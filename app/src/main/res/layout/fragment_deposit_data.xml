@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".fragment.DepositDataFragment">
+
+        <TableLayout
+            android:id="@+id/tl_deposit_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="*">
+
+            <TableRow
+                android:id="@+id/tr_title">
+                <TextView
+                    android:text="날짜"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="이름"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="액수"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="방법"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="호수"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:text="중개인"
+                    android:layout_gravity="center"/>
+            </TableRow>
+        </TableLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

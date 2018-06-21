@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="main"
+            type="com.abercompany.smsforwarding.activity.MainActivity" />
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.MainActivity">
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true">
+
+            <fragment
+                android:id="@+id/fragment_search_raw_data"
+                android:name="com.abercompany.smsforwarding.fragment.SearchRawDataFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                tools:layout="@layout/fragment_search_raw_data" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            app:layout_behavior="com.abercompany.smsforwarding.util.ui.QuickReturnFooterBehavior">
+
+            <FrameLayout
+                android:id="@+id/btn_search_raw_data"
+                style="@style/MainButton"
+                android:onClick="@{main.bottomBtnClick}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="조회"
+                    android:textColor="@color/white" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/btn_deposit_data"
+                style="@style/MainButton"
+                android:onClick="@{main.bottomBtnClick}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="입금"
+                    android:textColor="@color/white" />
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:id="@+id/btn_camera"
+                style="@style/MainButton"></FrameLayout>
+
+
+            <FrameLayout
+                android:id="@+id/btn_news"
+                style="@style/MainButton"></FrameLayout>
+
+
+            <FrameLayout
+                android:id="@+id/btn_my_page"
+                style="@style/MainButton"></FrameLayout>
+
+
+        </LinearLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+</layout>
