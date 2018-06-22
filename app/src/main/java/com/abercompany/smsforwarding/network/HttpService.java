@@ -1,5 +1,8 @@
 package com.abercompany.smsforwarding.network;
 
+import com.abercompany.smsforwarding.model.Deposit;
+import com.abercompany.smsforwarding.model.GetBrokerResult;
+import com.abercompany.smsforwarding.model.GetDepositResult;
 import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
@@ -7,6 +10,7 @@ import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 public interface HttpService {
@@ -30,4 +34,12 @@ public interface HttpService {
     @FormUrlEncoded
     @POST("deleteNum")
     Call<JsonObject> deleteNum(@Field("sender_num") String senderNum);
+
+    @FormUrlEncoded
+    @POST("getDeposit")
+    Call<GetDepositResult> getDeposit(@Field("phone_num") String phoneNum);
+
+    @FormUrlEncoded
+    @POST("getBroker")
+    Call<GetBrokerResult> getBroker(@Field("") String empty);
 }

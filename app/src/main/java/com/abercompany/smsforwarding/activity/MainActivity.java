@@ -355,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
         // else {
         // throw new RuntimeException("You have no SMS");
         // }
-//        c.close();
+        c.close();
 
         return lstSms;
     }
@@ -363,8 +363,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (!c.isClosed()) {
-            c.close();
-        }
+//        if (!c.isClosed()) {
+//            c.close();
+//        }
     }
 }
