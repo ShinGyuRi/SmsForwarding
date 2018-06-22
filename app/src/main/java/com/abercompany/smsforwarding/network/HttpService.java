@@ -3,6 +3,7 @@ package com.abercompany.smsforwarding.network;
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.GetBrokerResult;
 import com.abercompany.smsforwarding.model.GetDepositResult;
+import com.abercompany.smsforwarding.model.GetResidentResult;
 import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
@@ -42,4 +43,8 @@ public interface HttpService {
     @FormUrlEncoded
     @POST("getBroker")
     Call<GetBrokerResult> getBroker(@Field("") String empty);
+
+    @FormUrlEncoded
+    @POST("getResident")
+    Call<GetResidentResult> getResident(@Field("") String empty);
 }

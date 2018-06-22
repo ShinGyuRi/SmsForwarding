@@ -20,7 +20,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
 
     private Context context;
     private List<Deposit> deposits;
-    private List<String> brokers;
+    private List<String> residents;
 
     public class BindingHolder extends RecyclerView.ViewHolder {
 
@@ -32,10 +32,10 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         }
     }
 
-    public DepositDataAdapter(Context context, List<Deposit> deposits, List<String> brokers) {
+    public DepositDataAdapter(Context context, List<Deposit> deposits, List<String> residents) {
         this.context = context;
         this.deposits = deposits;
-        this.brokers = brokers;
+        this.residents = residents;
     }
 
     @NonNull
@@ -54,7 +54,8 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                 deposits.get(position).getDate(),
                 deposits.get(position).getMethod()));
 
-        holder.binding.spBroker.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, brokers));
+//        holder.binding.spBroker.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, brokers));
+        holder.binding.spHo.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residents));
     }
 
 

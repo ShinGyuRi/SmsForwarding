@@ -29,13 +29,22 @@
                 android:textAlignment="center"
                 android:entries="@array/einsvill"/>
 
-            <Spinner
-                android:id="@+id/sp_broker"
+            <Button
+                android:id="@+id/btn_upload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:text="upload"
+                android:background="@color/black"
+                android:textColor="@color/white"
                 android:layout_weight="1"
-                android:gravity="center" />
+                android:layout_gravity="center"/>
+            <!--<Spinner-->
+                <!--android:id="@+id/sp_broker"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:layout_weight="1"-->
+                <!--android:gravity="center" />-->
 
         </LinearLayout>
 

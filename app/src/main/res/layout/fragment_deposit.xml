@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".fragment.DepositDataFragment">
+        tools:context=".fragment.DepositFragment">
 
         <LinearLayout
             android:id="@+id/linearLayout3"
@@ -31,13 +31,13 @@
                 android:gravity="center"
                 android:text="호수" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="중개인" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:layout_weight="1"-->
+                <!--android:gravity="center"-->
+                <!--android:text="중개인" />-->
 
         </LinearLayout>
 

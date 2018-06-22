@@ -18,8 +18,10 @@ import android.widget.Toast;
 
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.databinding.ActivityMainBinding;
-import com.abercompany.smsforwarding.fragment.DepositDataFragment;
+import com.abercompany.smsforwarding.fragment.DepositFragment;
 import com.abercompany.smsforwarding.fragment.SearchRawDataFragment;
+import com.abercompany.smsforwarding.model.Deposit;
+import com.abercompany.smsforwarding.model.GetDepositResult;
 import com.abercompany.smsforwarding.model.Sms;
 import com.abercompany.smsforwarding.network.QuestionsSpreadsheetWebService;
 import com.abercompany.smsforwarding.service.SmsService;
@@ -52,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
     private List<Sms> lst2;
     private Cursor c;
     private Fragment searchRawDataFragment, depositDataFragment;
+    private List<Deposit> trimmedData;
+    private List<Deposit> deposits = new ArrayList<>();
+    private List<Deposit> withdraws = new ArrayList<>();
 
 
     @Override
@@ -70,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 getNum("");
+                getDeposit(DeviceUtil.getDevicePhoneNumber(MainActivity.this));
             }
 
             @Override
@@ -107,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_deposit_data:
                 initNaviButton(view);
                 if (depositDataFragment == null) {
-                    depositDataFragment = DepositDataFragment.newInstance();
+                    depositDataFragment = DepositFragment.newInstance(deposits);
                 }
                 switchContent(depositDataFragment, "DEPOSIT_DATA");
                 break;
@@ -270,6 +276,35 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void getDeposit(String phoneNum) {
+        Call<GetDepositResult> jsonObjectCall = NetworkUtil.getInstace().getDeposit(phoneNum);
+        jsonObjectCall.enqueue(new Callback<GetDepositResult>() {
+            @Override
+            public void onResponse(Call<GetDepositResult> call, Response<GetDepositResult> response) {
+                GetDepositResult getDepositResult = response.body();
+                String result = getDepositResult.getResult();
+
+                if ("success".equals(result)) {
+                    trimmedData = getDepositResult.getMessage();
+                    if (trimmedData != null) {
+                        for (int i = 0; i < trimmedData.size(); i++) {
+                            if (trimmedData.get(i).getMethod().contains("입금")) {
+                                deposits.add(trimmedData.get(i));
+                            } else if (trimmedData.get(i).getMethod().contains("출금")) {
+                                withdraws.add(trimmedData.get(i));
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetDepositResult> call, Throwable t) {
+
+            }
+        });
+    }
 
     private void uploadToSpreadSheet() {
 
