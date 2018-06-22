@@ -113,7 +113,11 @@ public class DepositDataFragment extends Fragment {
     }
 
     private void setDepositAdapter(List<Deposit> deposits, List<Broker> brokers) {
-        adapter = new DepositDataAdapter(getContext(), deposits, brokers);
+        List<String> brokerNames = new ArrayList<>();
+        for (int i=0; i<brokers.size(); i++) {
+            brokerNames.add(getString(R.string.str_deposit_realty, brokers.get(i).getName(), brokers.get(i).getRealtyName()));
+        }
+        adapter = new DepositDataAdapter(getContext(), deposits, brokerNames);
         binding.rvDeposit.setAdapter(adapter);
         binding.rvDeposit.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.notifyDataSetChanged();
