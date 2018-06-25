@@ -47,4 +47,11 @@ public interface HttpService {
     @FormUrlEncoded
     @POST("getResident")
     Call<GetResidentResult> getResident(@Field("") String empty);
+
+    @FormUrlEncoded
+    @POST("updateTrimmedData")
+    Call<JsonObject> updateTrimmedData(@Field("name") String name,
+                                       @Field("date") String date,
+                                       @Field("object_name") String objectName,
+                                       @Field("type") String type);
 }

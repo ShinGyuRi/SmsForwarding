@@ -20,6 +20,7 @@ import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.databinding.ActivityMainBinding;
 import com.abercompany.smsforwarding.fragment.DepositFragment;
 import com.abercompany.smsforwarding.fragment.SearchRawDataFragment;
+import com.abercompany.smsforwarding.fragment.WithdrawFragment;
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.GetDepositResult;
 import com.abercompany.smsforwarding.model.Sms;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private List<String> nums = new ArrayList<String>();
     private List<Sms> lst2;
     private Cursor c;
-    private Fragment searchRawDataFragment, depositDataFragment;
+    private Fragment searchRawDataFragment, depositDataFragment, withdrawFragment;
     private List<Deposit> trimmedData;
     private List<Deposit> deposits = new ArrayList<>();
     private List<Deposit> withdraws = new ArrayList<>();
@@ -117,6 +118,14 @@ public class MainActivity extends AppCompatActivity {
                 }
                 switchContent(depositDataFragment, "DEPOSIT_DATA");
                 break;
+
+            case R.id.btn_withdraw:
+                initNaviButton(view);
+                if (withdrawFragment == null) {
+                    withdrawFragment = WithdrawFragment.newInstance(withdraws);
+                }
+                switchContent(withdrawFragment, "WITHDRAW");
+                break;
         }
     }
 
@@ -129,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
     private void initNaviButton(View v) {
         binding.btnSearchRawData.setEnabled(true);
         binding.btnDepositData.setEnabled(true);
+        binding.btnWithdraw.setEnabled(true);
         v.setEnabled(false);
     }
 
@@ -183,6 +193,9 @@ public class MainActivity extends AppCompatActivity {
                     initNaviButton(binding.btnSearchRawData);
                     break;
                 case "DEPOSIT_DATA":
+                    initNaviButton(binding.btnDepositData);
+                    break;
+                case "WITHDRAW":
                     initNaviButton(binding.btnDepositData);
                     break;
             }
