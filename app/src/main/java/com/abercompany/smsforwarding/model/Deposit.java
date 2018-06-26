@@ -16,6 +16,12 @@ public class Deposit {
     @SerializedName("method")
     private String method;
 
+    @SerializedName("type")
+    private String type;
+
+    @SerializedName("destination_name")
+    private String destinationName;
+
     public String getName() {
         return name;
     }
@@ -42,5 +48,19 @@ public class Deposit {
     }
     public void setMethod(String method) {
         this.method = method;
+    }
+
+    public String getType() {
+        return type;
+    }
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getDestinationName() {
+        return destinationName;
+    }
+    public void setDestinationName(String destinationName) {
+        this.destinationName = destinationName;
     }
 }

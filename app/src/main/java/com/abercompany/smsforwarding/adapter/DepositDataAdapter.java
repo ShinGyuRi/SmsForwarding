@@ -12,27 +12,24 @@ import android.widget.ArrayAdapter;
 
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.databinding.ViewDepositItemBinding;
-import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Deposit;
-import com.abercompany.smsforwarding.util.Debug;
-import com.abercompany.smsforwarding.util.NetworkUtil;
-import com.google.gson.JsonObject;
+import com.abercompany.smsforwarding.model.SelectedSpinnerEvent;
+import com.abercompany.smsforwarding.provider.BusProvider;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static com.abercompany.smsforwarding.util.Definitions.UPDATE_TRIM_DATA.RESIDENT;
 
 public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.BindingHolder> {
 
     private Context context;
     private List<Deposit> deposits;
     private List<String> residents;
-    private String name, date, objectName;
-    private String type;
+    private List<String> brokers;
+    private List<String> name = new ArrayList<>();
+    private List<String> date = new ArrayList<>();
+    private List<String> objectName = new ArrayList<>();
+    private List<String> type = new ArrayList<>();
+
 
     public class BindingHolder extends RecyclerView.ViewHolder {
 
@@ -44,11 +41,14 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         }
     }
 
-    public DepositDataAdapter(Context context, List<Deposit> deposits, List<String> residents, String type) {
+    public DepositDataAdapter(Context context, List<Deposit> deposits, List<String> residents, List<String> brokers) {
         this.context = context;
         this.deposits = deposits;
         this.residents = residents;
-        this.type = type;
+        this.brokers = brokers;
+        for (int i = 0; i < deposits.size(); i++) {
+            this.objectName.add("");
+        }
     }
 
     @NonNull
@@ -61,31 +61,55 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull final BindingHolder holder, final int position) {
-        holder.binding.btnUpload.setEnabled(false);
         holder.binding.tvMessage.setText(context.getString(R.string.str_deposit_message,
                 deposits.get(position).getName(),
                 deposits.get(position).getAmount(),
                 deposits.get(position).getDate(),
                 deposits.get(position).getMethod()));
 
-//        holder.binding.spBroker.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, brokers));
-        holder.binding.spHo.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residents));
+        name.add(position, deposits.get(position).getName());
+        date.add(position, deposits.get(position).getDate());
 
-        holder.binding.btnUpload.setOnClickListener(new View.OnClickListener() {
+        holder.binding.spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                name = deposits.get(position).getName();
-                date = deposits.get(position).getDate();
+            public void onItemSelected(AdapterView<?> parent, View view, int itemPosition, long id) {
+                type.add(position, holder.binding.spCategory.getItemAtPosition(itemPosition).toString());
+                switch (itemPosition) {
+                    case 0:
+                        holder.binding.spToName.setAdapter(null);
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 7:
+                        holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residents));
+                        break;
+                    case 6:
+                        holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, brokers));
+                        break;
+                    case 8:
+                        holder.binding.spToName.setAdapter(null);
+                        break;
+                }
 
-                updateTrimmedData(name, date, objectName, type);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
-        holder.binding.spHo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        holder.binding.spToName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                objectName = holder.binding.spHo.getItemAtPosition(position).toString();
-                holder.binding.btnUpload.setEnabled(true);
+            public void onItemSelected(AdapterView<?> parent, View view, int itemPosition, long id) {
+                objectName.add(position, holder.binding.spToName.getItemAtPosition(itemPosition).toString());
+
+                BusProvider.getInstance().post(new SelectedSpinnerEvent(name, date, objectName, type));
             }
 
             @Override
@@ -106,25 +130,5 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         return deposits.size();
     }
 
-
-    private void updateTrimmedData(String name, String date, String objectName, String type) {
-        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type);
-        jsonObjectCall.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                JsonObject jsonObject = response.body();
-                String result = jsonObject.get("result").getAsString();
-
-                if ("success".equals(result)) {
-                    Debug.showToast(context, "등록되었습니다");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-
-            }
-        });
-    }
 
 }

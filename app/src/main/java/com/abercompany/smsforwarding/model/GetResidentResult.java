@@ -10,7 +10,7 @@ public class GetResidentResult {
     private String result;
 
     @SerializedName("message")
-    private List<Resigent> resigents;
+    private List<Resident> residents;
 
     public String getResult() {
         return result;
@@ -19,10 +19,10 @@ public class GetResidentResult {
         this.result = result;
     }
 
-    public List<Resigent> getResigents() {
-        return resigents;
+    public List<Resident> getResidents() {
+        return residents;
     }
-    public void setResigents(List<Resigent> resigents) {
-        this.resigents = resigents;
+    public void setResidents(List<Resident> residents) {
+        this.residents = residents;
     }
 }

@@ -20,24 +20,38 @@
                 android:layout_weight="2" />
 
             <Spinner
-                android:id="@+id/sp_ho"
-                android:layout_width="wrap_content"
+                android:id="@+id/sp_category"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:entries="@array/category"
+                android:spinnerMode="dropdown"
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:background="@drawable/shape_drop_down_normal"></Spinner>
+
+            <Spinner
+                android:id="@+id/sp_to_name"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textAlignment="center"
-                android:entries="@array/einsvill"/>
+                android:spinnerMode="dropdown"
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:background="@drawable/shape_drop_down_normal"/>
 
-            <Button
-                android:id="@+id/btn_upload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="upload"
-                android:background="@color/black"
-                android:textColor="@color/white"
-                android:layout_weight="1"
-                android:layout_gravity="center"/>
+            <!--<Button-->
+                <!--android:id="@+id/btn_upload"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="upload"-->
+                <!--android:background="@color/black"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_gravity="center"/>-->
             <!--<Spinner-->
                 <!--android:id="@+id/sp_broker"-->
                 <!--android:layout_width="wrap_content"-->

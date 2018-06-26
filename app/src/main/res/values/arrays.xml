@@ -40,4 +40,16 @@
         <item>504</item>
         <item>505</item>
     </string-array>
+
+    <string-array name="category">
+        <item></item>
+        <item>입금-계약금</item>
+        <item>입금-보증금</item>
+        <item>입금-월세</item>
+        <item>입금-보증금+월세</item>
+        <item>입금-관리비</item>
+        <item>출금-수수료</item>
+        <item>출금-정산</item>
+        <item>출금-유지보수</item>
+    </string-array>
 </resources>

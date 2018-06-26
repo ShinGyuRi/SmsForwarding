@@ -49,7 +49,7 @@ public class SearchRawDataFragment extends Fragment {
     private List<String> nums = new ArrayList<String>();
     private Cursor c;
 
-    public SearchRawDataFragment () {
+    public SearchRawDataFragment() {
 
     }
 

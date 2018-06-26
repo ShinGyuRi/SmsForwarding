@@ -15,84 +15,98 @@
         android:layout_height="match_parent"
         tools:context=".activity.MainActivity">
 
-        <FrameLayout
-            android:id="@+id/container"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_centerInParent="true">
+            android:layout_height="match_parent">
 
-            <fragment
-                android:id="@+id/fragment_search_raw_data"
-                android:name="com.abercompany.smsforwarding.fragment.SearchRawDataFragment"
+            <FrameLayout
+                android:id="@+id/container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                tools:layout="@layout/fragment_search_raw_data" />
-        </FrameLayout>
+                android:layout_height="0dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_gravity="bottom"
-            android:background="@color/colorPrimaryDark"
-            android:orientation="horizontal"
-            android:weightSum="5"
-            app:layout_behavior="com.abercompany.smsforwarding.util.ui.QuickReturnFooterBehavior">
-
-            <FrameLayout
-                android:id="@+id/btn_search_raw_data"
-                style="@style/MainButton"
-                android:onClick="@{main.bottomBtnClick}">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <fragment
+                    android:id="@+id/fragment_search_raw_data"
+                    android:name="com.abercompany.smsforwarding.fragment.SearchRawDataFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:text="조회"
-                    android:textColor="@color/white" />
+                    tools:layout="@layout/fragment_search_raw_data" />
             </FrameLayout>
 
-            <FrameLayout
-                android:id="@+id/btn_deposit_data"
-                style="@style/MainButton"
-                android:onClick="@{main.bottomBtnClick}">
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="bottom"
+                android:background="@color/colorPrimaryDark"
+                android:orientation="horizontal"
+                android:weightSum="5"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="입금"
-                    android:textColor="@color/white" />
-            </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/btn_search_raw_data"
+                    style="@style/MainButton"
+                    android:onClick="@{main.bottomBtnClick}">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="조회"
+                        android:textColor="@color/white" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/btn_deposit_data"
+                    style="@style/MainButton"
+                    android:onClick="@{main.bottomBtnClick}">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="새로운"
+                        android:textColor="@color/white" />
+                </FrameLayout>
 
 
-            <FrameLayout
-                android:id="@+id/btn_withdraw"
-                style="@style/MainButton"
-                android:onClick="@{main.bottomBtnClick}">
+                <FrameLayout
+                    android:id="@+id/btn_withdraw"
+                    style="@style/MainButton"
+                    android:onClick="@{main.bottomBtnClick}">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="출금"
-                    android:textColor="@color/white" />
-            </FrameLayout>
-
-
-            <FrameLayout
-                android:id="@+id/btn_news"
-                style="@style/MainButton"></FrameLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="기존"
+                        android:textColor="@color/white" />
+                </FrameLayout>
 
 
-            <FrameLayout
-                android:id="@+id/btn_my_page"
-                style="@style/MainButton"></FrameLayout>
+                <FrameLayout
+                    android:id="@+id/btn_news"
+                    style="@style/MainButton"></FrameLayout>
 
 
-        </LinearLayout>
+                <FrameLayout
+                    android:id="@+id/btn_my_page"
+                    style="@style/MainButton"></FrameLayout>
+
+
+            </LinearLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
+
 
     </android.support.design.widget.CoordinatorLayout>
 </layout>

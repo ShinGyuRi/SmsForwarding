@@ -18,11 +18,15 @@ import android.widget.Toast;
 
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.databinding.ActivityMainBinding;
-import com.abercompany.smsforwarding.fragment.DepositFragment;
+import com.abercompany.smsforwarding.fragment.NewDataFragment;
 import com.abercompany.smsforwarding.fragment.SearchRawDataFragment;
-import com.abercompany.smsforwarding.fragment.WithdrawFragment;
+import com.abercompany.smsforwarding.fragment.ExistingDataFragment;
+import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Deposit;
+import com.abercompany.smsforwarding.model.GetBrokerResult;
 import com.abercompany.smsforwarding.model.GetDepositResult;
+import com.abercompany.smsforwarding.model.GetResidentResult;
+import com.abercompany.smsforwarding.model.Resident;
 import com.abercompany.smsforwarding.model.Sms;
 import com.abercompany.smsforwarding.network.QuestionsSpreadsheetWebService;
 import com.abercompany.smsforwarding.service.SmsService;
@@ -54,10 +58,12 @@ public class MainActivity extends AppCompatActivity {
     private List<String> nums = new ArrayList<String>();
     private List<Sms> lst2;
     private Cursor c;
-    private Fragment searchRawDataFragment, depositDataFragment, withdrawFragment;
+    private Fragment searchRawDataFragment, newDataFragment, existingDataFragment;
     private List<Deposit> trimmedData;
-    private List<Deposit> deposits = new ArrayList<>();
-    private List<Deposit> withdraws = new ArrayList<>();
+    private List<Deposit> newDatas = new ArrayList<>();
+    private List<Deposit> existingDatas = new ArrayList<>();
+    private List<Resident> residents;
+    private List<Broker> brokers;
 
 
     @Override
@@ -76,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
 
 
                 getNum("");
-                getDeposit(DeviceUtil.getDevicePhoneNumber(MainActivity.this));
+                getTrimmedData(DeviceUtil.getDevicePhoneNumber(MainActivity.this));
+                getBroker();
+                getResident();
             }
 
             @Override
@@ -113,18 +121,18 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.btn_deposit_data:
                 initNaviButton(view);
-                if (depositDataFragment == null) {
-                    depositDataFragment = DepositFragment.newInstance(deposits);
+                if (newDataFragment == null) {
+                    newDataFragment = NewDataFragment.newInstance(newDatas, residents, brokers);
                 }
-                switchContent(depositDataFragment, "DEPOSIT_DATA");
+                switchContent(newDataFragment, "NEW_DATA");
                 break;
 
             case R.id.btn_withdraw:
                 initNaviButton(view);
-                if (withdrawFragment == null) {
-                    withdrawFragment = WithdrawFragment.newInstance(withdraws);
+                if (existingDataFragment == null) {
+                    existingDataFragment = ExistingDataFragment.newInstance(existingDatas, residents, brokers);
                 }
-                switchContent(withdrawFragment, "WITHDRAW");
+                switchContent(existingDataFragment, "EXISTING_DATA");
                 break;
         }
     }
@@ -192,15 +200,55 @@ public class MainActivity extends AppCompatActivity {
                 case "SEARCH_RAW_DATA":
                     initNaviButton(binding.btnSearchRawData);
                     break;
-                case "DEPOSIT_DATA":
+                case "NEW_DATA":
                     initNaviButton(binding.btnDepositData);
                     break;
-                case "WITHDRAW":
-                    initNaviButton(binding.btnDepositData);
+                case "EXISTING_DATA":
+                    initNaviButton(binding.btnWithdraw);
                     break;
             }
         }
     };
+
+    private void getBroker() {
+        Call<GetBrokerResult> getBrokerResultCall = NetworkUtil.getInstace().getBroker("");
+        getBrokerResultCall.enqueue(new Callback<GetBrokerResult>() {
+            @Override
+            public void onResponse(Call<GetBrokerResult> call, Response<GetBrokerResult> response) {
+                GetBrokerResult getBrokerResult = response.body();
+                String result = getBrokerResult.getResult();
+
+                if ("success".equals(result)) {
+                    brokers = getBrokerResult.getBrokers();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetBrokerResult> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getResident() {
+        Call<GetResidentResult> getResidentResultCall = NetworkUtil.getInstace().getResident("");
+        getResidentResultCall.enqueue(new Callback<GetResidentResult>() {
+            @Override
+            public void onResponse(Call<GetResidentResult> call, Response<GetResidentResult> response) {
+                GetResidentResult getResidentResult = response.body();
+                String result = getResidentResult.getResult();
+
+                if ("success".equals(result)) {
+                    residents = getResidentResult.getResidents();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetResidentResult> call, Throwable t) {
+
+            }
+        });
+    }
 
     private void getNum(final String senderNum) {
         Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().getNum(senderNum);
@@ -289,7 +337,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void getDeposit(String phoneNum) {
+    private void getTrimmedData(String phoneNum) {
         Call<GetDepositResult> jsonObjectCall = NetworkUtil.getInstace().getDeposit(phoneNum);
         jsonObjectCall.enqueue(new Callback<GetDepositResult>() {
             @Override
@@ -301,10 +349,10 @@ public class MainActivity extends AppCompatActivity {
                     trimmedData = getDepositResult.getMessage();
                     if (trimmedData != null) {
                         for (int i = 0; i < trimmedData.size(); i++) {
-                            if (trimmedData.get(i).getMethod().contains("입금")) {
-                                deposits.add(trimmedData.get(i));
-                            } else if (trimmedData.get(i).getMethod().contains("출금")) {
-                                withdraws.add(trimmedData.get(i));
+                            if (trimmedData.get(i).getType() == null || trimmedData.get(i).getDestinationName() == null) {
+                                newDatas.add(trimmedData.get(i));
+                            } else if (trimmedData.get(i).getType() != null && trimmedData.get(i).getDestinationName() != null) {
+                                existingDatas.add(trimmedData.get(i));
                             }
                         }
                     }
