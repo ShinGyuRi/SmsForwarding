@@ -82,8 +82,6 @@ public class SearchRawDataFragment extends Fragment {
 //        Log.e(TAG, "Time     :::     " + getAllSms().get(0).getTime());
 //        Log.e(TAG, "State     :::     " + getAllSms().get(0).getReadState());
 
-        binding.btnUpload.setEnabled(false);
-
         setRegisterNumAdapter(nums);
 
 
@@ -100,11 +98,6 @@ public class SearchRawDataFragment extends Fragment {
                 }
                 lst = getAllSms(senderNum);
                 setSmsAdapter(lst);
-                binding.btnUpload.setEnabled(true);
-                break;
-
-            case R.id.btn_upload:
-                uploadSmsBody(senderNum, lst);
                 break;
 
             case R.id.btn_register:
@@ -139,52 +132,6 @@ public class SearchRawDataFragment extends Fragment {
         });
     }
 
-    int i = 0;
-
-    private void uploadSmsBody(final String senderNum, final List<Sms> lst) {
-        String message = lst.get(i).getMsg();
-        String phoneNum = DeviceUtil.getDevicePhoneNumber(getContext());
-        String timeStamp = lst.get(i).getTime();
-        Log.d(TAG, "phoneNum        :::     " + phoneNum);
-
-        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertSms(message, phoneNum, senderNum, timeStamp);
-        jsonObjectCall.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                JsonObject jsonObject = response.body();
-
-                String result = null;
-                result = jsonObject.get("result").getAsString();
-
-                Log.d(TAG, "result          :::     " + result);
-
-                if ("success".equals(result)) {
-                    boolean success = jsonObject.get("message").getAsBoolean();
-                    Log.d(TAG, "success          :::     " + success);
-                    if (success) {
-                        i++;
-                        Log.d(TAG, "i           ::      " + i);
-//                        Log.d(TAG, "lst.size            ::      " + lst.size());
-                        if (i < lst.size()) {
-                            uploadSmsBody(senderNum, lst);
-                        }
-
-                        if (i == lst.size()) {
-                            i = 0;
-                        }
-                    } else {
-                        i = 0;
-                    }
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.e(TAG, "Fail", t);
-            }
-        });
-    }
 
     private void setSmsAdapter(List<Sms> lst) {
         smsRecyclerAdapter = new SmsRecyclerAdapter(getContext(), lst);
