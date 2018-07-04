@@ -10,12 +10,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.adapter.DepositDataAdapter;
 import com.abercompany.smsforwarding.databinding.FragmentNewDataBinding;
-import com.abercompany.smsforwarding.databinding.ViewDepositItemBinding;
 import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.Resident;
@@ -28,7 +26,6 @@ import com.google.gson.JsonObject;
 
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -46,7 +43,8 @@ public class NewDataFragment extends Fragment {
     private List<Broker> brokers;
     private DepositDataAdapter adapter;
 
-    private List<String> objectName, name, date, type;
+    private List<String> objectName, name, date, type, startDate, endDate;
+    private List<Integer> positions;
 
     public NewDataFragment() {
         // Required empty public constructor
@@ -91,14 +89,21 @@ public class NewDataFragment extends Fragment {
     public void upload(View view) {
         switch (view.getId()) {
             case R.id.btn_upload:
-                for (int i=0; i<name.size(); i++) {
-                    updateTrimmedData(name.get(i), date.get(i), objectName.get(i), type.get(i));
+                for (int i = 0; i < positions.size(); i++) {
+                    JSLog.D("name           :::     " + name.get(i), null);
+                    updateTrimmedData(name.get(i), date.get(i), objectName.get(i), type.get(i), "", "", i);
                 }
+
+                this.name.clear();
+                this.date.clear();
+                this.objectName.clear();
+                this.type.clear();
+                this.positions.clear();
                 break;
         }
     }
 
-    private void updateTrimmedData(String name, String date, String objectName, String type) {
+    private void updateTrimmedData(String name, String date, String objectName, String type, String startDate, String endDate, final int i) {
         Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type);
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
@@ -108,6 +113,7 @@ public class NewDataFragment extends Fragment {
 
                 if ("success".equals(result)) {
                     Debug.showToast(getContext(), "등록되었습니다");
+                    adapter.remove(positions.get(i), i);
                 }
             }
 
@@ -125,20 +131,15 @@ public class NewDataFragment extends Fragment {
         date = event.getDate();
         objectName = event.getObjectName();
         type = event.getType();
+        startDate = event.getStartDate();
+        endDate = event.getEndDate();
+        positions = event.getPositions();
 
         binding.btnUpload.setEnabled(true);
     }
 
     private void setDepositAdapter(final List<Deposit> newDatas, List<Resident> residents, List<Broker> brokers) {
-        final List<String> residentName = new ArrayList<>();
-        for (int i = 0; i < residents.size(); i++) {
-            residentName.add(getString(R.string.str_deposit_realty, residents.get(i).getName(), residents.get(i).getHo()));
-        }
-        final List<String> brokerName = new ArrayList<>();
-        for (int i = 0; i < brokers.size(); i++) {
-            brokerName.add(getString(R.string.str_deposit_realty, brokers.get(i).getName(), brokers.get(i).getRealtyName()));
-        }
-        adapter = new DepositDataAdapter(getContext(), newDatas, residentName, brokerName);
+        adapter = new DepositDataAdapter(getActivity(), getContext(), newDatas, residents, brokers);
         binding.rvDeposit.setAdapter(adapter);
         binding.rvDeposit.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.notifyDataSetChanged();

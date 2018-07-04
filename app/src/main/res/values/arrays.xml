@@ -18,6 +18,7 @@
         <item>206</item>
         <item>207</item>
         <item>208</item>
+
         <item>301</item>
         <item>302</item>
         <item>303</item>
@@ -48,8 +49,10 @@
         <item>입금-월세</item>
         <item>입금-보증금+월세</item>
         <item>입금-관리비</item>
+        <item>입금-기타</item>
         <item>출금-수수료</item>
         <item>출금-정산</item>
         <item>출금-유지보수</item>
+        <item>출금-기타</item>
     </string-array>
 </resources>

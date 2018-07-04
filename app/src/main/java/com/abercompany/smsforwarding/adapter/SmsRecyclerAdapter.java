@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.abercompany.smsforwarding.R;
+import com.abercompany.smsforwarding.model.Defaulter;
 import com.abercompany.smsforwarding.model.Sms;
 import com.abercompany.smsforwarding.databinding.ViewSmsItemBinding;
 
@@ -18,7 +19,7 @@ import java.util.List;
 public class SmsRecyclerAdapter extends RecyclerView.Adapter<SmsRecyclerAdapter.BindingHolder> {
 
     private Context context;
-    private List<Sms> sms = new ArrayList<>();
+    private List<Defaulter> defaulters = new ArrayList<>();
 
     public class BindingHolder extends RecyclerView.ViewHolder  {
 
@@ -30,9 +31,9 @@ public class SmsRecyclerAdapter extends RecyclerView.Adapter<SmsRecyclerAdapter.
         }
     }
 
-    public SmsRecyclerAdapter(Context context, List<Sms> sms) {
+    public SmsRecyclerAdapter(Context context, List<Defaulter> defaulters) {
         this.context = context;
-        this.sms = sms;
+        this.defaulters = defaulters;
     }
 
     @NonNull
@@ -45,14 +46,14 @@ public class SmsRecyclerAdapter extends RecyclerView.Adapter<SmsRecyclerAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull BindingHolder holder, int position) {
-        holder.binding.tvSmsBody.setText(sms.get(position).getMsg());
+        holder.binding.tvSmsBody.setText(defaulters.get(position).getDstName());
     }
 
     @Override
     public int getItemCount() {
-        if (sms == null) {
+        if (defaulters == null) {
             return 0;
         }
-        return sms.size();
+        return defaulters.size();
     }
 }

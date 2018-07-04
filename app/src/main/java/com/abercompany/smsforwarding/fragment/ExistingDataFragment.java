@@ -44,7 +44,8 @@ public class ExistingDataFragment extends Fragment {
     private List<Resident> residents;
     private DepositDataAdapter adapter;
 
-    private List<String> objectName, name, date, type;
+    private List<String> objectName, name, date, type, startDate, endDate;
+    private List<Integer> positions;
 
     public ExistingDataFragment() {
         // Required empty public constructor
@@ -79,7 +80,7 @@ public class ExistingDataFragment extends Fragment {
         View view = binding.getRoot();
         binding.setExistingData(this);
 
-        setDepositAdapter(existingDatas, brokers);
+        setDepositAdapter(existingDatas, residents, brokers);
 
         return view;
     }
@@ -88,13 +89,13 @@ public class ExistingDataFragment extends Fragment {
         switch (view.getId()) {
             case R.id.btn_upload:
                 for (int i = 0; i < name.size(); i++) {
-                    updateTrimmedData(name.get(i), date.get(i), objectName.get(i), type.get(i));
+                    updateTrimmedData(name.get(i), date.get(i), objectName.get(i), type.get(i), startDate.get(i), endDate.get(i));
                 }
                 break;
         }
     }
 
-    private void updateTrimmedData(String name, String date, String objectName, String type) {
+    private void updateTrimmedData(String name, String date, String objectName, String type, String startDate, String endDate) {
         Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type);
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
@@ -121,20 +122,15 @@ public class ExistingDataFragment extends Fragment {
         date = event.getDate();
         objectName = event.getObjectName();
         type = event.getType();
+        startDate = event.getStartDate();
+        endDate = event.getEndDate();
+        positions = event.getPositions();
 
         binding.btnUpload.setEnabled(true);
     }
 
-    private void setDepositAdapter(List<Deposit> existingDatas, List<Broker> brokers) {
-        List<String> residentName = new ArrayList<>();
-        for (int i = 0; i < residents.size(); i++) {
-            residentName.add(getString(R.string.str_deposit_realty, residents.get(i).getName(), residents.get(i).getHo()));
-        }
-        List<String> brokerName = new ArrayList<>();
-        for (int i = 0; i < brokers.size(); i++) {
-            brokerName.add(getString(R.string.str_deposit_realty, brokers.get(i).getName(), brokers.get(i).getRealtyName()));
-        }
-        adapter = new DepositDataAdapter(getContext(), existingDatas, residentName, brokerName);
+    private void setDepositAdapter(List<Deposit> existingDatas ,List<Resident> residents, List<Broker> brokers) {
+        adapter = new DepositDataAdapter(getActivity(), getContext(), existingDatas, residents, brokers);
         binding.rvWithdraw.setAdapter(adapter);
         binding.rvWithdraw.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.notifyDataSetChanged();

@@ -2,6 +2,7 @@ package com.abercompany.smsforwarding.network;
 
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.GetBrokerResult;
+import com.abercompany.smsforwarding.model.GetDefaulterResult;
 import com.abercompany.smsforwarding.model.GetDepositResult;
 import com.abercompany.smsforwarding.model.GetResidentResult;
 import com.google.gson.JsonObject;
@@ -54,4 +55,8 @@ public interface HttpService {
                                        @Field("date") String date,
                                        @Field("object_name") String objectName,
                                        @Field("type") String type);
+
+    @FormUrlEncoded
+    @POST("getDefaulter")
+    Call<GetDefaulterResult> getDefaulter(@Field("room_num") String roomNum);
 }

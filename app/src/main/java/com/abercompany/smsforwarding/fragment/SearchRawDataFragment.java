@@ -22,6 +22,8 @@ import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.adapter.RegisterNumAdapter;
 import com.abercompany.smsforwarding.adapter.SmsRecyclerAdapter;
 import com.abercompany.smsforwarding.databinding.FragmentSearchRawDataBinding;
+import com.abercompany.smsforwarding.model.Defaulter;
+import com.abercompany.smsforwarding.model.GetDefaulterResult;
 import com.abercompany.smsforwarding.model.Sms;
 import com.abercompany.smsforwarding.util.DeviceUtil;
 import com.abercompany.smsforwarding.util.NetworkUtil;
@@ -48,6 +50,7 @@ public class SearchRawDataFragment extends Fragment {
     private List<Sms> lst;
     private List<String> nums = new ArrayList<String>();
     private Cursor c;
+    private List<Defaulter> defaulters;
 
     public SearchRawDataFragment() {
 
@@ -93,11 +96,12 @@ public class SearchRawDataFragment extends Fragment {
         String senderNum = binding.etPhoneNum.getText().toString().replace("-", "");
         switch (view.getId()) {
             case R.id.btn_search:
-                if (lst != null) {
-                    lst.clear();
-                }
-                lst = getAllSms(senderNum);
-                setSmsAdapter(lst);
+//                if (lst != null) {
+//                    lst.clear();
+//                }
+//                lst = getAllSms(senderNum);
+//                setSmsAdapter(lst);
+                getDefault(binding.etPhoneNum.getText().toString());
                 break;
 
             case R.id.btn_register:
@@ -106,6 +110,27 @@ public class SearchRawDataFragment extends Fragment {
                 registerNumAdapter.notifyDataSetChanged();
                 break;
         }
+    }
+
+    private void getDefault(String roomNum) {
+        Call<GetDefaulterResult> getDefaulterResultCall = NetworkUtil.getInstace().getDefaulter(roomNum);
+        getDefaulterResultCall.enqueue(new Callback<GetDefaulterResult>() {
+            @Override
+            public void onResponse(Call<GetDefaulterResult> call, Response<GetDefaulterResult> response) {
+                GetDefaulterResult getDefaulterResult = response.body();
+                String result = getDefaulterResult.getResult();
+
+                if ("success".equals(result)) {
+                    defaulters = getDefaulterResult.getDefaulters();
+                    setSmsAdapter(defaulters);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetDefaulterResult> call, Throwable t) {
+
+            }
+        });
     }
 
     private void registerNum(String senderNum, String phoneNum) {
@@ -133,8 +158,8 @@ public class SearchRawDataFragment extends Fragment {
     }
 
 
-    private void setSmsAdapter(List<Sms> lst) {
-        smsRecyclerAdapter = new SmsRecyclerAdapter(getContext(), lst);
+    private void setSmsAdapter(List<Defaulter> defaulters) {
+        smsRecyclerAdapter = new SmsRecyclerAdapter(getContext(), defaulters);
         binding.rvSms.setAdapter(smsRecyclerAdapter);
         binding.rvSms.setLayoutManager(new LinearLayoutManager(getContext()));
         smsRecyclerAdapter.notifyDataSetChanged();
