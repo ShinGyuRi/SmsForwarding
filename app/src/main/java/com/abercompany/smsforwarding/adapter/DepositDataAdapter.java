@@ -16,34 +16,35 @@ import com.abercompany.smsforwarding.databinding.ViewDepositItemBinding;
 import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.Resident;
-import com.abercompany.smsforwarding.model.SelectedSpinnerEvent;
-import com.abercompany.smsforwarding.provider.BusProvider;
+import com.abercompany.smsforwarding.util.Debug;
 import com.abercompany.smsforwarding.util.JSLog;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.abercompany.smsforwarding.util.NetworkUtil;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.BindingHolder> implements DatePickerDialog.OnDateSetListener {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.abercompany.smsforwarding.util.Definitions.TRIM_DATA.EXISTING_DATA;
+import static com.abercompany.smsforwarding.util.Definitions.TRIM_DATA.NEW_DATA;
+
+public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.BindingHolder> {
 
     private Activity activity;
     private Context context;
     private List<Deposit> deposits;
     private List<Resident> residents;
     private List<Broker> brokers;
-    private List<String> name = new ArrayList<>();
-    private List<String> date = new ArrayList<>();
-    private List<String> objectName = new ArrayList<>();
-    private List<String> type = new ArrayList<>();
-    private List<String> startDate = new ArrayList<>();
-    private List<String> endDate = new ArrayList<>();
 
     private List<String> residentName = new ArrayList<>();
     private List<String> brokerName = new ArrayList<>();
 
-    private List<Integer> positions = new ArrayList<>();
-    private DatePickerDialog startDpd, endDpd;
+
+    private boolean selectedFlag = false;
+    private String type = "";
 
 
     public class BindingHolder extends RecyclerView.ViewHolder {
@@ -57,12 +58,13 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         }
     }
 
-    public DepositDataAdapter(Activity activity, Context context, List<Deposit> deposits, List<Resident> residents, List<Broker> brokers) {
+    public DepositDataAdapter(Activity activity, Context context, List<Deposit> deposits, List<Resident> residents, List<Broker> brokers, String type) {
         this.activity = activity;
         this.context = context;
         this.deposits = deposits;
         this.residents = residents;
         this.brokers = brokers;
+        this.type = type;
 
 
         for (int i = 0; i < residents.size(); i++) {
@@ -71,6 +73,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         for (int i = 0; i < brokers.size(); i++) {
             brokerName.add(context.getString(R.string.str_deposit_realty, brokers.get(i).getName(), brokers.get(i).getRealtyName()));
         }
+
     }
 
     @NonNull
@@ -89,13 +92,18 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                 deposits.get(position).getDate(),
                 deposits.get(position).getMethod()));
 
+        if (EXISTING_DATA.equals(type)) {
+            JSLog.D("getSelectedTypePosition        :::     " + getSelectedTypePosition(position), null);
+            JSLog.D("getSelectedPosition        :::     " + getSelectedPosition(position), null);
+
+            holder.binding.spCategory.setSelection(getSelectedTypePosition(position));
+            holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residentName));
+            holder.binding.spToName.setSelection(getSelectedPosition(position));
+        }
         holder.binding.spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int itemPosition, long id) {
-                JSLog.D("View.getID()       ::      " + view.getId(), null);
-                JSLog.D("View.getID()       ::      " + holder.binding.spCategory, null);
-                JSLog.D("spCategory position        :::     " + position, null);
-                type.add(holder.binding.spCategory.getItemAtPosition(itemPosition).toString());
+
                 switch (itemPosition) {
                     case 0:
                         holder.binding.spToName.setAdapter(null);
@@ -107,16 +115,16 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                     case 5:
                     case 6:
                     case 7:
-                        holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residentName));
-                        positions.add(position);
-                        JSLog.D("onItemSelected position            :::     " + position, null);
+                        if (NEW_DATA.equals(type)) {
+                            holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residentName));
+                        }
+                        selectedFlag = false;
                         break;
                     case 8:
                         holder.binding.spToName.setAdapter(null);
                         break;
                 }
 
-
             }
 
             @Override
@@ -124,23 +132,15 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
 
             }
         });
-
 
         holder.binding.spToName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int itemPosition, long id) {
-                JSLog.D("spToName position        :::     " + position, null);
-
-                if (!checkSameValue(name, residents.get(itemPosition).getName()) && !checkSameValue(date, deposits.get(position).getDate()) &&
-                        !checkSameValue(objectName, holder.binding.spToName.getItemAtPosition(itemPosition).toString())) {
-                    objectName.add(holder.binding.spToName.getItemAtPosition(itemPosition).toString());
-
-                    JSLog.D("resident.getName()         :::" + residents.get(itemPosition).getName(), null);
-                    name.add(residents.get(itemPosition).getName());
-                    date.add(deposits.get(position).getDate());
+                if (selectedFlag) {
+                    updateTrimmedData(deposits.get(position).getName(), deposits.get(position).getDate(), holder.binding.spToName.getSelectedItem().toString(), holder.binding.spCategory.getSelectedItem().toString(), position);
                 }
 
-                BusProvider.getInstance().post(new SelectedSpinnerEvent(name, date, objectName, type, startDate, endDate, positions));
+                selectedFlag = true;
             }
 
             @Override
@@ -149,21 +149,6 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
             }
         });
 
-        holder.binding.tvMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Calendar now = Calendar.getInstance();
-                startDpd = DatePickerDialog.newInstance(
-                        DepositDataAdapter.this,
-                        now.get(Calendar.YEAR),
-                        now.get(Calendar.MONTH),
-                        now.get(Calendar.DAY_OF_MONTH)
-                );
-                startDpd.setTitle("Start Date");
-                startDpd.show(activity.getFragmentManager(), "startDate" + position);
-            }
-        });
 
     }
 
@@ -176,55 +161,50 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         return deposits.size();
     }
 
-    @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        if (view.getTag().contains("startDate")) {
-            int position = Integer.parseInt(view.getTag().replace("startDate", ""));
-            JSLog.D("onDateSet position         :::     " + position, null);
-            startDate.add(position, year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
 
-            Calendar now = Calendar.getInstance();
-            endDpd = DatePickerDialog.newInstance(
-                    DepositDataAdapter.this,
-                    now.get(Calendar.YEAR),
-                    now.get(Calendar.MONTH),
-                    now.get(Calendar.DAY_OF_MONTH)
-            );
-            endDpd.setTitle("End Date");
-            endDpd.show(activity.getFragmentManager(), "endDate" + position);
-        } else if (view.getTag().contains("endDate")) {
-            int position = Integer.parseInt(view.getTag().replace("endDate", ""));
-            JSLog.D("onDateSet position         :::     " + position, null);
-            endDate.add(position, year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-            BusProvider.getInstance().post(new SelectedSpinnerEvent(name, date, objectName, type, startDate, endDate, positions));
-        }
+    private void updateTrimmedData(String name, String date, String objectName, final String type, final int position) {
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type);
+        jsonObjectCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject jsonObject = response.body();
+                String result = jsonObject.get("result").getAsString();
+
+                if ("success".equals(result)) {
+                    Debug.showToast(context, "등록되었습니다");
+                    JSLog.D("type           :::     " + DepositDataAdapter.this.type, null);
+                    if (NEW_DATA.equals(DepositDataAdapter.this.type)) {
+                        deposits.remove(position);
+                        notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
     }
 
-    private boolean checkSameValue(List<String> lst, String compare) {
-        for (int i = 0; i < lst.size(); i++) {
-            if (compare.equals(lst.get(i))) {
-                return true;
-            } else {
-                return false;
+    private int getSelectedPosition(int position) {
+        for (int j = 0; j < residentName.size(); j++) {
+
+            if ((deposits.get(position).getDestinationName()).equals(residentName.get(j))) {
+                return j;
             }
         }
-        return false;
+        return 0;
     }
 
-    public void remove(int position, int i) {
-        deposits.remove(position);
-        name.remove(i);
-        date.remove(i);
-        objectName.remove(i);
-        type.remove(i);
-//        name.clear();
-//        date.clear();
-//        objectName.clear();
-//        type.clear();
-//        positions.clear();
+    private int getSelectedTypePosition(int position) {
+        for (int j = 0; j < residents.size(); j++) {
 
-        notifyDataSetChanged();
+            if ((deposits.get(position).getType()).equals(context.getResources().getStringArray(R.array.category)[j])) {
+                return j;
+            }
+        }
+        return 0;
     }
-
 
 }

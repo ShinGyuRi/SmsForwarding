@@ -33,6 +33,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.abercompany.smsforwarding.util.Definitions.TRIM_DATA.EXISTING_DATA;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -44,8 +46,6 @@ public class ExistingDataFragment extends Fragment {
     private List<Resident> residents;
     private DepositDataAdapter adapter;
 
-    private List<String> objectName, name, date, type, startDate, endDate;
-    private List<Integer> positions;
 
     public ExistingDataFragment() {
         // Required empty public constructor
@@ -63,13 +63,6 @@ public class ExistingDataFragment extends Fragment {
         return fragment;
     }
 
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        BusProvider.getInstance().register(this);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,60 +78,12 @@ public class ExistingDataFragment extends Fragment {
         return view;
     }
 
-    public void upload(View view) {
-        switch (view.getId()) {
-            case R.id.btn_upload:
-                for (int i = 0; i < name.size(); i++) {
-                    updateTrimmedData(name.get(i), date.get(i), objectName.get(i), type.get(i), startDate.get(i), endDate.get(i));
-                }
-                break;
-        }
-    }
-
-    private void updateTrimmedData(String name, String date, String objectName, String type, String startDate, String endDate) {
-        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type);
-        jsonObjectCall.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                JsonObject jsonObject = response.body();
-                String result = jsonObject.get("result").getAsString();
-
-                if ("success".equals(result)) {
-                    Debug.showToast(getContext(), "등록되었습니다");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-
-            }
-        });
-    }
-
-    @Subscribe
-    public void FinishLoad(SelectedSpinnerEvent event) {
-        JSLog.D("Event          !!!     ", null);
-        name = event.getName();
-        date = event.getDate();
-        objectName = event.getObjectName();
-        type = event.getType();
-        startDate = event.getStartDate();
-        endDate = event.getEndDate();
-        positions = event.getPositions();
-
-        binding.btnUpload.setEnabled(true);
-    }
 
     private void setDepositAdapter(List<Deposit> existingDatas ,List<Resident> residents, List<Broker> brokers) {
-        adapter = new DepositDataAdapter(getActivity(), getContext(), existingDatas, residents, brokers);
+        adapter = new DepositDataAdapter(getActivity(), getContext(), existingDatas, residents, brokers, EXISTING_DATA);
         binding.rvWithdraw.setAdapter(adapter);
         binding.rvWithdraw.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onDestroy() {
-        BusProvider.getInstance().unregister(this);
-        super.onDestroy();
-    }
 }

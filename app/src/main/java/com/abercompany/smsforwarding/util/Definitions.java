@@ -12,4 +12,9 @@ public class Definitions {
         String WITHDRAW_ADJUSTMENT = "withdraw_adjustment";
         String WITHDRAW_MAINTENANCE = "withdraw_maintenance";
     }
+
+    public interface TRIM_DATA  {
+        String NEW_DATA = "new";
+        String EXISTING_DATA = "existing";
+    }
 }
