@@ -67,10 +67,16 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         this.type = type;
 
 
-        for (int i = 0; i < residents.size(); i++) {
+        for (int i = 1; i < residents.size(); i++) {
+            if (i == 0) {
+                residentName.add("");
+            }
             residentName.add(context.getString(R.string.str_deposit_realty, residents.get(i).getName(), residents.get(i).getHo()));
         }
         for (int i = 0; i < brokers.size(); i++) {
+            if (i == 0) {
+                brokerName.add("");
+            }
             brokerName.add(context.getString(R.string.str_deposit_realty, brokers.get(i).getName(), brokers.get(i).getRealtyName()));
         }
 
@@ -94,11 +100,17 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
 
         if (EXISTING_DATA.equals(type)) {
             JSLog.D("getSelectedTypePosition        :::     " + getSelectedTypePosition(position), null);
-            JSLog.D("getSelectedPosition        :::     " + getSelectedPosition(position), null);
 
             holder.binding.spCategory.setSelection(getSelectedTypePosition(position));
-            holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residentName));
-            holder.binding.spToName.setSelection(getSelectedPosition(position));
+            if ("출금-수수료".equals(holder.binding.spCategory.getSelectedItem().toString())) {
+                JSLog.D("getSelectedPosition        :::     " + getSelectedPosition(position, brokerName), null);
+                holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, brokerName));
+                holder.binding.spToName.setSelection(getSelectedPosition(position, brokerName));
+            } else {
+                JSLog.D("getSelectedPosition        :::     " + getSelectedPosition(position, residentName), null);
+                holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residentName));
+                holder.binding.spToName.setSelection(getSelectedPosition(position, residentName));
+            }
         }
         holder.binding.spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -114,9 +126,14 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                     case 4:
                     case 5:
                     case 6:
-                    case 7:
                         if (NEW_DATA.equals(type)) {
                             holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residentName));
+                        }
+                        selectedFlag = false;
+                        break;
+                    case 7:
+                        if (NEW_DATA.equals(type)) {
+                            holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, brokerName));
                         }
                         selectedFlag = false;
                         break;
@@ -136,6 +153,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         holder.binding.spToName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int itemPosition, long id) {
+                JSLog.D("selectedFlag           :::     " + selectedFlag, null);
                 if (selectedFlag) {
                     updateTrimmedData(deposits.get(position).getName(), deposits.get(position).getDate(), holder.binding.spToName.getSelectedItem().toString(), holder.binding.spCategory.getSelectedItem().toString(), position);
                 }
@@ -187,10 +205,10 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         });
     }
 
-    private int getSelectedPosition(int position) {
-        for (int j = 0; j < residentName.size(); j++) {
+    private int getSelectedPosition(int position, List<String> compareList) {
+        for (int j = 0; j < compareList.size(); j++) {
 
-            if ((deposits.get(position).getDestinationName()).equals(residentName.get(j))) {
+            if ((deposits.get(position).getDestinationName()).equals(compareList.get(j))) {
                 return j;
             }
         }
