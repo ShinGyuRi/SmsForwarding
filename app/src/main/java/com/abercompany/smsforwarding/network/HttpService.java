@@ -2,9 +2,11 @@ package com.abercompany.smsforwarding.network;
 
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.GetBrokerResult;
+import com.abercompany.smsforwarding.model.GetContractResult;
 import com.abercompany.smsforwarding.model.GetDefaulterResult;
 import com.abercompany.smsforwarding.model.GetDepositResult;
 import com.abercompany.smsforwarding.model.GetResidentResult;
+import com.abercompany.smsforwarding.model.GetRoomResult;
 import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
@@ -59,4 +61,12 @@ public interface HttpService {
     @FormUrlEncoded
     @POST("getDefaulter")
     Call<GetDefaulterResult> getDefaulter(@Field("") String empty);
+
+    @FormUrlEncoded
+    @POST("getRoom")
+    Call<GetRoomResult> getRoom(@Field("") String empty);
+
+    @FormUrlEncoded
+    @POST("getContract")
+    Call<GetContractResult> getContract(@Field("") String empty);
 }

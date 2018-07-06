@@ -93,8 +93,17 @@
 
 
                 <FrameLayout
-                    android:id="@+id/btn_news"
-                    style="@style/MainButton"></FrameLayout>
+                    android:id="@+id/btn_room"
+                    style="@style/MainButton"
+                    android:onClick="@{main.bottomBtnClick}">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="방"
+                        android:textColor="@color/white" />
+                </FrameLayout>
 
 
                 <FrameLayout

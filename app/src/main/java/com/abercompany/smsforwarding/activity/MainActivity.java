@@ -19,11 +19,14 @@ import android.widget.Toast;
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.databinding.ActivityMainBinding;
 import com.abercompany.smsforwarding.fragment.NewDataFragment;
+import com.abercompany.smsforwarding.fragment.RoomFragment;
 import com.abercompany.smsforwarding.fragment.SearchRawDataFragment;
 import com.abercompany.smsforwarding.fragment.ExistingDataFragment;
 import com.abercompany.smsforwarding.model.Broker;
+import com.abercompany.smsforwarding.model.Defaulter;
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.GetBrokerResult;
+import com.abercompany.smsforwarding.model.GetDefaulterResult;
 import com.abercompany.smsforwarding.model.GetDepositResult;
 import com.abercompany.smsforwarding.model.GetResidentResult;
 import com.abercompany.smsforwarding.model.Resident;
@@ -58,12 +61,13 @@ public class MainActivity extends AppCompatActivity {
     private List<String> nums = new ArrayList<String>();
     private List<Sms> lst2;
     private Cursor c;
-    private Fragment searchRawDataFragment, newDataFragment, existingDataFragment;
+    private Fragment searchRawDataFragment, newDataFragment, existingDataFragment, roomFragment;
     private List<Deposit> trimmedData;
     private List<Deposit> newDatas = new ArrayList<>();
     private List<Deposit> existingDatas = new ArrayList<>();
     private List<Resident> residents;
     private List<Broker> brokers;
+    private List<Defaulter> defaulters;
 
 
     @Override
@@ -85,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 getTrimmedData(DeviceUtil.getDevicePhoneNumber(MainActivity.this));
                 getBroker();
                 getResident();
+                getDefaulter();
             }
 
             @Override
@@ -114,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_search_raw_data:
                 initNaviButton(view);
                 if (searchRawDataFragment == null) {
-                    searchRawDataFragment = SearchRawDataFragment.newInstance(nums);
+                    searchRawDataFragment = SearchRawDataFragment.newInstance(nums, defaulters);
                 }
                 switchContent(searchRawDataFragment, "SEARCH_RAW_DATA");
                 break;
@@ -134,11 +139,19 @@ public class MainActivity extends AppCompatActivity {
                 }
                 switchContent(existingDataFragment, "EXISTING_DATA");
                 break;
+
+            case R.id.btn_room:
+                initNaviButton(view);
+                if (roomFragment == null) {
+                    roomFragment = RoomFragment.newInstance(defaulters);
+                }
+                switchContent(roomFragment, "ROOM");
+                break;
         }
     }
 
     public void setInitFrag() {
-        searchRawDataFragment = SearchRawDataFragment.newInstance(nums);
+        searchRawDataFragment = SearchRawDataFragment.newInstance(nums, defaulters);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, searchRawDataFragment, "SEARCH_RAW_DATA").addToBackStack("SEARCH_RAW_DATA").commit();
         binding.btnSearchRawData.setEnabled(false);
     }
@@ -147,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
         binding.btnSearchRawData.setEnabled(true);
         binding.btnDepositData.setEnabled(true);
         binding.btnWithdraw.setEnabled(true);
+        binding.btnRoom.setEnabled(true);
         v.setEnabled(false);
     }
 
@@ -201,6 +215,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case "EXISTING_DATA":
                     initNaviButton(binding.btnWithdraw);
+                    break;
+                case "ROOM":
+                    initNaviButton(binding.btnRoom);
                     break;
             }
         }
@@ -414,6 +431,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void getDefaulter() {
+        Call<GetDefaulterResult> getDefaulterResultCall = NetworkUtil.getInstace().getDefaulter("");
+        getDefaulterResultCall.enqueue(new Callback<GetDefaulterResult>() {
+            @Override
+            public void onResponse(Call<GetDefaulterResult> call, Response<GetDefaulterResult> response) {
+                GetDefaulterResult getDefaulterResult = response.body();
+                String result = getDefaulterResult.getResult();
+
+                if ("success".equals(result)) {
+                    defaulters = getDefaulterResult.getDefaulters();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetDefaulterResult> call, Throwable t) {
+            }
+        });
+
+    }
 
     public List<Sms> getAllSms(String phoneNum) {
         List<Sms> lstSms = new ArrayList<Sms>();

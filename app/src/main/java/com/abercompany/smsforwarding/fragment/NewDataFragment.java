@@ -67,7 +67,6 @@ public class NewDataFragment extends Fragment {
     }
 
     private void setDepositAdapter(final List<Deposit> newDatas, List<Resident> residents, List<Broker> brokers) {
-        JSLog.D("newDatas size          :::         " + newDatas.size(), null);
         adapter = new DepositDataAdapter(getActivity(), getContext(), newDatas, residents, brokers, NEW_DATA);
         binding.rvDeposit.setAdapter(adapter);
         binding.rvDeposit.setLayoutManager(new LinearLayoutManager(getContext()));

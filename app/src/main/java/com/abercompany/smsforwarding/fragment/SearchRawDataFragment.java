@@ -57,13 +57,14 @@ public class SearchRawDataFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public SearchRawDataFragment(List<String> nums) {
+    public SearchRawDataFragment(List<String> nums, List<Defaulter> defaulters) {
         // Required empty public constructor
         this.nums = nums;
+        this.defaulters = defaulters;
     }
 
-    public static SearchRawDataFragment newInstance(List<String> nums) {
-        SearchRawDataFragment fragment = new SearchRawDataFragment(nums);
+    public static SearchRawDataFragment newInstance(List<String> nums, List<Defaulter> defaulters) {
+        SearchRawDataFragment fragment = new SearchRawDataFragment(nums, defaulters);
         return fragment;
     }
 
@@ -101,7 +102,7 @@ public class SearchRawDataFragment extends Fragment {
 //                }
 //                lst = getAllSms(senderNum);
 //                setSmsAdapter(lst);
-                getDefault(binding.etPhoneNum.getText().toString());
+                setSmsAdapter(defaulters);
                 break;
 
             case R.id.btn_register:
@@ -112,26 +113,7 @@ public class SearchRawDataFragment extends Fragment {
         }
     }
 
-    private void getDefault(String roomNum) {
-        Call<GetDefaulterResult> getDefaulterResultCall = NetworkUtil.getInstace().getDefaulter(roomNum);
-        getDefaulterResultCall.enqueue(new Callback<GetDefaulterResult>() {
-            @Override
-            public void onResponse(Call<GetDefaulterResult> call, Response<GetDefaulterResult> response) {
-                GetDefaulterResult getDefaulterResult = response.body();
-                String result = getDefaulterResult.getResult();
 
-                if ("success".equals(result)) {
-                    defaulters = getDefaulterResult.getDefaulters();
-                    setSmsAdapter(defaulters);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetDefaulterResult> call, Throwable t) {
-
-            }
-        });
-    }
 
     private void registerNum(String senderNum, String phoneNum) {
         Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().registerNum(senderNum, phoneNum);
