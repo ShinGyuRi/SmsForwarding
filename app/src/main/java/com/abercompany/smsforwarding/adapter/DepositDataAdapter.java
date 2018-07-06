@@ -66,17 +66,13 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         this.brokers = brokers;
         this.type = type;
 
+        residentName.add("");
+        brokerName.add("");
 
-        for (int i = 1; i < residents.size(); i++) {
-            if (i == 0) {
-                residentName.add("");
-            }
+        for (int i = 0; i < residents.size(); i++) {
             residentName.add(context.getString(R.string.str_deposit_realty, residents.get(i).getName(), residents.get(i).getHo()));
         }
         for (int i = 0; i < brokers.size(); i++) {
-            if (i == 0) {
-                brokerName.add("");
-            }
             brokerName.add(context.getString(R.string.str_deposit_realty, brokers.get(i).getName(), brokers.get(i).getRealtyName()));
         }
 
@@ -118,7 +114,13 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
 
                 switch (itemPosition) {
                     case 0:
-                        holder.binding.spToName.setAdapter(null);
+                    case 7:
+                    case 10:
+                    case 11:
+                        holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item));
+                        if (holder.binding.spCategory.getSelectedItemPosition() != 0) {
+                            updateTrimmedData(deposits.get(position).getName(), deposits.get(position).getDate(), "", holder.binding.spCategory.getSelectedItem().toString(), position);
+                        }
                         break;
                     case 1:
                     case 2:
@@ -126,19 +128,17 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                     case 4:
                     case 5:
                     case 6:
+                    case 9:
                         if (NEW_DATA.equals(type)) {
                             holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residentName));
                         }
                         selectedFlag = false;
                         break;
-                    case 7:
+                    case 8:
                         if (NEW_DATA.equals(type)) {
                             holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, brokerName));
                         }
                         selectedFlag = false;
-                        break;
-                    case 8:
-                        holder.binding.spToName.setAdapter(null);
                         break;
                 }
 

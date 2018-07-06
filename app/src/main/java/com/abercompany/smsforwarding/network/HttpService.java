@@ -58,5 +58,5 @@ public interface HttpService {
 
     @FormUrlEncoded
     @POST("getDefaulter")
-    Call<GetDefaulterResult> getDefaulter(@Field("room_num") String roomNum);
+    Call<GetDefaulterResult> getDefaulter(@Field("") String empty);
 }
