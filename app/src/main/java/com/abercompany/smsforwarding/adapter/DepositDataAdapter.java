@@ -118,7 +118,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                     case 10:
                     case 11:
                         holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item));
-                        if (holder.binding.spCategory.getSelectedItemPosition() != 0) {
+                        if (!holder.binding.spCategory.getItemAtPosition(position).toString().equals(holder.binding.spCategory.getItemAtPosition(getSelectedTypePosition(position)))) {
                             updateTrimmedData(deposits.get(position).getName(), deposits.get(position).getDate(), "", holder.binding.spCategory.getSelectedItem().toString(), position);
                         }
                         break;

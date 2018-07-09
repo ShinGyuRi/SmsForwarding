@@ -10,6 +10,9 @@ public class Contract {
     @SerializedName("name")
     private String name;
 
+    @SerializedName("down_payment")
+    private String downPayment;
+
     @SerializedName("deposit")
     private String deposit;
 
@@ -33,6 +36,9 @@ public class Contract {
     }
     public String getName() {
         return name;
+    }
+    public String getDownPayment() {
+        return downPayment;
     }
     public String getDeposit() {
         return deposit;

@@ -67,10 +67,13 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.BindingHolder>
 
         for (int j = 0; j < contracts.size(); j++) {
             if (rooms.get(position).getRoomNum().equals(contracts.get(j).getRoomNum())) {
-                if ("재실".equals(contracts.get(j).getActive())) {
+                if (!"퇴실".equals(contracts.get(j).getActive())) {
                     holder.binding.tvStatus.setVisibility(View.VISIBLE);
                     holder.binding.tvName.setVisibility(View.VISIBLE);
                     holder.binding.tvCharges.setVisibility(View.VISIBLE);
+                }
+
+                if ("재실".equals(contracts.get(j).getActive())) {
 
                     holder.binding.tvStatus.setText(contracts.get(j).getActive());
                     holder.binding.tvName.setText(contracts.get(j).getName());
@@ -78,9 +81,22 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.BindingHolder>
                             contracts.get(j).getDeposit(),
                             contracts.get(j).getRent(),
                             contracts.get(j).getManageFee()));
+                } else if ("계약".equals(contracts.get(j).getActive())) {
+                    holder.binding.tvStatus.setText(contracts.get(j).getActive());
+                    holder.binding.tvName.setText(contracts.get(j).getName());
+                    holder.binding.tvCharges.setText(contracts.get(j).getDownPayment());
                 }
 
 
+            }
+        }
+
+        for (int i = 0; i < defaulters.size(); i++) {
+            if (rooms.get(position).getRoomNum().equals(defaulters.get(i).getRoomNum())) {
+                if ("재실".equals(rooms.get(position).getActive())) {
+                    holder.binding.tvDepositStatus.setVisibility(View.VISIBLE);
+                    holder.binding.tvDepositStatus.setText(defaulters.get(i).getEndDate());
+                }
             }
         }
 
