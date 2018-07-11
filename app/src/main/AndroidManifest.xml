@@ -41,7 +41,8 @@
 
         <activity android:name=".activity.RoomDetailActivity" />
         <activity android:name=".activity.ContractActivity" />
-        <activity android:name=".activity.RealtyActivity"></activity>
+        <activity android:name=".activity.RealtyActivity" />
+        <activity android:name=".activity.AddCashActivity"></activity>
     </application>
 
 </manifest>

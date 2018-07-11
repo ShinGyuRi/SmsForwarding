@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="addCash"
+            type="com.abercompany.smsforwarding.activity.AddCashActivity"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activity.AddCashActivity">
+
+        <EditText
+            android:id="@+id/et_name"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:hint="이름"
+            android:inputType="text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/et_amount"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:hint="금액"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/et_date"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="날짜"
+            android:inputType="text"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            app:layout_constraintStart_toStartOf="@+id/et_name"
+            app:layout_constraintTop_toBottomOf="@+id/et_name"
+            android:onClick="@{addCash.onClick}"/>
+
+        <Spinner
+            android:id="@+id/sp_category"
+            android:layout_width="170dp"
+            android:layout_height="19dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/shape_drop_down_normal"
+            android:entries="@array/category"
+            android:spinnerMode="dropdown"
+            android:textAlignment="center"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_constraintStart_toStartOf="@+id/et_date"
+            app:layout_constraintTop_toBottomOf="@+id/et_date"></Spinner>
+
+        <Spinner
+            android:id="@+id/sp_to_name"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/shape_drop_down_normal"
+            android:gravity="center"
+            android:spinnerMode="dropdown"
+            android:textAlignment="center"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_constraintBottom_toBottomOf="@+id/sp_category"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/sp_category" />
+
+        <Button
+            android:id="@+id/btn_upload"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@color/black"
+            android:text="업로드"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:onClick="@{addCash.onClick}"/>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

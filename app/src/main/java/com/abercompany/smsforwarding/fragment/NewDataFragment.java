@@ -2,6 +2,7 @@ package com.abercompany.smsforwarding.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.abercompany.smsforwarding.R;
+import com.abercompany.smsforwarding.activity.AddCashActivity;
 import com.abercompany.smsforwarding.adapter.DepositDataAdapter;
 import com.abercompany.smsforwarding.databinding.FragmentNewDataBinding;
 import com.abercompany.smsforwarding.model.Broker;
@@ -18,6 +20,7 @@ import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.Resident;
 import com.abercompany.smsforwarding.util.JSLog;
 
+import java.io.Serializable;
 import java.util.List;
 
 import static com.abercompany.smsforwarding.util.Definitions.TRIM_DATA.NEW_DATA;
@@ -64,6 +67,17 @@ public class NewDataFragment extends Fragment {
         return view;
 
 
+    }
+
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_add_cash:
+                Intent intent = new Intent(getContext(), AddCashActivity.class);
+                intent.putExtra("resident", (Serializable) residents);
+                intent.putExtra("broker", (Serializable) brokers);
+                startActivity(intent);
+                break;
+        }
     }
 
     private void setDepositAdapter(final List<Deposit> newDatas, List<Resident> residents, List<Broker> brokers) {

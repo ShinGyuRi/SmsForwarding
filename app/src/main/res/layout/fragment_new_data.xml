@@ -15,12 +15,36 @@
         android:background="@color/white"
         tools:context=".fragment.NewDataFragment">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:text="현금"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_add_cash"
+            app:layout_constraintEnd_toStartOf="@+id/btn_add_cash"
+            app:layout_constraintTop_toTopOf="@+id/btn_add_cash" />
+
+        <Button
+            android:id="@+id/btn_add_cash"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/plus_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:onClick="@{newData.onClick}"/>
+
         <LinearLayout
             android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:weightSum="3">
+            android:weightSum="3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_add_cash">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -38,12 +62,12 @@
                 android:text="호수" />
 
             <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:layout_weight="1"-->
-                <!--android:gravity="center"-->
-                <!--android:text="중개인" />-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:text="중개인" />-->
 
         </LinearLayout>
 

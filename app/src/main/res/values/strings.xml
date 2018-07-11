@@ -9,4 +9,5 @@
     <string name="str_charges">%1s/%2s/%3s</string>
     <string name="str_term">%1s ~ %2s</string>
     <string name="str_realty_info">%1s\t%2s\n%3s\t%4s</string>
+    <string name="str_sms_message_cash">%1s\n%2s\n%3s\n%4s\n%5s</string>
 </resources>
