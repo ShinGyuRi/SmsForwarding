@@ -39,7 +39,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.RoomDetailActivity"></activity>
+        <activity android:name=".activity.RoomDetailActivity" />
+        <activity android:name=".activity.ContractActivity" />
+        <activity android:name=".activity.RealtyActivity"></activity>
     </application>
 
 </manifest>

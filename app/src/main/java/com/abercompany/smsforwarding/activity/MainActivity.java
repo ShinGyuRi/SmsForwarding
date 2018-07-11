@@ -7,21 +7,20 @@ import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.databinding.ActivityMainBinding;
-import com.abercompany.smsforwarding.fragment.NewDataFragment;
-import com.abercompany.smsforwarding.fragment.RoomFragment;
-import com.abercompany.smsforwarding.fragment.SearchRawDataFragment;
 import com.abercompany.smsforwarding.fragment.ExistingDataFragment;
+import com.abercompany.smsforwarding.fragment.NewDataFragment;
+import com.abercompany.smsforwarding.fragment.SearchRawDataFragment;
 import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Defaulter;
 import com.abercompany.smsforwarding.model.Deposit;
@@ -41,6 +40,7 @@ import com.google.gson.JsonObject;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,13 +61,13 @@ public class MainActivity extends AppCompatActivity {
     private List<String> nums = new ArrayList<String>();
     private List<Sms> lst2;
     private Cursor c;
-    private Fragment searchRawDataFragment, newDataFragment, existingDataFragment, roomFragment;
+    private Fragment searchRawDataFragment, newDataFragment, existingDataFragment;
     private List<Deposit> trimmedData;
     private List<Deposit> newDatas = new ArrayList<>();
     private List<Deposit> existingDatas = new ArrayList<>();
     private List<Resident> residents;
     private List<Broker> brokers;
-    private List<Defaulter> defaulters;
+    private List<Defaulter> defaulters = new ArrayList<>();
 
 
     @Override
@@ -141,11 +141,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.btn_room:
-                initNaviButton(view);
-                if (roomFragment == null) {
-                    roomFragment = RoomFragment.newInstance(defaulters);
-                }
-                switchContent(roomFragment, "ROOM");
+
+                Intent intent = new Intent(this, ContractActivity.class);
+                intent.putExtra("defaulter", (Serializable) defaulters);
+                startActivity(intent);
                 break;
         }
     }
@@ -160,7 +159,6 @@ public class MainActivity extends AppCompatActivity {
         binding.btnSearchRawData.setEnabled(true);
         binding.btnDepositData.setEnabled(true);
         binding.btnWithdraw.setEnabled(true);
-        binding.btnRoom.setEnabled(true);
         v.setEnabled(false);
     }
 
@@ -215,9 +213,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case "EXISTING_DATA":
                     initNaviButton(binding.btnWithdraw);
-                    break;
-                case "ROOM":
-                    initNaviButton(binding.btnRoom);
                     break;
             }
         }

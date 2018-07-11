@@ -2,7 +2,9 @@ package com.abercompany.smsforwarding.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Defaulter {
+import java.io.Serializable;
+
+public class Defaulter implements Serializable{
 
     @SerializedName("dst_name")
     private String dstName;

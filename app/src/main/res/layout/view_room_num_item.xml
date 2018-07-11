@@ -5,7 +5,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/view_item"
-        android:layout_width="wrap_content"
+        android:layout_width="90dp"
         android:layout_height="wrap_content">
 
         <TextView
@@ -50,10 +50,6 @@
             android:id="@+id/tv_charges"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="charges"
             app:layout_constraintEnd_toEndOf="parent"
@@ -63,29 +59,29 @@
         <TextView
             android:id="@+id/tv_deposit_status"
             android:layout_width="wrap_content"
-            android:layout_height="15dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="deposit status"
+            android:text="입금상태"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_charges" />
 
-        <!--<View-->
-            <!--android:layout_width="1dp"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:background="@color/black"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintTop_toTopOf="parent" />-->
+        <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:background="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!--<View-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="1dp"-->
-            <!--android:background="@color/black"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintStart_toStartOf="parent" />-->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

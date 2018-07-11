@@ -2,6 +2,8 @@ package com.abercompany.smsforwarding.util;
 
 public class Definitions {
 
+    public static int REQUEST_REALTY = 0;
+
     public interface UPDATE_TRIM_DATA   {
         String DEPOSIT_DOWN_PAYMENT = "deposit_down_payment";
         String DEPOSIT_SECURITY = "deposit_security";

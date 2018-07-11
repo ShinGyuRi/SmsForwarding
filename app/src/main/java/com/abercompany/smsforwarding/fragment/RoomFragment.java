@@ -2,6 +2,7 @@ package com.abercompany.smsforwarding.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.abercompany.smsforwarding.R;
+import com.abercompany.smsforwarding.activity.RoomDetailActivity;
 import com.abercompany.smsforwarding.adapter.RoomAdapter;
 import com.abercompany.smsforwarding.databinding.FragmentRoomBinding;
 import com.abercompany.smsforwarding.model.Contract;
@@ -21,6 +23,7 @@ import com.abercompany.smsforwarding.model.GetRoomResult;
 import com.abercompany.smsforwarding.model.Room;
 import com.abercompany.smsforwarding.util.NetworkUtil;
 
+import java.io.Serializable;
 import java.util.List;
 
 import retrofit2.Call;
@@ -48,7 +51,7 @@ public class RoomFragment extends Fragment {
         this.defaulters = defaulters;
     }
 
-    public static RoomFragment newInstance(List<Defaulter> defaulters)   {
+    public static RoomFragment newInstance(List<Defaulter> defaulters) {
         RoomFragment fragment = new RoomFragment(defaulters);
         return fragment;
     }
@@ -63,12 +66,18 @@ public class RoomFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_room, container, false);
         View view = binding.getRoot();
 
-        getRoom();
 
         return view;
     }
 
-    private void setRoomAdapter(List<Room> rooms, List<Contract> contracts, List<Defaulter> defaulters)    {
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getRoom();
+    }
+
+    private void setRoomAdapter(final List<Room> rooms, final List<Contract> contracts, List<Defaulter> defaulters) {
         adapter = new RoomAdapter(getContext(), rooms, contracts, defaulters);
         binding.rvRoomNum.setAdapter(adapter);
         binding.rvRoomNum.setLayoutManager(new GridLayoutManager(getContext(), 4));
@@ -76,12 +85,20 @@ public class RoomFragment extends Fragment {
         adapter.setItemClick(new RoomAdapter.ItemClick() {
             @Override
             public void onClick(View view, int position) {
-
+                Intent intent = new Intent(getContext(), RoomDetailActivity.class);
+                intent.putExtra("room", rooms.get(position));
+                for (int i = 0; i < contracts.size(); i++) {
+                    if (rooms.get(position).getRoomNum().equals(contracts.get(i).getRoomNum()) &&
+                            "재실".equals(contracts.get(i).getActive())) {
+                        intent.putExtra("contract", contracts.get(i));
+                    }
+                }
+                startActivity(intent);
             }
         });
     }
 
-    private void getRoom()  {
+    private void getRoom() {
         Call<GetRoomResult> getRoomResultCall = NetworkUtil.getInstace().getRoom("");
         getRoomResultCall.enqueue(new Callback<GetRoomResult>() {
             @Override
@@ -103,7 +120,7 @@ public class RoomFragment extends Fragment {
         });
     }
 
-    private void getContract(final List<Room> rooms)  {
+    private void getContract(final List<Room> rooms) {
         Call<GetContractResult> getContractResultCall = NetworkUtil.getInstace().getContract("");
         getContractResultCall.enqueue(new Callback<GetContractResult>() {
             @Override

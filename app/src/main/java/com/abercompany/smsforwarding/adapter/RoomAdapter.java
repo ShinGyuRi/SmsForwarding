@@ -71,6 +71,9 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.BindingHolder>
                     holder.binding.tvStatus.setVisibility(View.VISIBLE);
                     holder.binding.tvName.setVisibility(View.VISIBLE);
                     holder.binding.tvCharges.setVisibility(View.VISIBLE);
+                    holder.binding.tvDepositStatus.setVisibility(View.VISIBLE);
+                } else {
+                    holder.binding.tvDepositStatus.setVisibility(View.GONE);
                 }
 
                 if ("재실".equals(contracts.get(j).getActive())) {
@@ -78,9 +81,9 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.BindingHolder>
                     holder.binding.tvStatus.setText(contracts.get(j).getActive());
                     holder.binding.tvName.setText(contracts.get(j).getName());
                     holder.binding.tvCharges.setText(context.getString(R.string.str_charges,
-                            contracts.get(j).getDeposit(),
-                            contracts.get(j).getRent(),
-                            contracts.get(j).getManageFee()));
+                            contracts.get(j).getDeposit().replace("0000", ""),
+                            contracts.get(j).getRent().replace("0000", ""),
+                            contracts.get(j).getManageFee().replace("0000", "")));
                 } else if ("계약".equals(contracts.get(j).getActive())) {
                     holder.binding.tvStatus.setText(contracts.get(j).getActive());
                     holder.binding.tvName.setText(contracts.get(j).getName());
@@ -91,21 +94,17 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.BindingHolder>
             }
         }
 
-        for (int i = 0; i < defaulters.size(); i++) {
-            if (rooms.get(position).getRoomNum().equals(defaulters.get(i).getRoomNum())) {
-                if ("재실".equals(rooms.get(position).getActive())) {
-                    holder.binding.tvDepositStatus.setVisibility(View.VISIBLE);
-                    holder.binding.tvDepositStatus.setText(defaulters.get(i).getEndDate());
+        if (defaulters != null) {
+            for (int i = 0; i < defaulters.size(); i++) {
+                if (rooms.get(position).getRoomNum().equals(defaulters.get(i).getRoomNum())) {
+                    if ("재실".equals(rooms.get(position).getActive())) {
+                        holder.binding.tvDepositStatus.setVisibility(View.VISIBLE);
+                        holder.binding.tvDepositStatus.setText(defaulters.get(i).getEndDate());
+                    }
                 }
             }
         }
 
-
-//        if (rooms.get(i).getRoomNum().equals(defaulters.get(j).getRoomNum())) {
-//            if ("재실".equals(contracts.get(j).getActive())) {
-//                holder.binding.tvDepositStatus.setText();
-//            }
-//        }
 
         holder.binding.viewItem.setOnClickListener(new View.OnClickListener() {
             @Override

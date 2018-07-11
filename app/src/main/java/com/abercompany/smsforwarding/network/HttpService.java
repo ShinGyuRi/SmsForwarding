@@ -5,6 +5,7 @@ import com.abercompany.smsforwarding.model.GetBrokerResult;
 import com.abercompany.smsforwarding.model.GetContractResult;
 import com.abercompany.smsforwarding.model.GetDefaulterResult;
 import com.abercompany.smsforwarding.model.GetDepositResult;
+import com.abercompany.smsforwarding.model.GetRealtyResult;
 import com.abercompany.smsforwarding.model.GetResidentResult;
 import com.abercompany.smsforwarding.model.GetRoomResult;
 import com.google.gson.JsonObject;
@@ -69,4 +70,32 @@ public interface HttpService {
     @FormUrlEncoded
     @POST("getContract")
     Call<GetContractResult> getContract(@Field("") String empty);
+
+    @FormUrlEncoded
+    @POST("insertContract")
+    Call<JsonObject> insertContract(@Field("room_num") String roomNum,
+                                    @Field("name") String name,
+                                    @Field("phone_num") String phoneNum,
+                                    @Field("id_num") String idNum,
+                                    @Field("etc_num") String etcNum,
+                                    @Field("address") String address,
+                                    @Field("emer_num") String emerNum,
+                                    @Field("emer_name") String emerName,
+                                    @Field("down_payment") String downPayment,
+                                    @Field("deposit") String deposit,
+                                    @Field("rent") String rent,
+                                    @Field("manage_fee") String manageFee,
+                                    @Field("start_date") String startDate,
+                                    @Field("end_date") String endDate,
+                                    @Field("elec_num") String elecNum,
+                                    @Field("gas_num") String gasNum,
+                                    @Field("active") String active,
+                                    @Field("realty_name") String realtyName,
+                                    @Field("realty_account") String realtyAccount,
+                                    @Field("realty_broker_name") String realtyBrokerName,
+                                    @Field("realty_broker_phone_num") String realtyBrokerPhoneNum);
+
+    @FormUrlEncoded
+    @POST("getRealty")
+    Call<GetRealtyResult> getRealty(@Field("") String empty);
 }

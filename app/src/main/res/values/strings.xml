@@ -7,4 +7,6 @@
     <string name="str_deposit_message">이름:%1s\n입금액:%2s\n날짜:%3s\n방법:%4s</string>
     <string name="str_deposit_realty">%1s(%2s)</string>
     <string name="str_charges">%1s/%2s/%3s</string>
+    <string name="str_term">%1s ~ %2s</string>
+    <string name="str_realty_info">%1s\t%2s\n%3s\t%4s</string>
 </resources>
