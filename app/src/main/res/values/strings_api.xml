@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="API_SERVER">http://13.125.185.2:8080/ABER/</string>
+    <string name="API_SERVER">http://10.0.2.2:8080/ABER/</string>
 </resources>

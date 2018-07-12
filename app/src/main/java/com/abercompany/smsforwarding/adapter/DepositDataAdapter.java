@@ -17,6 +17,7 @@ import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.Resident;
 import com.abercompany.smsforwarding.util.Debug;
+import com.abercompany.smsforwarding.util.DeviceUtil;
 import com.abercompany.smsforwarding.util.JSLog;
 import com.abercompany.smsforwarding.util.NetworkUtil;
 import com.google.gson.JsonObject;
@@ -117,6 +118,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                     case 7:
                     case 10:
                     case 11:
+                    case 12:
                         holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item));
                         if (EXISTING_DATA.equals(type) && !holder.binding.spCategory.getItemAtPosition(position).toString().equals(holder.binding.spCategory.getItemAtPosition(getSelectedTypePosition(position)))) {
                             updateTrimmedData(deposits.get(position).getName(), deposits.get(position).getDate(), "", holder.binding.spCategory.getSelectedItem().toString(), position);
@@ -183,7 +185,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
 
 
     private void updateTrimmedData(String name, String date, String objectName, final String type, final int position) {
-        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type);
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type, DeviceUtil.getDevicePhoneNumber(context));
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

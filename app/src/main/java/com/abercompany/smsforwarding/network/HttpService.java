@@ -57,7 +57,8 @@ public interface HttpService {
     Call<JsonObject> updateTrimmedData(@Field("name") String name,
                                        @Field("date") String date,
                                        @Field("object_name") String objectName,
-                                       @Field("type") String type);
+                                       @Field("type") String type,
+                                       @Field("phone_num") String phoneNum);
 
     @FormUrlEncoded
     @POST("getDefaulter")

@@ -14,6 +14,7 @@ import com.abercompany.smsforwarding.databinding.ActivityAddCashBinding;
 import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Resident;
 import com.abercompany.smsforwarding.util.Debug;
+import com.abercompany.smsforwarding.util.DeviceUtil;
 import com.abercompany.smsforwarding.util.JSLog;
 import com.abercompany.smsforwarding.util.NetworkUtil;
 import com.google.gson.JsonObject;
@@ -165,7 +166,7 @@ public class AddCashActivity extends AppCompatActivity implements DatePickerDial
     }
 
     private void updateTrimmedData(String name, String date, String objectName, final String type) {
-        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type);
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type, DeviceUtil.getDevicePhoneNumber(this));
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

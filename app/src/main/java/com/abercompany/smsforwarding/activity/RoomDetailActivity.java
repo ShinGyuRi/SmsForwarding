@@ -55,7 +55,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
     private void setInitView(Room room, Contract contract) {
         binding.tvRoomNum.setText(room.getRoomNum());
 
-        if ("재실".equals(contract.getActive())) {
+        if ("재실".equals(room.getActive())) {
             binding.rbCheckIn.setChecked(true);
         } else {
             binding.rbCheckOut.setChecked(true);

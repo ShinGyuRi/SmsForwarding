@@ -55,5 +55,6 @@
         <item>출금-정산</item>
         <item>출금-유지보수</item>
         <item>출금-기타</item>
+        <item>입출금-무관</item>
     </string-array>
 </resources>
