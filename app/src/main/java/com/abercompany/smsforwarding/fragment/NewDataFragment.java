@@ -75,6 +75,7 @@ public class NewDataFragment extends Fragment {
                 Intent intent = new Intent(getContext(), AddCashActivity.class);
                 intent.putExtra("resident", (Serializable) residents);
                 intent.putExtra("broker", (Serializable) brokers);
+                intent.putExtra("dataType", NEW_DATA);
                 startActivity(intent);
                 break;
         }

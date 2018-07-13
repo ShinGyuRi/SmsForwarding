@@ -81,6 +81,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/sp_category" />
 
+        <TextView
+            android:id="@+id/tv_last_term"
+            android:layout_width="350dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:onClick="@{addCash.onClick}"
+            android:text="마지막 월세 기간:"
+            android:visibility="gone"
+            android:textSize="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sp_category" />
+
         <Button
             android:id="@+id/btn_upload"
             android:layout_width="350dp"

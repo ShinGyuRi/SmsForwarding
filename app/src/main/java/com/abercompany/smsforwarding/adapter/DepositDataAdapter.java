@@ -185,7 +185,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
 
 
     private void updateTrimmedData(String name, String date, String objectName, final String type, final int position) {
-        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type, DeviceUtil.getDevicePhoneNumber(context));
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type, DeviceUtil.getDevicePhoneNumber(context), NEW_DATA, "", "");
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

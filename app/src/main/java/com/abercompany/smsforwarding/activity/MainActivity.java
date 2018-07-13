@@ -21,6 +21,7 @@ import com.abercompany.smsforwarding.databinding.ActivityMainBinding;
 import com.abercompany.smsforwarding.fragment.ExistingDataFragment;
 import com.abercompany.smsforwarding.fragment.NewDataFragment;
 import com.abercompany.smsforwarding.fragment.SearchRawDataFragment;
+import com.abercompany.smsforwarding.fragment.SettingFragment;
 import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Defaulter;
 import com.abercompany.smsforwarding.model.Deposit;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private List<String> nums = new ArrayList<String>();
     private List<Sms> lst2;
     private Cursor c;
-    private Fragment searchRawDataFragment, newDataFragment, existingDataFragment;
+    private Fragment searchRawDataFragment, newDataFragment, existingDataFragment, settingFragment;
     private List<Deposit> trimmedData;
     private List<Deposit> newDatas = new ArrayList<>();
     private List<Deposit> existingDatas = new ArrayList<>();
@@ -146,6 +147,14 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("defaulter", (Serializable) defaulters);
                 startActivity(intent);
                 break;
+
+            case R.id.btn_setting:
+                initNaviButton(view);
+                if (settingFragment == null) {
+                    settingFragment = SettingFragment.newInstance(residents, brokers);
+                }
+                switchContent(settingFragment, "SETTING");
+                break;
         }
     }
 
@@ -159,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
         binding.btnSearchRawData.setEnabled(true);
         binding.btnDepositData.setEnabled(true);
         binding.btnWithdraw.setEnabled(true);
+        binding.btnSetting.setEnabled(true);
         v.setEnabled(false);
     }
 
@@ -213,6 +223,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case "EXISTING_DATA":
                     initNaviButton(binding.btnWithdraw);
+                    break;
+                case "SETTING":
+                    initNaviButton(binding.btnSetting);
                     break;
             }
         }

@@ -28,6 +28,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.abercompany.smsforwarding.util.Definitions.TRIM_DATA.EXISTING_DATA;
 import static com.abercompany.smsforwarding.util.Definitions.TRIM_DATA.NEW_DATA;
 
 public class AddCashActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -40,6 +41,12 @@ public class AddCashActivity extends AppCompatActivity implements DatePickerDial
     private List<String> brokerName = new ArrayList<>();
 
     private String date = "";
+    private DatePickerDialog dpd;
+
+
+    private String startDate = "";
+    private String endDate = "";
+    private String dataType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +94,17 @@ public class AddCashActivity extends AppCompatActivity implements DatePickerDial
         Intent intent = getIntent();
         residents = (ArrayList<Resident>) intent.getSerializableExtra("resident");
         brokers = (ArrayList<Broker>) intent.getSerializableExtra("broker");
+        dataType = intent.getStringExtra("dataType");
 
         for (int i = 0; i < residents.size(); i++) {
             residentName.add(getString(R.string.str_deposit_realty, residents.get(i).getName(), residents.get(i).getHo()));
         }
         for (int i = 0; i < brokers.size(); i++) {
             brokerName.add(getString(R.string.str_deposit_realty, brokers.get(i).getName(), brokers.get(i).getRealtyName()));
+        }
+
+        if (EXISTING_DATA.equals(dataType)) {
+            binding.tvLastTerm.setVisibility(View.VISIBLE);
         }
     }
 
@@ -121,13 +133,24 @@ public class AddCashActivity extends AppCompatActivity implements DatePickerDial
             case R.id.et_date:
 
                 Calendar cal = Calendar.getInstance();
-                DatePickerDialog dpd = DatePickerDialog.newInstance(
+                dpd = DatePickerDialog.newInstance(
                         this,
                         cal.get(Calendar.YEAR),
                         cal.get(Calendar.MONTH),
                         cal.get(Calendar.DAY_OF_MONTH)
                 );
                 dpd.show(getFragmentManager(), "date");
+                break;
+
+            case R.id.tv_last_term:
+                Calendar startDate = Calendar.getInstance();
+                dpd = DatePickerDialog.newInstance(
+                        this,
+                        startDate.get(Calendar.YEAR),
+                        startDate.get(Calendar.MONTH),
+                        startDate.get(Calendar.DAY_OF_MONTH)
+                );
+                dpd.show(getFragmentManager(), "startDate");
                 break;
         }
     }
@@ -151,7 +174,7 @@ public class AddCashActivity extends AppCompatActivity implements DatePickerDial
                     boolean success = jsonObject.get("message").getAsBoolean();
                     JSLog.D("success          :::     " + success, null);
                     if (success) {
-                        updateTrimmedData(name, date, objectName, type);
+                        updateTrimmedData(name, date, objectName, type, dataType);
                     } else {
                     }
                 }
@@ -165,8 +188,8 @@ public class AddCashActivity extends AppCompatActivity implements DatePickerDial
         });
     }
 
-    private void updateTrimmedData(String name, String date, String objectName, final String type) {
-        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type, DeviceUtil.getDevicePhoneNumber(this));
+    private void updateTrimmedData(String name, String date, String objectName, final String type, String dataType) {
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type, DeviceUtil.getDevicePhoneNumber(this), dataType, startDate, endDate);
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -204,11 +227,30 @@ public class AddCashActivity extends AppCompatActivity implements DatePickerDial
         }
         if (String.valueOf(dayOfMonth).length() == 1) {
             dayResult = "0" + dayOfMonth;
-        } else {
+        }else {
             dayResult = String.valueOf(dayOfMonth);
         }
 
-        date = monthResult + "/" + dayResult;
-        binding.etDate.setText(date);
+        if ("date".equals(view.getTag())) {
+
+            date = monthResult + "/" + dayResult;
+            binding.etDate.setText(date);
+        } else if ("startDate".equals(view.getTag())) {
+            startDate = year + "-" + monthResult + "-" + dayResult;
+
+
+            Calendar endDate = Calendar.getInstance();
+            dpd = DatePickerDialog.newInstance(
+                    this,
+                    endDate.get(Calendar.YEAR),
+                    endDate.get(Calendar.MONTH),
+                    endDate.get(Calendar.DAY_OF_MONTH)
+            );
+            dpd.show(getFragmentManager(), "endDate");
+        } else if ("endDate".equals(view.getTag())) {
+            endDate = year + "-" + monthResult + "-" + dayResult;
+
+            binding.tvLastTerm.setText(getString(R.string.str_term, startDate, endDate));
+        }
     }
 }
