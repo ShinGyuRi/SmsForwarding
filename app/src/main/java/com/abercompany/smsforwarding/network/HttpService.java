@@ -2,6 +2,8 @@ package com.abercompany.smsforwarding.network;
 
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.GetBrokerResult;
+import com.abercompany.smsforwarding.model.GetCheckInListResult;
+import com.abercompany.smsforwarding.model.GetCheckOutListResult;
 import com.abercompany.smsforwarding.model.GetContractResult;
 import com.abercompany.smsforwarding.model.GetDefaulterResult;
 import com.abercompany.smsforwarding.model.GetDepositResult;
@@ -102,4 +104,36 @@ public interface HttpService {
     @FormUrlEncoded
     @POST("getRealty")
     Call<GetRealtyResult> getRealty(@Field("") String empty);
+
+    @FormUrlEncoded
+    @POST("insertCheckInList")
+    Call<JsonObject> insertCheckInList(@Field("room_num") String roomNum,
+                                       @Field("name") String name,
+                                       @Field("id_num") boolean idNum,
+                                       @Field("emer_num") boolean emerNum,
+                                       @Field("amount") boolean amount,
+                                       @Field("elec_gas") boolean elecGas,
+                                       @Field("condition") boolean condition,
+                                       @Field("realty") boolean realty);
+
+    @FormUrlEncoded
+    @POST("getCheckInList")
+    Call<GetCheckInListResult> getCheckInList(@Field("room_num") String roomNum,
+                                              @Field("name") String name);
+
+    @FormUrlEncoded
+    @POST("insertCheckOutList")
+    Call<JsonObject> insertCheckOutList(@Field("room_num") String roomNum,
+                                        @Field("name") String name,
+                                        @Field("elec_gas") boolean elecGas,
+                                        @Field("out_date") boolean outDate,
+                                        @Field("remote_con") boolean remoteCon,
+                                        @Field("account") boolean account,
+                                        @Field("katok") boolean katok,
+                                        @Field("tv") boolean tv);
+
+    @FormUrlEncoded
+    @POST("getCheckOutList")
+    Call<GetCheckOutListResult> getCheckOutList(@Field("room_num") String roomNum,
+                                                @Field("name") String name);
 }

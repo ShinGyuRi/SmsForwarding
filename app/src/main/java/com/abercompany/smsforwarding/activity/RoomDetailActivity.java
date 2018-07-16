@@ -9,9 +9,16 @@ import android.widget.RadioGroup;
 
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.databinding.ActivityRoomDetailBinding;
+import com.abercompany.smsforwarding.dialog.CheckInListDialog;
+import com.abercompany.smsforwarding.dialog.CheckOutListDialog;
+import com.abercompany.smsforwarding.model.CheckIn;
+import com.abercompany.smsforwarding.model.CheckOut;
 import com.abercompany.smsforwarding.model.Contract;
+import com.abercompany.smsforwarding.model.GetCheckInListResult;
+import com.abercompany.smsforwarding.model.GetCheckOutListResult;
 import com.abercompany.smsforwarding.model.Room;
 import com.abercompany.smsforwarding.util.Debug;
+import com.abercompany.smsforwarding.util.JSLog;
 import com.abercompany.smsforwarding.util.NetworkUtil;
 import com.google.gson.JsonObject;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -24,7 +31,7 @@ import retrofit2.Response;
 
 import static com.abercompany.smsforwarding.util.Definitions.REQUEST_REALTY;
 
-public class RoomDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
+public class RoomDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private ActivityRoomDetailBinding binding;
 
@@ -57,8 +64,10 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
 
         if ("재실".equals(room.getActive())) {
             binding.rbCheckIn.setChecked(true);
+            rbCheckOutSetOnClick();
         } else {
             binding.rbCheckOut.setChecked(true);
+            rbCheckInSetOnClick();
         }
 
         if (contract != null) {
@@ -94,18 +103,48 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
         binding.rgActive.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
+                if (!"".equals(binding.etName.getText().toString())) {
+                    if (checkedId == R.id.rb_check_in) {
+                        rbCheckOutSetOnClick();
+                    } else if (checkedId == R.id.rb_check_out) {
+                        rbCheckInSetOnClick();
+                    }
+                } else {
+                    Debug.showToast(RoomDetailActivity.this, "이름을 입력해주세요");
+                }
+            }
+        });
+
+
+    }
+
+    private void rbCheckInSetOnClick() {
+
+        binding.rbCheckIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
                     case R.id.rb_check_in:
+                        getCheckInList(binding.tvRoomNum.getText().toString(), binding.etName.getText().toString());
                         active = "재실";
                         break;
+                }
+            }
+        });
+    }
 
+    private void rbCheckOutSetOnClick() {
+        binding.rbCheckOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
                     case R.id.rb_check_out:
+                        getCheckOutList(binding.tvRoomNum.getText().toString(), binding.etName.getText().toString());
                         active = "퇴실";
                         break;
                 }
             }
         });
-
     }
 
     public void onClick(View view) {
@@ -134,6 +173,188 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
                 startActivityForResult(intent, REQUEST_REALTY);
                 break;
         }
+    }
+
+    private void getCheckInList(final String roomNum, final String name) {
+        Call<GetCheckInListResult> getCheckInListResultCall = NetworkUtil.getInstace().getCheckInList(roomNum, name);
+        getCheckInListResultCall.enqueue(new Callback<GetCheckInListResult>() {
+            @Override
+            public void onResponse(Call<GetCheckInListResult> call, Response<GetCheckInListResult> response) {
+                GetCheckInListResult getCheckInListResult = response.body();
+                String result = getCheckInListResult.getResult();
+
+                if ("success".equals(result)) {
+                    CheckIn checkIn = getCheckInListResult.getCheckIns();
+
+
+                    final CheckInListDialog checkInListDialog = new CheckInListDialog(RoomDetailActivity.this);
+                    checkInListDialog.show();
+
+
+                    if (checkIn.isIdNum() != null) {
+
+                        checkInListDialog.getBinding().checkIdNum.setChecked(checkIn.isIdNum());
+                        checkInListDialog.getBinding().checkInputEmerNum.setChecked(checkIn.isEmerNum());
+                        checkInListDialog.getBinding().checkAmount.setChecked(checkIn.isAmount());
+                        checkInListDialog.getBinding().checkElecGas.setChecked(checkIn.isElecGas());
+                        checkInListDialog.getBinding().checkCondition.setChecked(checkIn.isCondition());
+                        checkInListDialog.getBinding().checkRealty.setChecked(checkIn.isRealty());
+
+                    }
+
+                    checkInListDialog.getBinding().btnOk.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            insertCheckInList(checkInListDialog, roomNum, name,
+                                    checkInListDialog.getBinding().checkIdNum.isChecked(),
+                                    checkInListDialog.getBinding().checkInputEmerNum.isChecked(),
+                                    checkInListDialog.getBinding().checkAmount.isChecked(),
+                                    checkInListDialog.getBinding().checkElecGas.isChecked(),
+                                    checkInListDialog.getBinding().checkCondition.isChecked(),
+                                    checkInListDialog.getBinding().checkRealty.isChecked());
+
+                            if (!checkInListDialog.getBinding().checkIdNum.isChecked() ||
+                                    !checkInListDialog.getBinding().checkInputEmerNum.isChecked() ||
+                                    !checkInListDialog.getBinding().checkAmount.isChecked() ||
+                                    !checkInListDialog.getBinding().checkElecGas.isChecked() ||
+                                    !checkInListDialog.getBinding().checkCondition.isChecked() ||
+                                    !checkInListDialog.getBinding().checkRealty.isChecked()) {
+                                binding.rbCheckOut.setChecked(true);
+                            }
+                        }
+                    });
+                    checkInListDialog.getBinding().btnCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            binding.rbCheckOut.setChecked(true);
+                            checkInListDialog.cancel();
+                        }
+                    });
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetCheckInListResult> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void insertCheckInList(final CheckInListDialog dialog, String roomNum, String name, boolean idNum, boolean emerNum, boolean amount, boolean elecGas, boolean condition, boolean realty) {
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertCheckInList(roomNum, name, idNum, emerNum, amount, elecGas, condition, realty);
+        jsonObjectCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject jsonObject = response.body();
+                String result = jsonObject.get("result").getAsString();
+
+                if ("success".equals(result)) {
+                    boolean message = jsonObject.get("message").getAsBoolean();
+                    if (message) {
+                        JSLog.D("insert CheckIn List Success            !!!     ", null);
+                        dialog.dismiss();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getCheckOutList(final String roomNum, final String name) {
+        Call<GetCheckOutListResult> getCheckOutListResultCall = NetworkUtil.getInstace().getCheckOutList(roomNum, name);
+        getCheckOutListResultCall.enqueue(new Callback<GetCheckOutListResult>() {
+            @Override
+            public void onResponse(Call<GetCheckOutListResult> call, Response<GetCheckOutListResult> response) {
+                GetCheckOutListResult checkOutListResult = response.body();
+                String result = checkOutListResult.getResult();
+
+                if ("success".equals(result)) {
+                    CheckOut checkOut = checkOutListResult.getCheckOut();
+
+                    final CheckOutListDialog checkoutListDialog = new CheckOutListDialog(RoomDetailActivity.this);
+                    checkoutListDialog.show();
+
+
+                    if (checkOut.getElecGas() != null) {
+
+                        checkoutListDialog.getBinding().checkElecGas.setChecked(checkOut.getElecGas());
+                        checkoutListDialog.getBinding().checkInputOutDate.setChecked(checkOut.getOutDate());
+                        checkoutListDialog.getBinding().checkRemoteCon.setChecked(checkOut.getRemoteCon());
+                        checkoutListDialog.getBinding().checkAccount.setChecked(checkOut.getAccount());
+                        checkoutListDialog.getBinding().checkKatok.setChecked(checkOut.getKatok());
+                        checkoutListDialog.getBinding().checkTv.setChecked(checkOut.getTv());
+
+                    }
+
+
+                    checkoutListDialog.getBinding().btnOk.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            insertCheckOutList(checkoutListDialog, roomNum, name,
+                                    checkoutListDialog.getBinding().checkElecGas.isChecked(),
+                                    checkoutListDialog.getBinding().checkInputOutDate.isChecked(),
+                                    checkoutListDialog.getBinding().checkRemoteCon.isChecked(),
+                                    checkoutListDialog.getBinding().checkAccount.isChecked(),
+                                    checkoutListDialog.getBinding().checkKatok.isChecked(),
+                                    checkoutListDialog.getBinding().checkTv.isChecked());
+
+                            if (!checkoutListDialog.getBinding().checkElecGas.isChecked() ||
+                                    !checkoutListDialog.getBinding().checkInputOutDate.isChecked() ||
+                                    !checkoutListDialog.getBinding().checkRemoteCon.isChecked() ||
+                                    !checkoutListDialog.getBinding().checkAccount.isChecked() ||
+                                    !checkoutListDialog.getBinding().checkKatok.isChecked() ||
+                                    !checkoutListDialog.getBinding().checkTv.isChecked()) {
+                                binding.rbCheckIn.setChecked(true);
+                            }
+                        }
+                    });
+                    checkoutListDialog.getBinding().btnCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            binding.rbCheckIn.setChecked(true);
+                            checkoutListDialog.cancel();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetCheckOutListResult> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void insertCheckOutList(final CheckOutListDialog dialog, String roomNum, String name, boolean elecGas, boolean outDate, boolean remoteCon, boolean account, boolean katok, boolean tv) {
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertCheckOutList(roomNum, name, elecGas, outDate, remoteCon, account, katok, tv);
+        jsonObjectCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject jsonObject = response.body();
+                String result = jsonObject.get("result").getAsString();
+
+                if ("success".equals(result)) {
+                    boolean message = jsonObject.get("message").getAsBoolean();
+                    if (message) {
+                        JSLog.D("insert CheckOut List Success            !!!     ", null);
+                        dialog.dismiss();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
     }
 
     private void uploadContract() {
@@ -198,7 +419,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
         }
         if (String.valueOf(dayOfMonth).length() == 1) {
             dayResult = "0" + dayOfMonth;
-        }else {
+        } else {
             dayResult = String.valueOf(dayOfMonth);
         }
 

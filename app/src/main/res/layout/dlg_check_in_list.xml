@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <CheckBox
+            android:id="@+id/check_id_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:text="주민번호 확인"
+            app:layout_constraintEnd_toStartOf="@+id/check_input_emer_num"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/check_input_emer_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="8dp"
+            android:text="응급 연락처 적기"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/check_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="금액확인"
+            app:layout_constraintStart_toStartOf="@+id/check_id_num"
+            app:layout_constraintTop_toBottomOf="@+id/check_id_num" />
+
+        <CheckBox
+            android:id="@+id/check_elec_gas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="전기 가스 체크"
+            app:layout_constraintStart_toStartOf="@+id/check_input_emer_num"
+            app:layout_constraintTop_toBottomOf="@+id/check_input_emer_num" />
+
+        <CheckBox
+            android:id="@+id/check_condition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="특약사항 확인"
+            app:layout_constraintStart_toStartOf="@+id/check_amount"
+            app:layout_constraintTop_toBottomOf="@+id/check_amount" />
+
+        <CheckBox
+            android:id="@+id/check_realty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="부동산 적기"
+            app:layout_constraintStart_toStartOf="@+id/check_elec_gas"
+            app:layout_constraintTop_toBottomOf="@+id/check_elec_gas" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/black"
+            android:text="취소"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/check_condition"
+            app:layout_constraintTop_toBottomOf="@+id/check_condition" />
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/black"
+            android:text="확인"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="@+id/check_realty"
+            app:layout_constraintTop_toBottomOf="@+id/check_realty" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
