@@ -19,15 +19,54 @@
             android:id="@+id/btn_add_last_rent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:background="@color/black"
+            android:onClick="@{setting.onClick}"
             android:text="마지막 월세 추가"
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/black"
+            android:text="전화번호 등록"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@+id/btn_add_last_rent"
             app:layout_constraintTop_toTopOf="parent"
             android:onClick="@{setting.onClick}"/>
+
+        <Button
+            android:id="@+id/btn_check_defaulter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/black"
+            android:text="미납자 조회"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@+id/btn_register"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_check_leave_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/black"
+            android:text="퇴실 임박자 조회"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="@+id/btn_add_last_rent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_add_last_rent"
+            android:onClick="@{setting.onClick}" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

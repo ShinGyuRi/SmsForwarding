@@ -12,11 +12,16 @@ import android.view.ViewGroup;
 
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.activity.AddCashActivity;
+import com.abercompany.smsforwarding.activity.RegisterPhoneNumActivity;
+import com.abercompany.smsforwarding.activity.SearchDefaulterActivity;
+import com.abercompany.smsforwarding.activity.SearchLeaveRoomActivity;
 import com.abercompany.smsforwarding.databinding.FragmentSettingBinding;
 import com.abercompany.smsforwarding.model.Broker;
+import com.abercompany.smsforwarding.model.Defaulter;
 import com.abercompany.smsforwarding.model.Resident;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.abercompany.smsforwarding.util.Definitions.TRIM_DATA.EXISTING_DATA;
@@ -30,19 +35,23 @@ public class SettingFragment extends Fragment {
 
     private List<Resident> residents;
     private List<Broker> brokers;
+    private List<String> nums = new ArrayList<>();
+    private List<Defaulter> defaulters;
 
     public SettingFragment() {
         // Required empty public constructor
     }
 
     @SuppressLint("ValidFragment")
-    public SettingFragment(List<Resident> residents, List<Broker> brokers) {
+    public SettingFragment(List<Resident> residents, List<Broker> brokers, List<String> nums, List<Defaulter> defaulters) {
         this.residents = residents;
         this.brokers = brokers;
+        this.nums = nums;
+        this.defaulters = defaulters;
     }
 
-    public static SettingFragment newInstance(List<Resident> residents, List<Broker> brokers) {
-        SettingFragment fragment = new SettingFragment(residents, brokers);
+    public static SettingFragment newInstance(List<Resident> residents, List<Broker> brokers, List<String> nums, List<Defaulter> defaulters) {
+        SettingFragment fragment = new SettingFragment(residents, brokers, nums, defaulters);
         return fragment;
     }
 
@@ -68,6 +77,23 @@ public class SettingFragment extends Fragment {
                 intent.putExtra("dataType", EXISTING_DATA);
                 startActivity(intent);
                 break;
+
+            case R.id.btn_register:
+                Intent intent1 = new Intent(getContext(), RegisterPhoneNumActivity.class);
+                intent1.putExtra("nums", (Serializable) nums);
+                startActivity(intent1);
+
+            case R.id.btn_check_defaulter:
+                Intent intent2 = new Intent(getContext(), SearchDefaulterActivity.class);
+                intent2.putExtra("defaulter", (Serializable) defaulters);
+                startActivity(intent2);
+                break;
+
+            case R.id.btn_check_leave_room:
+                Intent intent3 = new Intent(getContext(), SearchLeaveRoomActivity.class);
+                startActivity(intent3);
+                break;
+
         }
     }
 

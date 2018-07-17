@@ -136,4 +136,8 @@ public interface HttpService {
     @POST("getCheckOutList")
     Call<GetCheckOutListResult> getCheckOutList(@Field("room_num") String roomNum,
                                                 @Field("name") String name);
+
+    @FormUrlEncoded
+    @POST("getLeaveRoom")
+    Call<GetContractResult> getLeaveRoom(@Field("") String empty);
 }

@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btn_setting:
                 initNaviButton(view);
                 if (settingFragment == null) {
-                    settingFragment = SettingFragment.newInstance(residents, brokers);
+                    settingFragment = SettingFragment.newInstance(residents, brokers, nums, defaulters);
                 }
                 switchContent(settingFragment, "SETTING");
                 break;

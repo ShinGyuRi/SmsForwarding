@@ -43,7 +43,10 @@
         <activity android:name=".activity.ContractActivity" />
         <activity android:name=".activity.RealtyActivity" />
         <activity android:name=".activity.AddCashActivity" />
-        <activity android:name=".activity.ExistingContractActivity"></activity>
+        <activity android:name=".activity.ExistingContractActivity" />
+        <activity android:name=".activity.RegisterPhoneNumActivity" />
+        <activity android:name=".activity.SearchDefaulterActivity" />
+        <activity android:name=".activity.SearchLeaveRoomActivity"></activity>
     </application>
 
 </manifest>
