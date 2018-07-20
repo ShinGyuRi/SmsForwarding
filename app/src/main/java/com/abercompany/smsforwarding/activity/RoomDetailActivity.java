@@ -45,6 +45,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
     private String account = "";
     private String brokerName = "";
     private String brokerPhoneNum = "";
+    private String buildingName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
         Intent intent = getIntent();
         room = (Room) intent.getSerializableExtra("room");
         contract = (Contract) intent.getSerializableExtra("contract");
+        buildingName = intent.getStringExtra("buildingName");
 
         setInitView(room, contract);
     }
@@ -150,7 +152,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_upload:
-                uploadContract();
+                uploadContract(buildingName);
                 break;
 
             case R.id.tv_term:
@@ -357,7 +359,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
         });
     }
 
-    private void uploadContract() {
+    private void uploadContract(String buildingName) {
         String roomNum = binding.tvRoomNum.getText().toString();
         String name = binding.etName.getText().toString();
         String phoneNum = binding.etPhoneNum.getText().toString();
@@ -383,7 +385,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
         Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertContract(
                 roomNum, name, phoneNum, idNum, etcNum, address, emerNum, emerName,
                 downPayment, deposit, rent, manageFee, startDate, endDate, elecNum, gasNum, active,
-                realtyName, account, brokerName, brokerPhoneNum);
+                realtyName, account, brokerName, brokerPhoneNum, buildingName);
 
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override

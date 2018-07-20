@@ -32,11 +32,11 @@
 
                 <fragment
                     android:id="@+id/fragment_search_raw_data"
-                    android:name="com.abercompany.smsforwarding.fragment.SearchRawDataFragment"
+                    android:name="com.abercompany.smsforwarding.fragment.BuildingFragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    tools:layout="@layout/fragment_search_raw_data" />
+                    tools:layout="@layout/fragment_building" />
             </FrameLayout>
 
             <LinearLayout
@@ -52,7 +52,7 @@
                 app:layout_constraintStart_toStartOf="parent">
 
                 <FrameLayout
-                    android:id="@+id/btn_search_raw_data"
+                    android:id="@+id/btn_building"
                     style="@style/MainButton"
                     android:onClick="@{main.bottomBtnClick}">
 
@@ -60,7 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="조회"
+                        android:text="건물"
                         android:textColor="@color/white" />
                 </FrameLayout>
 

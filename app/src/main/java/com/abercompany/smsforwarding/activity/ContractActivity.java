@@ -66,8 +66,8 @@ public class ContractActivity extends AppCompatActivity {
         ArrayList<Fragment> fragments = new ArrayList<>();
 
         if (contractHashSet.contains(Contract.Room)) {
-            fragments.add(RoomFragment.newInstance(defaulters));
-            binding.tabLayout.addTab(binding.tabLayout.newTab().setText("ROOM"));
+//            fragments.add(RoomFragment.newInstance(defaulters));
+//            binding.tabLayout.addTab(binding.tabLayout.newTab().setText("ROOM"));
         }
 
         if (contractHashSet.contains(Contract.Expire)) {

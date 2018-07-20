@@ -46,7 +46,8 @@
         <activity android:name=".activity.ExistingContractActivity" />
         <activity android:name=".activity.RegisterPhoneNumActivity" />
         <activity android:name=".activity.SearchDefaulterActivity" />
-        <activity android:name=".activity.SearchLeaveRoomActivity"></activity>
+        <activity android:name=".activity.SearchLeaveRoomActivity" />
+        <activity android:name=".activity.AddBuildingActivity"></activity>
     </application>
 
 </manifest>

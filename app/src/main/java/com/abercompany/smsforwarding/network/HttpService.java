@@ -2,6 +2,7 @@ package com.abercompany.smsforwarding.network;
 
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.GetBrokerResult;
+import com.abercompany.smsforwarding.model.GetBuildingResult;
 import com.abercompany.smsforwarding.model.GetCheckInListResult;
 import com.abercompany.smsforwarding.model.GetCheckOutListResult;
 import com.abercompany.smsforwarding.model.GetContractResult;
@@ -99,7 +100,8 @@ public interface HttpService {
                                     @Field("realty_name") String realtyName,
                                     @Field("realty_account") String realtyAccount,
                                     @Field("realty_broker_name") String realtyBrokerName,
-                                    @Field("realty_broker_phone_num") String realtyBrokerPhoneNum);
+                                    @Field("realty_broker_phone_num") String realtyBrokerPhoneNum,
+                                    @Field("building_name") String buildingName);
 
     @FormUrlEncoded
     @POST("getRealty")
@@ -140,4 +142,13 @@ public interface HttpService {
     @FormUrlEncoded
     @POST("getLeaveRoom")
     Call<GetContractResult> getLeaveRoom(@Field("") String empty);
+
+    @FormUrlEncoded
+    @POST("getCountRoom")
+    Call<GetBuildingResult> getBuiling(@Field("") String empty);
+
+    @FormUrlEncoded
+    @POST("insertBuilding")
+    Call<JsonObject> insertBuilding(@Field("name") String name,
+                                    @Field("total_room_num") String totalRoomName);
 }

@@ -12,20 +12,25 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.abercompany.smsforwarding.R;
+import com.abercompany.smsforwarding.adapter.BuildingAdapter;
 import com.abercompany.smsforwarding.databinding.ActivityMainBinding;
+import com.abercompany.smsforwarding.fragment.BuildingFragment;
 import com.abercompany.smsforwarding.fragment.ExistingDataFragment;
 import com.abercompany.smsforwarding.fragment.NewDataFragment;
-import com.abercompany.smsforwarding.fragment.SearchRawDataFragment;
+import com.abercompany.smsforwarding.fragment.RoomFragment;
 import com.abercompany.smsforwarding.fragment.SettingFragment;
 import com.abercompany.smsforwarding.model.Broker;
+import com.abercompany.smsforwarding.model.Building;
 import com.abercompany.smsforwarding.model.Defaulter;
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.GetBrokerResult;
+import com.abercompany.smsforwarding.model.GetBuildingResult;
 import com.abercompany.smsforwarding.model.GetDefaulterResult;
 import com.abercompany.smsforwarding.model.GetDepositResult;
 import com.abercompany.smsforwarding.model.GetResidentResult;
@@ -62,13 +67,16 @@ public class MainActivity extends AppCompatActivity {
     private List<String> nums = new ArrayList<String>();
     private List<Sms> lst2;
     private Cursor c;
-    private Fragment searchRawDataFragment, newDataFragment, existingDataFragment, settingFragment;
+    private Fragment buildingFragment, newDataFragment, existingDataFragment, settingFragment, roomFragment;
     private List<Deposit> trimmedData;
     private List<Deposit> newDatas = new ArrayList<>();
     private List<Deposit> existingDatas = new ArrayList<>();
     private List<Resident> residents;
     private List<Broker> brokers;
     private List<Defaulter> defaulters = new ArrayList<>();
+    private List<Building> buildings;
+
+    private BuildingAdapter buildingAdapter;
 
 
     @Override
@@ -117,12 +125,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void bottomBtnClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_search_raw_data:
+            case R.id.btn_building:
                 initNaviButton(view);
-                if (searchRawDataFragment == null) {
-                    searchRawDataFragment = SearchRawDataFragment.newInstance(nums, defaulters);
+                if (buildingFragment == null) {
+                    buildingFragment = BuildingFragment.newInstance();
+                    getBuilding();
                 }
-                switchContent(searchRawDataFragment, "SEARCH_RAW_DATA");
+                switchContent(buildingFragment, "BUILDING");
                 break;
 
             case R.id.btn_deposit_data:
@@ -159,13 +168,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setInitFrag() {
-        searchRawDataFragment = SearchRawDataFragment.newInstance(nums, defaulters);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, searchRawDataFragment, "SEARCH_RAW_DATA").addToBackStack("SEARCH_RAW_DATA").commit();
-        binding.btnSearchRawData.setEnabled(false);
+        buildingFragment = BuildingFragment.newInstance();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, buildingFragment, "BUILDING").addToBackStack("BUILDING").commit();
+        binding.btnBuilding.setEnabled(false);
+
+        getBuilding();
     }
 
     private void initNaviButton(View v) {
-        binding.btnSearchRawData.setEnabled(true);
+        binding.btnBuilding.setEnabled(true);
         binding.btnDepositData.setEnabled(true);
         binding.btnWithdraw.setEnabled(true);
         binding.btnSetting.setEnabled(true);
@@ -215,8 +226,9 @@ public class MainActivity extends AppCompatActivity {
             JSLog.D(currentTab, new Throwable());
             if (currentTab == null) return;
             switch (currentTab) {
-                case "SEARCH_RAW_DATA":
-                    initNaviButton(binding.btnSearchRawData);
+                case "BUILDING":
+                    initNaviButton(binding.btnBuilding);
+                    setBuildingAdapter(buildings);
                     break;
                 case "NEW_DATA":
                     initNaviButton(binding.btnDepositData);
@@ -386,6 +398,44 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<GetDepositResult> call, Throwable t) {
 
+            }
+        });
+    }
+
+    private void getBuilding() {
+        Call<GetBuildingResult> getBuildingResultCall = NetworkUtil.getInstace().getBuiling("");
+        getBuildingResultCall.enqueue(new Callback<GetBuildingResult>() {
+            @Override
+            public void onResponse(Call<GetBuildingResult> call, Response<GetBuildingResult> response) {
+                GetBuildingResult getBuildingResult = response.body();
+                String result = getBuildingResult.getResult();
+
+                if ("success".equals(result)) {
+                    buildings = getBuildingResult.getBuildings();
+
+                    setBuildingAdapter(buildings);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetBuildingResult> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void setBuildingAdapter(final List<Building> buildings) {
+        buildingAdapter = new BuildingAdapter(buildingFragment.getContext(), buildings);
+        ((BuildingFragment) buildingFragment).getBinding().rvBuilding.setAdapter(buildingAdapter);
+        ((BuildingFragment) buildingFragment).getBinding().rvBuilding.setLayoutManager(new GridLayoutManager(buildingFragment.getContext(), 2));
+        buildingAdapter.notifyDataSetChanged();
+        buildingAdapter.setItemClick(new BuildingAdapter.ItemClick() {
+            @Override
+            public void onClick(View view, int position) {
+                if (roomFragment == null) {
+                    roomFragment = RoomFragment.newInstance(defaulters, buildings.get(position).getName());
+                }
+                switchContent(roomFragment, "ROOM");
             }
         });
     }

@@ -41,18 +41,20 @@ public class RoomFragment extends Fragment {
     private List<Room> rooms;
     private List<Contract> contracts;
     private List<Defaulter> defaulters;
+    private String buildingName = "";
 
     public RoomFragment() {
         // Required empty public constructor
     }
 
     @SuppressLint("ValidFragment")
-    public RoomFragment(List<Defaulter> defaulters) {
+    public RoomFragment(List<Defaulter> defaulters, String buildingName) {
         this.defaulters = defaulters;
+        this.buildingName = buildingName;
     }
 
-    public static RoomFragment newInstance(List<Defaulter> defaulters) {
-        RoomFragment fragment = new RoomFragment(defaulters);
+    public static RoomFragment newInstance(List<Defaulter> defaulters, String buildingName) {
+        RoomFragment fragment = new RoomFragment(defaulters, buildingName);
         return fragment;
     }
 
