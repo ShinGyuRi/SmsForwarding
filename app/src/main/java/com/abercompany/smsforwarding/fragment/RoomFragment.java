@@ -93,6 +93,7 @@ public class RoomFragment extends Fragment {
                     if (rooms.get(position).getRoomNum().equals(contracts.get(i).getRoomNum()) &&
                             "재실".equals(contracts.get(i).getActive())) {
                         intent.putExtra("contract", contracts.get(i));
+                        intent.putExtra("buildingName", buildingName);
                     }
                 }
                 startActivity(intent);

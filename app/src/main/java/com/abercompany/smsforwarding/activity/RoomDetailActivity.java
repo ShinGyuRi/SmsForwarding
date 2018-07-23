@@ -284,30 +284,42 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
                     checkoutListDialog.show();
 
 
-                    if (checkOut.getElecGas() != null) {
+                    if (checkOut.getAccount() != null) {
 
-                        checkoutListDialog.getBinding().checkElecGas.setChecked(checkOut.getElecGas());
+                        checkoutListDialog.getBinding().etElecAmount.setText(String.valueOf(checkOut.getElecAmount()));
+                        checkoutListDialog.getBinding().etGasAmount.setText(String.valueOf(checkOut.getGasAmount()));
                         checkoutListDialog.getBinding().checkInputOutDate.setChecked(checkOut.getOutDate());
                         checkoutListDialog.getBinding().checkRemoteCon.setChecked(checkOut.getRemoteCon());
                         checkoutListDialog.getBinding().checkAccount.setChecked(checkOut.getAccount());
                         checkoutListDialog.getBinding().checkKatok.setChecked(checkOut.getKatok());
                         checkoutListDialog.getBinding().checkTv.setChecked(checkOut.getTv());
-
+                        checkoutListDialog.getBinding().tvAdjustAmount.setText(getString(R.string.str_adjustment_amount,
+                                String.valueOf(checkOut.getDeposit() - (checkOut.getElecAmount() + checkOut.getGasAmount() + 70000))));
                     }
 
 
                     checkoutListDialog.getBinding().btnOk.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            String elecAmount = checkoutListDialog.getBinding().etElecAmount.getText().toString();
+                            String gasAmount = checkoutListDialog.getBinding().etGasAmount.getText().toString();
+                            if ("".equals(elecAmount)) {
+                                elecAmount = "0";
+                            }
+                            if ("".equals(gasAmount)) {
+                                gasAmount = "0";
+                            }
                             insertCheckOutList(checkoutListDialog, roomNum, name,
-                                    checkoutListDialog.getBinding().checkElecGas.isChecked(),
+                                    Integer.parseInt(elecAmount),
+                                    Integer.parseInt(gasAmount),
                                     checkoutListDialog.getBinding().checkInputOutDate.isChecked(),
                                     checkoutListDialog.getBinding().checkRemoteCon.isChecked(),
                                     checkoutListDialog.getBinding().checkAccount.isChecked(),
                                     checkoutListDialog.getBinding().checkKatok.isChecked(),
                                     checkoutListDialog.getBinding().checkTv.isChecked());
 
-                            if (!checkoutListDialog.getBinding().checkElecGas.isChecked() ||
+                            if ("".equals(checkoutListDialog.getBinding().etElecAmount.getText().toString()) ||
+                                    "".equals(checkoutListDialog.getBinding().etGasAmount.getText().toString()) ||
                                     !checkoutListDialog.getBinding().checkInputOutDate.isChecked() ||
                                     !checkoutListDialog.getBinding().checkRemoteCon.isChecked() ||
                                     !checkoutListDialog.getBinding().checkAccount.isChecked() ||
@@ -334,8 +346,8 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
         });
     }
 
-    private void insertCheckOutList(final CheckOutListDialog dialog, String roomNum, String name, boolean elecGas, boolean outDate, boolean remoteCon, boolean account, boolean katok, boolean tv) {
-        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertCheckOutList(roomNum, name, elecGas, outDate, remoteCon, account, katok, tv);
+    private void insertCheckOutList(final CheckOutListDialog dialog, String roomNum, String name, int elecAmount, int gasAmount, boolean outDate, boolean remoteCon, boolean account, boolean katok, boolean tv) {
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertCheckOutList(roomNum, name, elecAmount, gasAmount, outDate, remoteCon, account, katok, tv);
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -381,6 +393,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
         } else if (binding.rbCheckIn.isChecked()) {
             active = "재실";
         }
+        JSLog.D("active         :::     " + active, null);
 
         Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertContract(
                 roomNum, name, phoneNum, idNum, etcNum, address, emerNum, emerName,

@@ -127,7 +127,8 @@ public interface HttpService {
     @POST("insertCheckOutList")
     Call<JsonObject> insertCheckOutList(@Field("room_num") String roomNum,
                                         @Field("name") String name,
-                                        @Field("elec_gas") boolean elecGas,
+                                        @Field("elec_amount") int elecAmount,
+                                        @Field("gas_amount") int gasAmount,
                                         @Field("out_date") boolean outDate,
                                         @Field("remote_con") boolean remoteCon,
                                         @Field("account") boolean account,

@@ -54,7 +54,8 @@
             android:text="미납자 조회"
             android:textColor="@color/white"
             app:layout_constraintStart_toEndOf="@+id/btn_register"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:onClick="@{setting.onClick}" />
 
         <Button
             android:id="@+id/btn_check_leave_room"

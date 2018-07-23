@@ -37,7 +37,6 @@ public class CheckOutListDialog extends Dialog implements CompoundButton.OnCheck
         binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.dlg_check_out_list, null, false);
         setContentView(binding.getRoot());
 
-        binding.checkElecGas.setOnCheckedChangeListener(this);
         binding.checkInputOutDate.setOnCheckedChangeListener(this);
         binding.checkRemoteCon.setOnCheckedChangeListener(this);
         binding.checkAccount.setOnCheckedChangeListener(this);
@@ -49,9 +48,6 @@ public class CheckOutListDialog extends Dialog implements CompoundButton.OnCheck
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
-            case R.id.check_elec_gas:
-                break;
-
             case R.id.check_input_out_date:
                 break;
 

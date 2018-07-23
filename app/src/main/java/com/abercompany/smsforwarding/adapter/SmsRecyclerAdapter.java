@@ -12,6 +12,7 @@ import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.model.Defaulter;
 import com.abercompany.smsforwarding.model.Sms;
 import com.abercompany.smsforwarding.databinding.ViewSmsItemBinding;
+import com.abercompany.smsforwarding.util.JSLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class SmsRecyclerAdapter extends RecyclerView.Adapter<SmsRecyclerAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull BindingHolder holder, int position) {
-        holder.binding.tvSmsBody.setText(defaulters.get(position).getDstName());
+        holder.binding.tvSmsBody.setText(defaulters.get(position).getDstName() + defaulters.get(position).getEndDate());
     }
 
     @Override

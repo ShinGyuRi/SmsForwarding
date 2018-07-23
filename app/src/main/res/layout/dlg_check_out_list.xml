@@ -7,30 +7,39 @@
         android:layout_height="wrap_content"
         android:background="@color/white">
 
-        <CheckBox
-            android:id="@+id/check_elec_gas"
+        <EditText
+            android:id="@+id/et_elec_amount"
             android:layout_width="wrap_content"
-            android:layout_height="31dp"
-            android:layout_marginEnd="32dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
             android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
+            android:layout_marginRight="40dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
-            android:text="전기 가스 정산"
-            app:layout_constraintEnd_toStartOf="@+id/check_input_out_date"
+            android:hint="전기 정산금액"
+            app:layout_constraintEnd_toStartOf="@+id/et_gas_amount"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/et_gas_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="가스 정산금액"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <CheckBox
             android:id="@+id/check_input_out_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:text="퇴실 날짜 적기"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="@+id/check_katok"
+            app:layout_constraintTop_toBottomOf="@+id/check_katok" />
 
         <CheckBox
             android:id="@+id/check_remote_con"
@@ -38,8 +47,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="리모콘 및 벽지 확인"
-            app:layout_constraintStart_toStartOf="@+id/check_elec_gas"
-            app:layout_constraintTop_toBottomOf="@+id/check_elec_gas" />
+            app:layout_constraintStart_toStartOf="@+id/et_elec_amount"
+            app:layout_constraintTop_toBottomOf="@+id/et_elec_amount" />
 
         <CheckBox
             android:id="@+id/check_account"
@@ -47,8 +56,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="퇴실자 계좌번호"
-            app:layout_constraintStart_toStartOf="@+id/check_input_out_date"
-            app:layout_constraintTop_toBottomOf="@+id/check_input_out_date" />
+            app:layout_constraintStart_toStartOf="@+id/et_gas_amount"
+            app:layout_constraintTop_toBottomOf="@+id/et_gas_amount" />
 
         <CheckBox
             android:id="@+id/check_katok"
@@ -68,6 +77,16 @@
             app:layout_constraintStart_toStartOf="@+id/check_account"
             app:layout_constraintTop_toBottomOf="@+id/check_account" />
 
+        <TextView
+            android:id="@+id/tv_adjust_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:text="@string/str_adjustment_amount"
+            app:layout_constraintStart_toStartOf="@+id/check_tv"
+            app:layout_constraintTop_toBottomOf="@+id/check_tv" />
+
         <Button
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
@@ -76,8 +95,8 @@
             android:background="@color/black"
             android:text="취소"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/check_katok"
-            app:layout_constraintTop_toBottomOf="@+id/check_katok" />
+            app:layout_constraintEnd_toEndOf="@+id/check_input_out_date"
+            app:layout_constraintTop_toBottomOf="@+id/check_input_out_date" />
 
         <Button
             android:id="@+id/btn_ok"
@@ -87,8 +106,8 @@
             android:background="@color/black"
             android:text="확인"
             android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@+id/check_tv"
-            app:layout_constraintTop_toBottomOf="@+id/check_tv" />
+            app:layout_constraintStart_toStartOf="@+id/tv_adjust_amount"
+            app:layout_constraintTop_toBottomOf="@+id/tv_adjust_amount" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

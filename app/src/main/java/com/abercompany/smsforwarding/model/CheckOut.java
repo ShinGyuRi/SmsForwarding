@@ -10,8 +10,14 @@ public class CheckOut {
     @SerializedName("name")
     private String name;
 
-    @SerializedName("elec_gas")
-    private Boolean elecGas;
+    @SerializedName("elec_amount")
+    private int elecAmount;
+
+    @SerializedName("gas_amount")
+    private int gasAmount;
+
+    @SerializedName("deposit")
+    private int deposit;
 
     @SerializedName("out_date")
     private Boolean outDate;
@@ -34,8 +40,14 @@ public class CheckOut {
     public String getName() {
         return name;
     }
-    public Boolean getElecGas() {
-        return elecGas;
+    public int getElecAmount() {
+        return elecAmount;
+    }
+    public int getGasAmount() {
+        return gasAmount;
+    }
+    public int getDeposit() {
+        return deposit;
     }
     public Boolean getOutDate() {
         return outDate;

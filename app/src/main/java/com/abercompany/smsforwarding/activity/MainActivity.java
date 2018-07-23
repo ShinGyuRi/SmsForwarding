@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
                 getBroker();
                 getResident();
                 getDefaulter();
+
+                setInitFrag();
             }
 
             @Override
@@ -113,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
                 .setPermissions(Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS, Manifest.permission.READ_PHONE_STATE)
                 .check();
 
-        setInitFrag();
 
     }
 
@@ -224,6 +225,13 @@ public class MainActivity extends AppCompatActivity {
         public void onBackStackChanged() {
             String currentTab = getSupportFragmentManager().findFragmentById(R.id.container).getTag();
             JSLog.D(currentTab, new Throwable());
+
+            getNum("");
+            getTrimmedData(DeviceUtil.getDevicePhoneNumber(MainActivity.this));
+            getBroker();
+            getResident();
+            getDefaulter();
+
             if (currentTab == null) return;
             switch (currentTab) {
                 case "BUILDING":

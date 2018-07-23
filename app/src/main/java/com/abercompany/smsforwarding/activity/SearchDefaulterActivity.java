@@ -11,6 +11,7 @@ import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.adapter.SmsRecyclerAdapter;
 import com.abercompany.smsforwarding.databinding.ActivitySearchDefaulterBinding;
 import com.abercompany.smsforwarding.model.Defaulter;
+import com.abercompany.smsforwarding.util.JSLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +27,11 @@ public class SearchDefaulterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_search_defaulter);
+        binding.setSearchDefaulter(this);
 
         Intent intent = getIntent();
         defaulters = (ArrayList<Defaulter>) intent.getSerializableExtra("defaulter");
+        JSLog.D("defaulter size         :::         " + defaulters.size(), null);
     }
 
     public void onClick(View view) {
