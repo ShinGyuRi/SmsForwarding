@@ -129,7 +129,7 @@ public interface HttpService {
                                         @Field("name") String name,
                                         @Field("elec_amount") int elecAmount,
                                         @Field("gas_amount") int gasAmount,
-                                        @Field("out_date") boolean outDate,
+                                        @Field("out_date") String outDate,
                                         @Field("remote_con") boolean remoteCon,
                                         @Field("account") boolean account,
                                         @Field("katok") boolean katok,

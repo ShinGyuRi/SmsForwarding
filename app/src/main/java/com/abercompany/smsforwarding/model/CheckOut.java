@@ -20,7 +20,7 @@ public class CheckOut {
     private int deposit;
 
     @SerializedName("out_date")
-    private Boolean outDate;
+    private String outDate;
 
     @SerializedName("remote_con")
     private Boolean remoteCon;
@@ -33,6 +33,9 @@ public class CheckOut {
 
     @SerializedName("tv")
     private Boolean tv;
+
+    @SerializedName("day_amount")
+    private int dayAmount;
 
     public String getRoomNum() {
         return roomNum;
@@ -49,7 +52,7 @@ public class CheckOut {
     public int getDeposit() {
         return deposit;
     }
-    public Boolean getOutDate() {
+    public String getOutDate() {
         return outDate;
     }
     public Boolean getRemoteCon() {
@@ -63,5 +66,8 @@ public class CheckOut {
     }
     public Boolean getTv() {
         return tv;
+    }
+    public int getDayAmount() {
+        return dayAmount;
     }
 }

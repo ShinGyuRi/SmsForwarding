@@ -2,6 +2,12 @@
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="checkOutList"
+            type="com.abercompany.smsforwarding.dialog.CheckOutListDialog"/>
+    </data>
+
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,14 +38,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <CheckBox
-            android:id="@+id/check_input_out_date"
+        <EditText
+            android:id="@+id/et_input_out_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="퇴실 날짜 적기"
+            android:hint="퇴실 날짜 적기"
+            android:focusableInTouchMode="false"
+            android:focusable="false"
             app:layout_constraintStart_toStartOf="@+id/check_katok"
-            app:layout_constraintTop_toBottomOf="@+id/check_katok" />
+            app:layout_constraintTop_toBottomOf="@+id/check_katok"
+            android:onClick="@{checkOutList.onClick}"/>
 
         <CheckBox
             android:id="@+id/check_remote_con"
@@ -80,9 +89,9 @@
         <TextView
             android:id="@+id/tv_adjust_amount"
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="24dp"
             android:gravity="center"
-            android:layout_marginTop="16dp"
             android:text="@string/str_adjustment_amount"
             app:layout_constraintStart_toStartOf="@+id/check_tv"
             app:layout_constraintTop_toBottomOf="@+id/check_tv" />
@@ -95,8 +104,8 @@
             android:background="@color/black"
             android:text="취소"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/check_input_out_date"
-            app:layout_constraintTop_toBottomOf="@+id/check_input_out_date" />
+            app:layout_constraintEnd_toEndOf="@+id/et_input_out_date"
+            app:layout_constraintTop_toBottomOf="@+id/et_input_out_date" />
 
         <Button
             android:id="@+id/btn_ok"

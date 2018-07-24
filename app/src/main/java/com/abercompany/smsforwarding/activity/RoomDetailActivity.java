@@ -280,7 +280,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
                 if ("success".equals(result)) {
                     CheckOut checkOut = checkOutListResult.getCheckOut();
 
-                    final CheckOutListDialog checkoutListDialog = new CheckOutListDialog(RoomDetailActivity.this);
+                    final CheckOutListDialog checkoutListDialog = new CheckOutListDialog(RoomDetailActivity.this, RoomDetailActivity.this);
                     checkoutListDialog.show();
 
 
@@ -288,13 +288,13 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
 
                         checkoutListDialog.getBinding().etElecAmount.setText(String.valueOf(checkOut.getElecAmount()));
                         checkoutListDialog.getBinding().etGasAmount.setText(String.valueOf(checkOut.getGasAmount()));
-                        checkoutListDialog.getBinding().checkInputOutDate.setChecked(checkOut.getOutDate());
+                        checkoutListDialog.getBinding().etInputOutDate.setText(checkOut.getOutDate());
                         checkoutListDialog.getBinding().checkRemoteCon.setChecked(checkOut.getRemoteCon());
                         checkoutListDialog.getBinding().checkAccount.setChecked(checkOut.getAccount());
                         checkoutListDialog.getBinding().checkKatok.setChecked(checkOut.getKatok());
                         checkoutListDialog.getBinding().checkTv.setChecked(checkOut.getTv());
                         checkoutListDialog.getBinding().tvAdjustAmount.setText(getString(R.string.str_adjustment_amount,
-                                String.valueOf(checkOut.getDeposit() - (checkOut.getElecAmount() + checkOut.getGasAmount() + 70000))));
+                                String.valueOf(checkOut.getDeposit() - (checkOut.getElecAmount() + checkOut.getGasAmount() + 70000 + checkOut.getDayAmount()))));
                     }
 
 
@@ -303,24 +303,27 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
                         public void onClick(View v) {
                             String elecAmount = checkoutListDialog.getBinding().etElecAmount.getText().toString();
                             String gasAmount = checkoutListDialog.getBinding().etGasAmount.getText().toString();
+                            String outDate = checkoutListDialog.getBinding().etInputOutDate.getText().toString();
+
                             if ("".equals(elecAmount)) {
                                 elecAmount = "0";
                             }
                             if ("".equals(gasAmount)) {
                                 gasAmount = "0";
                             }
+
                             insertCheckOutList(checkoutListDialog, roomNum, name,
                                     Integer.parseInt(elecAmount),
                                     Integer.parseInt(gasAmount),
-                                    checkoutListDialog.getBinding().checkInputOutDate.isChecked(),
+                                    outDate,
                                     checkoutListDialog.getBinding().checkRemoteCon.isChecked(),
                                     checkoutListDialog.getBinding().checkAccount.isChecked(),
                                     checkoutListDialog.getBinding().checkKatok.isChecked(),
                                     checkoutListDialog.getBinding().checkTv.isChecked());
 
-                            if ("".equals(checkoutListDialog.getBinding().etElecAmount.getText().toString()) ||
-                                    "".equals(checkoutListDialog.getBinding().etGasAmount.getText().toString()) ||
-                                    !checkoutListDialog.getBinding().checkInputOutDate.isChecked() ||
+                            if ("".equals(elecAmount) ||
+                                    "".equals(gasAmount) ||
+                                    "".equals(outDate) ||
                                     !checkoutListDialog.getBinding().checkRemoteCon.isChecked() ||
                                     !checkoutListDialog.getBinding().checkAccount.isChecked() ||
                                     !checkoutListDialog.getBinding().checkKatok.isChecked() ||
@@ -346,7 +349,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
         });
     }
 
-    private void insertCheckOutList(final CheckOutListDialog dialog, String roomNum, String name, int elecAmount, int gasAmount, boolean outDate, boolean remoteCon, boolean account, boolean katok, boolean tv) {
+    private void insertCheckOutList(final CheckOutListDialog dialog, String roomNum, String name, int elecAmount, int gasAmount, String outDate, boolean remoteCon, boolean account, boolean katok, boolean tv) {
         Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertCheckOutList(roomNum, name, elecAmount, gasAmount, outDate, remoteCon, account, katok, tv);
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
