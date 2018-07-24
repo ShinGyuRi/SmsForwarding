@@ -47,7 +47,8 @@
         <activity android:name=".activity.RegisterPhoneNumActivity" />
         <activity android:name=".activity.SearchDefaulterActivity" />
         <activity android:name=".activity.SearchLeaveRoomActivity" />
-        <activity android:name=".activity.AddBuildingActivity"></activity>
+        <activity android:name=".activity.AddBuildingActivity" />
+        <activity android:name=".activity.ElecDefaulterActivity"></activity>
     </application>
 
 </manifest>

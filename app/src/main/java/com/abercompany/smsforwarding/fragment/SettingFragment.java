@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.activity.AddCashActivity;
+import com.abercompany.smsforwarding.activity.ElecDefaulterActivity;
 import com.abercompany.smsforwarding.activity.RegisterPhoneNumActivity;
 import com.abercompany.smsforwarding.activity.SearchDefaulterActivity;
 import com.abercompany.smsforwarding.activity.SearchLeaveRoomActivity;
@@ -92,6 +93,11 @@ public class SettingFragment extends Fragment {
             case R.id.btn_check_leave_room:
                 Intent intent3 = new Intent(getContext(), SearchLeaveRoomActivity.class);
                 startActivity(intent3);
+                break;
+
+            case R.id.btn_check_elec_defaulter:
+                Intent intent4 = new Intent(getContext(), ElecDefaulterActivity.class);
+                startActivity(intent4);
                 break;
 
         }

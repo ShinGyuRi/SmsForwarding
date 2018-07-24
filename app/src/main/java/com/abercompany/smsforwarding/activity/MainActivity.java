@@ -226,8 +226,6 @@ public class MainActivity extends AppCompatActivity {
             String currentTab = getSupportFragmentManager().findFragmentById(R.id.container).getTag();
             JSLog.D(currentTab, new Throwable());
 
-            getNum("");
-            getTrimmedData(DeviceUtil.getDevicePhoneNumber(MainActivity.this));
             getBroker();
             getResident();
             getDefaulter();
