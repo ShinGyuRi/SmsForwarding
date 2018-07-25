@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Deposit {
 
+    @SerializedName("index")
+    private String index;
+
     @SerializedName("name")
     private String name;
 
@@ -21,6 +24,15 @@ public class Deposit {
 
     @SerializedName("destination_name")
     private String destinationName;
+
+    private int viewPosition;
+
+    public String getIndex() {
+        return index;
+    }
+    public void setIndex(String index) {
+        this.index = index;
+    }
 
     public String getName() {
         return name;
@@ -62,5 +74,12 @@ public class Deposit {
     }
     public void setDestinationName(String destinationName) {
         this.destinationName = destinationName;
+    }
+
+    public int getViewPosition() {
+        return viewPosition;
+    }
+    public void setViewPosition(int viewPosition) {
+        this.viewPosition = viewPosition;
     }
 }

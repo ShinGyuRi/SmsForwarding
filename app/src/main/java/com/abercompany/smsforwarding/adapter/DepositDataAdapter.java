@@ -15,12 +15,16 @@ import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.databinding.ViewDepositItemBinding;
 import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Deposit;
+import com.abercompany.smsforwarding.model.OnClickEvent;
 import com.abercompany.smsforwarding.model.Resident;
+import com.abercompany.smsforwarding.provider.BusProvider;
 import com.abercompany.smsforwarding.util.Debug;
 import com.abercompany.smsforwarding.util.DeviceUtil;
 import com.abercompany.smsforwarding.util.JSLog;
 import com.abercompany.smsforwarding.util.NetworkUtil;
 import com.google.gson.JsonObject;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +43,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     private List<Deposit> deposits;
     private List<Resident> residents;
     private List<Broker> brokers;
+    private List<Deposit> editDeposits = new ArrayList<>();
 
     private List<String> residentName = new ArrayList<>();
     private List<String> brokerName = new ArrayList<>();
@@ -46,6 +51,9 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
 
     private boolean selectedFlag = false;
     private String type = "";
+
+    private BindingHolder bindingHolder;
+
 
 
     public class BindingHolder extends RecyclerView.ViewHolder {
@@ -56,6 +64,10 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
             binding.setDepositItem(this);
+        }
+
+        public ViewDepositItemBinding getBinding() {
+            return binding;
         }
     }
 
@@ -77,6 +89,8 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
             brokerName.add(context.getString(R.string.str_deposit_realty, brokers.get(i).getName(), brokers.get(i).getRealtyName()));
         }
 
+
+        BusProvider.getInstance().register(this);
     }
 
     @NonNull
@@ -84,7 +98,10 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     public BindingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.view_deposit_item, parent, false);
-        return new BindingHolder(view);
+
+        bindingHolder = new BindingHolder(view);
+
+        return bindingHolder;
     }
 
     @Override
@@ -120,11 +137,6 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                     case 11:
                     case 12:
                         holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item));
-                        if (EXISTING_DATA.equals(type) && !holder.binding.spCategory.getItemAtPosition(position).toString().equals(holder.binding.spCategory.getItemAtPosition(getSelectedTypePosition(position)))) {
-                            updateTrimmedData(deposits.get(position).getName(), deposits.get(position).getDate(), "", holder.binding.spCategory.getSelectedItem().toString(), position);
-                        } else if (NEW_DATA.equals(type) && holder.binding.spCategory.getSelectedItemPosition() != 0) {
-                            updateTrimmedData(deposits.get(position).getName(), deposits.get(position).getDate(), "", holder.binding.spCategory.getSelectedItem().toString(), position);
-                        }
                         break;
                     case 1:
                     case 2:
@@ -134,6 +146,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                     case 6:
                     case 9:
                         if (NEW_DATA.equals(type)) {
+                            JSLog.D("residentName size              :::     " + residentName.size(), null);
                             holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residentName));
                         }
                         selectedFlag = false;
@@ -157,9 +170,23 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         holder.binding.spToName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int itemPosition, long id) {
-                JSLog.D("selectedFlag           :::     " + selectedFlag, null);
                 if (selectedFlag) {
-                    updateTrimmedData(deposits.get(position).getName(), deposits.get(position).getDate(), holder.binding.spToName.getSelectedItem().toString(), holder.binding.spCategory.getSelectedItem().toString(), position);
+                    Deposit deposit = new Deposit();
+                    deposit.setName(deposits.get(position).getName());
+                    deposit.setDate(deposits.get(position).getDate());
+                    deposit.setDestinationName(holder.binding.spToName.getSelectedItem().toString());
+                    deposit.setType(holder.binding.spCategory.getSelectedItem().toString());
+                    deposit.setIndex(deposits.get(position).getIndex());
+                    deposit.setViewPosition(position);
+
+                    for (int i = 0; i < editDeposits.size(); i++) {
+                        if (deposits.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
+                            JSLog.D("remove editDeposits position               :::         " + i, null);
+                            editDeposits.remove(i);
+                        }
+                    }
+                    JSLog.D("add editDeposits position              :::         " + deposit.getViewPosition(), null);
+                    editDeposits.add(deposit);
                 }
 
                 selectedFlag = true;
@@ -183,6 +210,23 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         return deposits.size();
     }
 
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        BusProvider.getInstance().unregister(this);
+        super.onDetachedFromRecyclerView(recyclerView);
+    }
+
+    private int i = 0;
+    @Subscribe
+    public void FinishLoad(OnClickEvent event) {
+
+        JSLog.D("editDeposits size              :::         " + editDeposits.size(), null);
+        if (i < editDeposits.size()) {
+            updateTrimmedData(editDeposits.get(i).getName(), editDeposits.get(i).getDate(), editDeposits.get(i).getDestinationName(), editDeposits.get(i).getType(), editDeposits.get(i).getViewPosition());
+        }
+
+    }
+
 
     private void updateTrimmedData(String name, String date, String objectName, final String type, final int position) {
         Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type, DeviceUtil.getDevicePhoneNumber(context), NEW_DATA, "", "");
@@ -192,12 +236,29 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                 JsonObject jsonObject = response.body();
                 String result = jsonObject.get("result").getAsString();
 
+
+                JSLog.D("updateTrimmedData get result               :::     " + result, null);
                 if ("success".equals(result)) {
-                    Debug.showToast(context, "등록되었습니다");
-                    JSLog.D("type           :::     " + DepositDataAdapter.this.type, null);
-                    if (NEW_DATA.equals(DepositDataAdapter.this.type)) {
-                        deposits.remove(position);
-                        notifyDataSetChanged();
+                    String message = jsonObject.get("message").getAsString();
+
+                    JSLog.D("updateTrimmedData get message               :::     " + message, null);
+                    if ("success".equals(message)) {
+                        Debug.showToast(context, "등록되었습니다");
+                        JSLog.D("type           :::     " + DepositDataAdapter.this.type, null);
+                        if (NEW_DATA.equals(DepositDataAdapter.this.type)) {
+                            deposits.remove(position);
+                            notifyDataSetChanged();
+
+                            i++;
+                            if (i < editDeposits.size()) {
+                                updateTrimmedData(editDeposits.get(i).getName(), editDeposits.get(i).getDate(), editDeposits.get(i).getDestinationName(), editDeposits.get(i).getType(), editDeposits.get(i).getViewPosition());
+                            } else {
+                                i = 0;
+                                editDeposits.clear();
+                            }
+                        }
+                    } else {
+                        i = 0;
                     }
                 }
             }

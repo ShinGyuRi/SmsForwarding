@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -17,7 +18,9 @@ import com.abercompany.smsforwarding.adapter.DepositDataAdapter;
 import com.abercompany.smsforwarding.databinding.FragmentNewDataBinding;
 import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Deposit;
+import com.abercompany.smsforwarding.model.OnClickEvent;
 import com.abercompany.smsforwarding.model.Resident;
+import com.abercompany.smsforwarding.provider.BusProvider;
 import com.abercompany.smsforwarding.util.JSLog;
 
 import java.io.Serializable;
@@ -77,6 +80,10 @@ public class NewDataFragment extends Fragment {
                 intent.putExtra("broker", (Serializable) brokers);
                 intent.putExtra("dataType", NEW_DATA);
                 startActivity(intent);
+                break;
+
+            case R.id.btn_upload:
+                BusProvider.getInstance().post(new OnClickEvent());
                 break;
         }
     }
