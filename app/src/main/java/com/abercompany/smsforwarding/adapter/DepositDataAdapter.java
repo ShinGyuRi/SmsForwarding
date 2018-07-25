@@ -132,11 +132,35 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
 
                 switch (itemPosition) {
                     case 0:
+                        for (int i = 0; i < editDeposits.size(); i++) {
+                            if (deposits.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
+                                JSLog.D("remove editDeposits position               :::         " + i, null);
+                                editDeposits.remove(i);
+                            }
+                        }
+                        break;
                     case 7:
                     case 10:
                     case 11:
                     case 12:
-                        holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item));
+                        if (!"".equals(holder.binding.spCategory.getSelectedItem().toString())) {
+                            Deposit deposit = new Deposit();
+                            deposit.setName(deposits.get(position).getName());
+                            deposit.setDate(deposits.get(position).getDate());
+                            deposit.setDestinationName("");
+                            deposit.setType(holder.binding.spCategory.getSelectedItem().toString());
+                            deposit.setIndex(deposits.get(position).getIndex());
+                            deposit.setViewPosition(position);
+
+                            for (int i = 0; i < editDeposits.size(); i++) {
+                                if (deposits.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
+                                    JSLog.D("remove editDeposits position               :::         " + i, null);
+                                    editDeposits.remove(i);
+                                }
+                            }
+                            JSLog.D("add editDeposits position              :::         " + deposit.getViewPosition(), null);
+                            editDeposits.add(deposit);
+                        }
                         break;
                     case 1:
                     case 2:
@@ -170,7 +194,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         holder.binding.spToName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int itemPosition, long id) {
-                if (selectedFlag) {
+                if (selectedFlag && itemPosition != 0) {
                     Deposit deposit = new Deposit();
                     deposit.setName(deposits.get(position).getName());
                     deposit.setDate(deposits.get(position).getDate());
@@ -224,6 +248,10 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         if (i < editDeposits.size()) {
             updateTrimmedData(editDeposits.get(i).getName(), editDeposits.get(i).getDate(), editDeposits.get(i).getDestinationName(), editDeposits.get(i).getType(), editDeposits.get(i).getViewPosition());
         }
+
+    }
+
+    private void addEditDeposit(int position) {
 
     }
 
