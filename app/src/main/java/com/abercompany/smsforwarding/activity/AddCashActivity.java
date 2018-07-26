@@ -189,7 +189,7 @@ public class AddCashActivity extends AppCompatActivity implements DatePickerDial
     }
 
     private void updateTrimmedData(String name, String date, String objectName, final String type, String dataType) {
-        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type, DeviceUtil.getDevicePhoneNumber(this), dataType, startDate, endDate);
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type, DeviceUtil.getDevicePhoneNumber(this), dataType, startDate, endDate, "");
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

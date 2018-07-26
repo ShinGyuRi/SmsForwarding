@@ -58,7 +58,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
             android:background="@drawable/shape_drop_down_normal"
-            android:entries="@array/category"
+            android:entries="@array/deposit"
             android:spinnerMode="dropdown"
             android:textAlignment="center"
             android:theme="@style/ThemeOverlay.AppCompat.Light"

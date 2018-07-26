@@ -25,6 +25,9 @@ public class Deposit {
     @SerializedName("destination_name")
     private String destinationName;
 
+    @SerializedName("note")
+    private String note;
+
     private int viewPosition;
 
     public String getIndex() {
@@ -74,6 +77,13 @@ public class Deposit {
     }
     public void setDestinationName(String destinationName) {
         this.destinationName = destinationName;
+    }
+
+    public String getNote() {
+        return note;
+    }
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public int getViewPosition() {
