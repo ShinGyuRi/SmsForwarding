@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+
+    <!--<group android:checkableBehavior="none">-->
+        <!--<item-->
+            <!--android:id="@+id/nav_company"-->
+            <!--android:title="소속회사" />-->
+        <!--<item-->
+            <!--android:id="@+id/nav_payment"-->
+            <!--android:title="결제정보" />-->
+    <!--</group>-->
+
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_building"
+            android:title="건물" />
+        <item
+            android:id="@+id/nav_new_data"
+            android:title="새로온 문자" />
+        <item
+            android:id="@+id/nav_existing_data"
+            android:title="기존 문자" />
+        <item
+            android:id="@+id/nav_setting"
+            android:title="설정" />
+    </group>
+
+    <!--<item android:title="Communicate">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/nav_share"-->
+                <!--android:icon="@drawable/ic_menu_share"-->
+                <!--android:title="Share" />-->
+            <!--<item-->
+                <!--android:id="@+id/nav_send"-->
+                <!--android:icon="@drawable/ic_menu_send"-->
+                <!--android:title="Send" />-->
+        <!--</menu>-->
+    <!--</item>-->
+
+</menu>

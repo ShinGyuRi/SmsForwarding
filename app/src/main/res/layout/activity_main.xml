@@ -3,128 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="main"
-            type="com.abercompany.smsforwarding.activity.MainActivity" />
-    </data>
-
-    <android.support.design.widget.CoordinatorLayout
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.MainActivity">
+        tools:openDrawer="start">
 
-        <android.support.constraint.ConstraintLayout
+        <include
+            android:id="@+id/content"
+            layout="@layout/app_bar_main"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" />
 
-            <FrameLayout
-                android:id="@+id/container"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerInParent="true"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+        <android.support.design.widget.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/nav_header_customer_view"
+            app:menu="@menu/activity_main_view_drawer" />
 
-                <fragment
-                    android:id="@+id/fragment_search_raw_data"
-                    android:name="com.abercompany.smsforwarding.fragment.BuildingFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    tools:layout="@layout/fragment_building" />
-            </FrameLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_gravity="bottom"
-                android:background="@color/colorPrimaryDark"
-                android:orientation="horizontal"
-                android:weightSum="5"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <FrameLayout
-                    android:id="@+id/btn_building"
-                    style="@style/MainButton"
-                    android:onClick="@{main.bottomBtnClick}">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="건물"
-                        android:textColor="@color/white" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/btn_deposit_data"
-                    style="@style/MainButton"
-                    android:onClick="@{main.bottomBtnClick}">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="새로운"
-                        android:textColor="@color/white" />
-                </FrameLayout>
-
-
-                <FrameLayout
-                    android:id="@+id/btn_withdraw"
-                    style="@style/MainButton"
-                    android:onClick="@{main.bottomBtnClick}">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="기존"
-                        android:textColor="@color/white" />
-                </FrameLayout>
-
-
-                <FrameLayout
-                    android:id="@+id/btn_room"
-                    style="@style/MainButton"
-                    android:onClick="@{main.bottomBtnClick}">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="방"
-                        android:textColor="@color/white" />
-                </FrameLayout>
-
-
-                <FrameLayout
-                    android:id="@+id/btn_setting"
-                    style="@style/MainButton"
-                    android:onClick="@{main.bottomBtnClick}">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="설정"
-                        android:textColor="@color/white" />
-                </FrameLayout>
-
-
-            </LinearLayout>
-
-        </android.support.constraint.ConstraintLayout>
-
-
-
-    </android.support.design.widget.CoordinatorLayout>
+    </android.support.v4.widget.DrawerLayout>
 </layout>
