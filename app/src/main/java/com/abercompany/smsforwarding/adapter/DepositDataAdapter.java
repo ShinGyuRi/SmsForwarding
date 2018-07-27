@@ -316,7 +316,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     public void FinishLoad(OnClickEvent event) {
 
         JSLog.D("editDeposits size              :::         " + editDeposits.size(), null);
-        if (i < editDeposits.size()) {
+        if (i < editDeposits.size() && bindingHolder.binding.spToName.getSelectedItemPosition() != 0) {
             updateTrimmedData(editDeposits.get(i).getName(), editDeposits.get(i).getDate(), editDeposits.get(i).getDestinationName(), editDeposits.get(i).getType(), editDeposits.get(i).getViewPosition(), editDeposits.get(i).getNote());
         }
 

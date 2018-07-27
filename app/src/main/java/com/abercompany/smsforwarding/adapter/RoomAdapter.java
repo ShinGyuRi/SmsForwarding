@@ -64,16 +64,14 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.BindingHolder>
         holder.binding.tvStatus.setVisibility(View.INVISIBLE);
         holder.binding.tvName.setVisibility(View.INVISIBLE);
         holder.binding.tvCharges.setVisibility(View.INVISIBLE);
+        holder.binding.tvDepositStatus.setVisibility(View.INVISIBLE);
 
         for (int j = 0; j < contracts.size(); j++) {
             if (rooms.get(position).getRoomNum().equals(contracts.get(j).getRoomNum())) {
-                if (!"퇴실".equals(contracts.get(j).getActive())) {
+                if ("재실".equals(contracts.get(j).getActive())) {
                     holder.binding.tvStatus.setVisibility(View.VISIBLE);
                     holder.binding.tvName.setVisibility(View.VISIBLE);
                     holder.binding.tvCharges.setVisibility(View.VISIBLE);
-                    holder.binding.tvDepositStatus.setVisibility(View.VISIBLE);
-                } else {
-                    holder.binding.tvDepositStatus.setVisibility(View.GONE);
                 }
 
                 if ("재실".equals(contracts.get(j).getActive())) {
