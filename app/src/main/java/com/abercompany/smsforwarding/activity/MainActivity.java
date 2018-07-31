@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private Menu menu;
     private MenuItem navBuilding, navNewData, navExistingData, navSetting;
+    private DrawerLayout drawer;
 
 
     @Override
@@ -171,7 +172,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getBuilding();
     }
 
-    private void initNaviButton(MenuItem menu) {
+    private void initNaviButton(MenuItem menu, DrawerLayout drawer) {
+
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
         navBuilding.setEnabled(true);
         navNewData.setEnabled(true);
         navExistingData.setEnabled(true);
@@ -238,17 +243,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (currentTab == null) return;
             switch (currentTab) {
                 case "BUILDING":
-                    initNaviButton(navBuilding);
+                    initNaviButton(navBuilding, drawer);
                     setBuildingAdapter(buildings);
                     break;
                 case "NEW_DATA":
-                    initNaviButton(navNewData);
+                    initNaviButton(navNewData, drawer);
                     break;
                 case "EXISTING_DATA":
-                    initNaviButton(navExistingData);
+                    initNaviButton(navExistingData, drawer);
                     break;
                 case "SETTING":
-                    initNaviButton(navSetting);
+                    initNaviButton(navSetting, drawer);
                     break;
             }
         }
@@ -596,33 +601,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_building) {
-            initNaviButton(item);
+            initNaviButton(item, drawer);
             if (buildingFragment == null) {
                 buildingFragment = BuildingFragment.newInstance();
                 getBuilding();
             }
             switchContent(buildingFragment, "BUILDING");
         } else if (id == R.id.nav_new_data) {
-            initNaviButton(item);
+            initNaviButton(item, drawer);
             if (newDataFragment == null) {
                 newDataFragment = NewDataFragment.newInstance(newDatas, residents, brokers);
             }
             switchContent(newDataFragment, "NEW_DATA");
         } else if (id == R.id.nav_existing_data) {
-            initNaviButton(item);
+            initNaviButton(item, drawer);
             if (existingDataFragment == null) {
                 existingDataFragment = ExistingDataFragment.newInstance(existingDatas, residents, brokers);
             }
             switchContent(existingDataFragment, "EXISTING_DATA");
         } else if (id == R.id.nav_setting) {
-            initNaviButton(item);
+            initNaviButton(item, drawer);
             if (settingFragment == null) {
                 settingFragment = SettingFragment.newInstance(residents, brokers, nums, defaulters);
             }

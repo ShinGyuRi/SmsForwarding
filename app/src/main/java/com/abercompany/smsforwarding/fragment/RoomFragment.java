@@ -21,6 +21,7 @@ import com.abercompany.smsforwarding.model.Defaulter;
 import com.abercompany.smsforwarding.model.GetContractResult;
 import com.abercompany.smsforwarding.model.GetRoomResult;
 import com.abercompany.smsforwarding.model.Room;
+import com.abercompany.smsforwarding.util.JSLog;
 import com.abercompany.smsforwarding.util.NetworkUtil;
 
 import java.io.Serializable;
@@ -51,6 +52,8 @@ public class RoomFragment extends Fragment {
     public RoomFragment(List<Defaulter> defaulters, String buildingName) {
         this.defaulters = defaulters;
         this.buildingName = buildingName;
+
+        JSLog.D("buildingName           :::     " + this.buildingName, null);
     }
 
     public static RoomFragment newInstance(List<Defaulter> defaulters, String buildingName) {
@@ -79,7 +82,7 @@ public class RoomFragment extends Fragment {
         getRoom();
     }
 
-    private void setRoomAdapter(final List<Room> rooms, final List<Contract> contracts, List<Defaulter> defaulters) {
+    private void setRoomAdapter(final List<Room> rooms, final List<Contract> contracts, List<Defaulter> defaulters, final String buildingName) {
         adapter = new RoomAdapter(getContext(), rooms, contracts, defaulters);
         binding.rvRoomNum.setAdapter(adapter);
         binding.rvRoomNum.setLayoutManager(new GridLayoutManager(getContext(), 4));
@@ -89,11 +92,11 @@ public class RoomFragment extends Fragment {
             public void onClick(View view, int position) {
                 Intent intent = new Intent(getContext(), RoomDetailActivity.class);
                 intent.putExtra("room", rooms.get(position));
+                intent.putExtra("buildingName", buildingName);
                 for (int i = 0; i < contracts.size(); i++) {
                     if (rooms.get(position).getRoomNum().equals(contracts.get(i).getRoomNum()) &&
                             "재실".equals(contracts.get(i).getActive())) {
                         intent.putExtra("contract", contracts.get(i));
-                        intent.putExtra("buildingName", buildingName);
                     }
                 }
                 startActivity(intent);
@@ -134,7 +137,7 @@ public class RoomFragment extends Fragment {
                 if ("success".equals(result)) {
                     contracts = getContractResult.getContracts();
 
-                    setRoomAdapter(rooms, contracts, defaulters);
+                    setRoomAdapter(rooms, contracts, defaulters, buildingName);
                 }
             }
 

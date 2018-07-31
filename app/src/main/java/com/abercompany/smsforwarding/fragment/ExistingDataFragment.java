@@ -2,6 +2,7 @@ package com.abercompany.smsforwarding.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.abercompany.smsforwarding.R;
+import com.abercompany.smsforwarding.activity.AddCashActivity;
 import com.abercompany.smsforwarding.adapter.DepositDataAdapter;
 import com.abercompany.smsforwarding.databinding.FragmentExistingDataBinding;
 import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Deposit;
+import com.abercompany.smsforwarding.model.OnClickEvent;
 import com.abercompany.smsforwarding.model.Resident;
 import com.abercompany.smsforwarding.model.SelectedSpinnerEvent;
 import com.abercompany.smsforwarding.provider.BusProvider;
@@ -26,6 +29,7 @@ import com.google.gson.JsonObject;
 
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.abercompany.smsforwarding.util.Definitions.TRIM_DATA.EXISTING_DATA;
+import static com.abercompany.smsforwarding.util.Definitions.TRIM_DATA.NEW_DATA;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -78,11 +83,26 @@ public class ExistingDataFragment extends Fragment {
         return view;
     }
 
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_add_cash:
+                Intent intent = new Intent(getContext(), AddCashActivity.class);
+                intent.putExtra("resident", (Serializable) residents);
+                intent.putExtra("broker", (Serializable) brokers);
+                intent.putExtra("dataType", EXISTING_DATA);
+                startActivity(intent);
+                break;
+
+            case R.id.btn_upload:
+                BusProvider.getInstance().post(new OnClickEvent());
+                break;
+        }
+    }
 
     private void setDepositAdapter(List<Deposit> existingDatas ,List<Resident> residents, List<Broker> brokers) {
         adapter = new DepositDataAdapter(getActivity(), getContext(), existingDatas, residents, brokers, EXISTING_DATA);
-        binding.rvWithdraw.setAdapter(adapter);
-        binding.rvWithdraw.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvDeposit.setAdapter(adapter);
+        binding.rvDeposit.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.notifyDataSetChanged();
     }
 

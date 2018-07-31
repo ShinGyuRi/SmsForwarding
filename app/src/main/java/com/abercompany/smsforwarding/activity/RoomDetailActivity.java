@@ -57,6 +57,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
         room = (Room) intent.getSerializableExtra("room");
         contract = (Contract) intent.getSerializableExtra("contract");
         buildingName = intent.getStringExtra("buildingName");
+        JSLog.D("buildingName           :::     " + buildingName, new Throwable());
 
         setInitView(room, contract);
     }
