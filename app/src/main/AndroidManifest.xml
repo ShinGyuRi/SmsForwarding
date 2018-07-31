@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
@@ -38,17 +39,27 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".receiver.GetPhoneNumReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+            </intent-filter>
+        </receiver>
 
         <activity android:name=".activity.RoomDetailActivity" />
         <activity android:name=".activity.ContractActivity" />
         <activity android:name=".activity.RealtyActivity" />
         <activity android:name=".activity.AddCashActivity" />
-        <activity android:name=".activity.ExistingContractActivity" />
         <activity android:name=".activity.RegisterPhoneNumActivity" />
         <activity android:name=".activity.SearchDefaulterActivity" />
         <activity android:name=".activity.SearchLeaveRoomActivity" />
         <activity android:name=".activity.AddBuildingActivity" />
-        <activity android:name=".activity.ElecDefaulterActivity"></activity>
+        <activity android:name=".activity.ElecDefaulterActivity" />
+        <activity android:name=".activity.IncomingCallActivity"></activity>
     </application>
 
 </manifest>
