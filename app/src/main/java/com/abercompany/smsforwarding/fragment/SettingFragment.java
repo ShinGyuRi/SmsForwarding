@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.activity.AddCashActivity;
 import com.abercompany.smsforwarding.activity.ElecDefaulterActivity;
+import com.abercompany.smsforwarding.activity.RegisterEtcNumActivity;
 import com.abercompany.smsforwarding.activity.RegisterPhoneNumActivity;
 import com.abercompany.smsforwarding.activity.SearchDefaulterActivity;
 import com.abercompany.smsforwarding.activity.SearchLeaveRoomActivity;
@@ -98,6 +99,13 @@ public class SettingFragment extends Fragment {
             case R.id.btn_check_elec_defaulter:
                 Intent intent4 = new Intent(getContext(), ElecDefaulterActivity.class);
                 startActivity(intent4);
+                break;
+
+            case R.id.btn_register_etc_num:
+                Intent intent5 = new Intent(getContext(), RegisterEtcNumActivity.class);
+                intent5.putExtra("residents", (Serializable) residents);
+                intent5.putExtra("brokers", (Serializable) brokers);
+                startActivity(intent5);
                 break;
 
         }

@@ -147,10 +147,20 @@ public interface HttpService {
 
     @FormUrlEncoded
     @POST("getCountRoom")
-    Call<GetBuildingResult> getBuiling(@Field("") String empty);
+    Call<GetBuildingResult> getBuilding(@Field("") String empty);
 
     @FormUrlEncoded
     @POST("insertBuilding")
     Call<JsonObject> insertBuilding(@Field("name") String name,
                                     @Field("total_room_num") String totalRoomName);
+
+    @FormUrlEncoded
+    @POST("insertEtcNum")
+    Call<JsonObject> insertEtcNum(@Field("phone_num") String etcNum,
+                                  @Field("dst_name") String dstName);
+
+    @FormUrlEncoded
+    @POST("insertRealtyPhoneNum")
+    Call<JsonObject> insertRealtyPhoneNum(@Field("phone_num") String phoneNum,
+                                          @Field("realty_name") String realtyName);
 }

@@ -19,9 +19,12 @@ import com.abercompany.smsforwarding.model.GetResidentResult;
 import com.abercompany.smsforwarding.model.Resident;
 import com.abercompany.smsforwarding.util.JSLog;
 import com.abercompany.smsforwarding.util.NetworkUtil;
+import com.abercompany.smsforwarding.util.PrefUtil;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +34,9 @@ public class GetPhoneNumReceiver extends PhonecallReceiver {
 
     private List<Resident> residents;
     private List<Broker> brokers;
+    private List<String> residentPhoneNum;
+    private List<String> residentName;
+    private List<String> residentRoomNum;
 
     private boolean flag = false;
 
@@ -39,21 +45,28 @@ public class GetPhoneNumReceiver extends PhonecallReceiver {
     @Override
     protected void onIncomingCallStarted(Context ctx, String number, Date start) {
         JSLog.D("incomingNumber             :::     " + number, null);
-        getResident(ctx, number);
+
+        residents = PrefUtil.getInstance().getResidentPreference("resident");
+        brokers = PrefUtil.getInstance().getBrokerPreference("broker");
+
+        for (int i = 0; i < residents.size(); i++) {
+            if ((number.equals(residents.get(i).getPhoneNum()) || number.equals(residents.get(i).getEtcNum())) && !"".equals(number)) {
+                flag = true;
+                pushNoti(ctx, residents.get(i).getName() + residents.get(i).getHo(), number);
+            } else {
+                flag = false;
+            }
+        }
+
+        if (!flag) {
+            for (int i = 0; i < brokers.size(); i++) {
+                if (number.equals(brokers.get(i).getPhoneNum())) {
+                    pushNoti(ctx, brokers.get(i).getRealtyName(), number);
+                }
+            }
+        }
     }
 
-    //    @Override
-//    public void onReceive(final Context context, Intent intent) {
-//        TelephonyManager telephony = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-//        telephony.listen(new PhoneStateListener(){
-//            @Override
-//            public void onCallStateChanged(int state, String incomingNumber) {
-//                super.onCallStateChanged(state, incomingNumber);
-//                JSLog.D("incomingNumber         :::         " + incomingNumber, null);
-//                getResident(context, "01071110442");
-//            }
-//        }, PhoneStateListener.LISTEN_CALL_STATE);
-//    }
 
     private void getResident(final Context context, final String incomingNumber)  {
         Call<GetResidentResult> getResidentResultCall = NetworkUtil.getInstace().getResident("");
@@ -69,7 +82,7 @@ public class GetPhoneNumReceiver extends PhonecallReceiver {
                     for (int i = 0; i < residents.size(); i++) {
                         if (incomingNumber.equals(residents.get(i).getPhoneNum()) && !"".equals(incomingNumber)) {
                             flag = true;
-                            pushNoti(context, residents.get(i).getName() + residents.get(i).getHo());
+//                            pushNoti(context, residents.get(i).getName() + residents.get(i).getHo());
                         } else {
                             flag = false;
                         }
@@ -100,7 +113,7 @@ public class GetPhoneNumReceiver extends PhonecallReceiver {
 
                     for (int i = 0; i < brokers.size(); i++) {
                         if (incomingNumber.equals(brokers.get(i).getPhoneNum()) && !"".equals(incomingNumber)) {
-                            pushNoti(context, brokers.get(i).getRealtyName() + "(" + brokers.get(i).getName() + ")");
+//                            pushNoti(context, brokers.get(i).getRealtyName() + "(" + brokers.get(i).getName() + ")");
                         }
                     }
                 }
@@ -113,22 +126,23 @@ public class GetPhoneNumReceiver extends PhonecallReceiver {
         });
     }
 
-    private void pushNoti(Context context, String name) {
+    private void pushNoti(Context context, String content, String number) {
         JSLog.D("push noti              !!!!        ", null);
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, channelId)
                         .setSmallIcon(android.support.v4.R.drawable.notification_icon_background)
                         .setContentTitle("전화가 왔습니다")
-                        .setContentText(name)
+                        .setContentText(content)
                         .setDefaults(Notification.DEFAULT_ALL)
                 .setPriority(Notification.PRIORITY_MAX);
 
         Intent intent = new Intent(context, IncomingCallActivity.class);
-        intent.putExtra("name", name);
+        intent.putExtra("content", content);
+        intent.putExtra("phoneNum", number);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        builder.setFullScreenIntent(pi, true);
+        builder.setContentIntent(pi);
 
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

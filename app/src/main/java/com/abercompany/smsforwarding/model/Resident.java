@@ -15,6 +15,9 @@ public class Resident implements Serializable {
     @SerializedName("phone_num")
     private String phoneNum;
 
+    @SerializedName("etc_num")
+    private String etcNum;
+
     public String getName() {
         return name;
     }
@@ -34,5 +37,12 @@ public class Resident implements Serializable {
     }
     public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
+    }
+
+    public String getEtcNum() {
+        return etcNum;
+    }
+    public void setEtcNum(String etcNum) {
+        this.etcNum = etcNum;
     }
 }

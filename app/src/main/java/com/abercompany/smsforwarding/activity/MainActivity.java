@@ -16,7 +16,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -48,12 +48,12 @@ import com.abercompany.smsforwarding.service.SmsService;
 import com.abercompany.smsforwarding.util.DeviceUtil;
 import com.abercompany.smsforwarding.util.JSLog;
 import com.abercompany.smsforwarding.util.NetworkUtil;
+import com.abercompany.smsforwarding.util.PrefUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -269,6 +269,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 if ("success".equals(result)) {
                     brokers = getBrokerResult.getBrokers();
+
+                    PrefUtil.getInstance().putPreference(brokers, "broker");
                 }
             }
 
@@ -289,6 +291,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 if ("success".equals(result)) {
                     residents = getResidentResult.getResidents();
+
+//                    List<String> residentPhoneNum = new ArrayList<>();
+//                    List<String> name = new ArrayList<>();
+//                    List<String> roomNum = new ArrayList<>();
+//                    for (int i=0; i<residents.size(); i++) {
+//                        residentPhoneNum.add(residents.get(i).getPhoneNum());
+//                        name.add(residents.get(i).getName());
+//                        roomNum.add(residents.get(i).getHo());
+//                    }
+//
+//                    Set<String> set = new HashSet<String>();
+//                    set.addAll(residentPhoneNum);
+//                    PrefUtil.getInstance().putPreference("residentPhoneNum", set);
+//                    set.clear();
+//                    set.addAll(name);
+//                    PrefUtil.getInstance().putPreference("residentName", set);
+//                    set.clear();
+//                    set.addAll(roomNum);
+//                    PrefUtil.getInstance().putPreference("residentRoomNum", set);
+//                    set.clear();
+
+                    PrefUtil.getInstance().putPreference("resident", residents);
                 }
             }
 
@@ -419,7 +443,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void getBuilding() {
-        Call<GetBuildingResult> getBuildingResultCall = NetworkUtil.getInstace().getBuiling("");
+        Call<GetBuildingResult> getBuildingResultCall = NetworkUtil.getInstace().getBuilding("");
         getBuildingResultCall.enqueue(new Callback<GetBuildingResult>() {
             @Override
             public void onResponse(Call<GetBuildingResult> call, Response<GetBuildingResult> response) {
@@ -443,7 +467,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setBuildingAdapter(final List<Building> buildings) {
         buildingAdapter = new BuildingAdapter(buildingFragment.getContext(), buildings);
         ((BuildingFragment) buildingFragment).getBinding().rvBuilding.setAdapter(buildingAdapter);
-        ((BuildingFragment) buildingFragment).getBinding().rvBuilding.setLayoutManager(new GridLayoutManager(buildingFragment.getContext(), 2));
+        ((BuildingFragment) buildingFragment).getBinding().rvBuilding.setLayoutManager(new LinearLayoutManager(buildingFragment.getContext()));
         buildingAdapter.notifyDataSetChanged();
         buildingAdapter.setItemClick(new BuildingAdapter.ItemClick() {
             @Override

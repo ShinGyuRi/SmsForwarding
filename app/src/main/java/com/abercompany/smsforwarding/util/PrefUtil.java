@@ -3,7 +3,14 @@ package com.abercompany.smsforwarding.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.abercompany.smsforwarding.model.Broker;
+import com.abercompany.smsforwarding.model.Resident;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListener{
@@ -52,9 +59,26 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
         prefEditor.commit();
     }
 
-    public void putPreference(String key, HashSet<String> value) {
+    public void putPreference(String key, Set<String> value) {
         prefEditor.putStringSet(key, value);
         prefEditor.commit();
+    }
+
+    public void putPreference(String key, List<Resident> value) {
+        Gson gson = new Gson();
+        String json = gson.toJson(value);
+
+        prefEditor.putString(key, json);
+        prefEditor.commit();
+    }
+
+    public void putPreference(List<Broker> value, String key)    {
+        Gson gson = new Gson();
+        String json = gson.toJson(value);
+
+        prefEditor.putString(key, json);
+        prefEditor.commit();
+
     }
 
     //get
@@ -78,6 +102,36 @@ public class PrefUtil implements SharedPreferences.OnSharedPreferenceChangeListe
 
     public Set<String> getStringSetPreference(String key) {
         return prefs.getStringSet(key, null);
+    }
+
+    public List<Resident> getResidentPreference(String key) {
+        List<Resident> residents;
+        String serializedObject = prefs.getString(key, null);
+        if (serializedObject != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Resident>>() {
+            }.getType();
+            residents = gson.fromJson(serializedObject, type);
+            return residents;
+        } else {
+            return null;
+        }
+
+    }
+
+    public List<Broker> getBrokerPreference(String key) {
+        List<Broker> brokers;
+        String serializedObject = prefs.getString(key, null);
+        if (serializedObject != null) {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Broker>>() {
+            }.getType();
+            brokers = gson.fromJson(serializedObject, type);
+            return brokers;
+        } else {
+            return null;
+        }
+
     }
 
     public void removePreference(String key){
