@@ -49,15 +49,16 @@ public class RoomFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public RoomFragment(List<Defaulter> defaulters, String buildingName) {
+    public RoomFragment(List<Defaulter> defaulters, String buildingName, List<Room> rooms) {
         this.defaulters = defaulters;
         this.buildingName = buildingName;
+        this.rooms = rooms;
 
         JSLog.D("buildingName           :::     " + this.buildingName, null);
     }
 
-    public static RoomFragment newInstance(List<Defaulter> defaulters, String buildingName) {
-        RoomFragment fragment = new RoomFragment(defaulters, buildingName);
+    public static RoomFragment newInstance(List<Defaulter> defaulters, String buildingName, List<Room> rooms) {
+        RoomFragment fragment = new RoomFragment(defaulters, buildingName, rooms);
         return fragment;
     }
 
@@ -79,7 +80,7 @@ public class RoomFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        getRoom();
+        getContract(rooms);
     }
 
     private void setRoomAdapter(final List<Room> rooms, final List<Contract> contracts, List<Defaulter> defaulters, final String buildingName) {
@@ -104,27 +105,6 @@ public class RoomFragment extends Fragment {
         });
     }
 
-    private void getRoom() {
-        Call<GetRoomResult> getRoomResultCall = NetworkUtil.getInstace().getRoom("");
-        getRoomResultCall.enqueue(new Callback<GetRoomResult>() {
-            @Override
-            public void onResponse(Call<GetRoomResult> call, Response<GetRoomResult> response) {
-                GetRoomResult getRoomResult = response.body();
-                String result = getRoomResult.getResult();
-
-                if ("success".equals(result)) {
-                    rooms = getRoomResult.getRooms();
-
-                    getContract(rooms);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetRoomResult> call, Throwable t) {
-
-            }
-        });
-    }
 
     private void getContract(final List<Room> rooms) {
         Call<GetContractResult> getContractResultCall = NetworkUtil.getInstace().getContract("");

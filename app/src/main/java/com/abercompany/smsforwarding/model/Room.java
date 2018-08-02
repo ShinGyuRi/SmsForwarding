@@ -12,10 +12,22 @@ public class Room implements Serializable{
     @SerializedName("active")
     private String active;
 
+    @SerializedName("price")
+    private String price;
+
+    @SerializedName("building_name")
+    private String buildingName;
+
     public String getRoomNum() {
         return roomNum;
     }
     public String getActive() {
         return active;
+    }
+    public String getPrice() {
+        return price;
+    }
+    public String getBuildingName() {
+        return buildingName;
     }
 }

@@ -53,6 +53,7 @@ public class GetPhoneNumReceiver extends PhonecallReceiver {
             if ((number.equals(residents.get(i).getPhoneNum()) || number.equals(residents.get(i).getEtcNum())) && !"".equals(number)) {
                 flag = true;
                 pushNoti(ctx, residents.get(i).getName() + residents.get(i).getHo(), number);
+                break;
             } else {
                 flag = false;
             }
@@ -142,7 +143,7 @@ public class GetPhoneNumReceiver extends PhonecallReceiver {
         intent.putExtra("phoneNum", number);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        builder.setContentIntent(pi);
+        builder.setFullScreenIntent(pi, true);
 
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

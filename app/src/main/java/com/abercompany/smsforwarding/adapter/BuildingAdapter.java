@@ -11,14 +11,24 @@ import android.view.ViewGroup;
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.databinding.ViewBuildingItemBinding;
 import com.abercompany.smsforwarding.model.Building;
+import com.abercompany.smsforwarding.model.GetRoomResult;
+import com.abercompany.smsforwarding.model.Room;
 import com.abercompany.smsforwarding.util.JSLog;
+import com.abercompany.smsforwarding.util.NetworkUtil;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.BindingHolder> {
 
     private Context context;
     private List<Building> buildings;
+    private List<Room> rooms;
+
+    private StringBuilder stringBuilder = new StringBuilder();
 
     private ItemClick itemClick;
 
@@ -40,9 +50,11 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Bindin
         }
     }
 
-    public BuildingAdapter(Context context, List<Building> buildingList) {
+    public BuildingAdapter(Context context, List<Building> buildingList, List<Room> rooms) {
         this.context = context;
         this.buildings = buildingList;
+        this.rooms = rooms;
+
     }
 
     @NonNull
@@ -57,6 +69,17 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Bindin
     public void onBindViewHolder(@NonNull BindingHolder holder, final int position) {
         holder.binding.tvBuildingName.setText(buildings.get(position).getName());
         holder.binding.tvCountEmptyRoom.setText("" + (buildings.get(position).getCountTotalRoom() - buildings.get(position).getCountUseRoom()));
+
+        for (int i = 0; i < rooms.size(); i++) {
+            if (buildings.get(position).getName().equals(rooms.get(i).getBuildingName())) {
+                if ("퇴실".equals(rooms.get(i).getActive())) {
+                    stringBuilder.append(context.getString(R.string.str_room_info, rooms.get(i).getRoomNum(), rooms.get(i).getPrice()));
+                }
+            }
+
+        }
+
+        holder.binding.tvEmptyRoomInfo.setText(stringBuilder.toString());
 
         holder.binding.viewItem.setOnClickListener(new View.OnClickListener() {
             @Override

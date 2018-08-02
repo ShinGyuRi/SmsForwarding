@@ -70,7 +70,7 @@ public class RegisterEtcNumActivity extends AppCompatActivity {
     }
 
     private void insertEtcNum(String etcNum, String dstName) {
-        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertEtcNum(etcNum, dstName);
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertEtcNum(etcNum.replace("-", ""), dstName);
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -95,7 +95,7 @@ public class RegisterEtcNumActivity extends AppCompatActivity {
     }
 
     private void insertRealtyPhoneNum(String phoneNum, String realtyName) {
-        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertRealtyPhoneNum(phoneNum, realtyName);
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertRealtyPhoneNum(phoneNum.replace("-", ""), realtyName);
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

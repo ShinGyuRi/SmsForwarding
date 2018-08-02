@@ -41,7 +41,9 @@ import com.abercompany.smsforwarding.model.GetBuildingResult;
 import com.abercompany.smsforwarding.model.GetDefaulterResult;
 import com.abercompany.smsforwarding.model.GetDepositResult;
 import com.abercompany.smsforwarding.model.GetResidentResult;
+import com.abercompany.smsforwarding.model.GetRoomResult;
 import com.abercompany.smsforwarding.model.Resident;
+import com.abercompany.smsforwarding.model.Room;
 import com.abercompany.smsforwarding.model.Sms;
 import com.abercompany.smsforwarding.network.QuestionsSpreadsheetWebService;
 import com.abercompany.smsforwarding.service.SmsService;
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private List<Broker> brokers;
     private List<Defaulter> defaulters = new ArrayList<>();
     private List<Building> buildings;
+    private List<Room> rooms;
 
     private BuildingAdapter buildingAdapter;
 
@@ -109,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getBroker();
                 getResident();
                 getDefaulter();
+                getRoom();
 
                 initNav();
                 setInitFrag();
@@ -137,6 +141,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void initNav() {
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -465,7 +472,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setBuildingAdapter(final List<Building> buildings) {
-        buildingAdapter = new BuildingAdapter(buildingFragment.getContext(), buildings);
+        buildingAdapter = new BuildingAdapter(buildingFragment.getContext(), buildings, rooms);
         ((BuildingFragment) buildingFragment).getBinding().rvBuilding.setAdapter(buildingAdapter);
         ((BuildingFragment) buildingFragment).getBinding().rvBuilding.setLayoutManager(new LinearLayoutManager(buildingFragment.getContext()));
         buildingAdapter.notifyDataSetChanged();
@@ -473,9 +480,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view, int position) {
                 if (roomFragment == null) {
-                    roomFragment = RoomFragment.newInstance(defaulters, buildings.get(position).getName());
+                    roomFragment = RoomFragment.newInstance(defaulters, buildings.get(position).getName(), rooms);
                 }
                 switchContent(roomFragment, "ROOM");
+            }
+        });
+    }
+
+    private void getRoom() {
+        Call<GetRoomResult> getRoomResultCall = NetworkUtil.getInstace().getRoom("");
+        getRoomResultCall.enqueue(new Callback<GetRoomResult>() {
+            @Override
+            public void onResponse(Call<GetRoomResult> call, Response<GetRoomResult> response) {
+                GetRoomResult getRoomResult = response.body();
+                String result = getRoomResult.getResult();
+
+                if ("success".equals(result)) {
+                    rooms = getRoomResult.getRooms();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetRoomResult> call, Throwable t) {
+
             }
         });
     }
@@ -625,7 +652,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
 
         // Handle navigation view item clicks here.
