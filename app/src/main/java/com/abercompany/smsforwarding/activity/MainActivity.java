@@ -379,6 +379,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String phoneNum = DeviceUtil.getDevicePhoneNumber(this);
         String timeStamp = lst.get(i).getTime();
         Log.d(TAG, "phoneNum        :::     " + phoneNum);
+        JSLog.D("sms Message            :::     " + message, null);
 
         Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertSms(message, phoneNum, senderNum, timeStamp);
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
@@ -582,7 +583,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Uri message = Uri.parse("content://sms/");
         ContentResolver cr = this.getContentResolver();
 
-        c = cr.query(message, null, null, null, null);
+        c = cr.query(message, null, "address='"+phoneNum+"'", null, null);
         this.startManagingCursor(c);
         int totalSMS = c.getCount();
 
@@ -604,7 +605,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (phoneNum.equals(c.getString(c.getColumnIndexOrThrow("address")))) {
                     lstSms.add(objSms);
                 }
-//                c.moveToNext();
+                c.moveToNext();
             }
         }
         // else {
@@ -612,6 +613,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // }
 //        c.close();
 
+        JSLog.D("lstSms.size            :::     " + lstSms.size(), null);
         return lstSms;
     }
 

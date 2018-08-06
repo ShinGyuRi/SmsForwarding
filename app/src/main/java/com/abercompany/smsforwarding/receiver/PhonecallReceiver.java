@@ -3,7 +3,10 @@ package com.abercompany.smsforwarding.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+
+import com.abercompany.smsforwarding.util.JSLog;
 
 import java.util.Date;
 
@@ -61,6 +64,7 @@ public class PhonecallReceiver extends BroadcastReceiver {
         }
         switch (state) {
             case TelephonyManager.CALL_STATE_RINGING:
+                JSLog.D("Call state ringing                 !!! ", null);
                 isIncoming = true;
                 callStartTime = new Date();
                 savedNumber = number;

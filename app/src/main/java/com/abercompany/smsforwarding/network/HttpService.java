@@ -8,6 +8,7 @@ import com.abercompany.smsforwarding.model.GetCheckOutListResult;
 import com.abercompany.smsforwarding.model.GetContractResult;
 import com.abercompany.smsforwarding.model.GetDefaulterResult;
 import com.abercompany.smsforwarding.model.GetDepositResult;
+import com.abercompany.smsforwarding.model.GetElecDefaulter;
 import com.abercompany.smsforwarding.model.GetRealtyResult;
 import com.abercompany.smsforwarding.model.GetResidentResult;
 import com.abercompany.smsforwarding.model.GetRoomResult;
@@ -163,4 +164,8 @@ public interface HttpService {
     @POST("insertRealtyPhoneNum")
     Call<JsonObject> insertRealtyPhoneNum(@Field("phone_num") String phoneNum,
                                           @Field("realty_name") String realtyName);
+
+    @FormUrlEncoded
+    @POST("getElecDefaulter")
+    Call<GetElecDefaulter> getElecDefaulter(@Field("") String empty);
 }

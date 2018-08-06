@@ -59,7 +59,7 @@
         <activity android:name=".activity.SearchLeaveRoomActivity" />
         <activity android:name=".activity.AddBuildingActivity" />
         <activity android:name=".activity.ElecDefaulterActivity" />
-        <activity android:name=".activity.IncomingCallActivity" />
+        <activity android:name=".activity.IncomingCallActivity"/>
         <activity android:name=".activity.RegisterEtcNumActivity"></activity>
     </application>
 
