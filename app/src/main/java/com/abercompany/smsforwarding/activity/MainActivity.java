@@ -114,8 +114,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getDefaulter();
                 getRoom();
 
-                initNav();
-                setInitFrag();
             }
 
             @Override
@@ -251,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (currentTab) {
                 case "BUILDING":
                     initNaviButton(navBuilding, drawer);
-                    setBuildingAdapter(buildings);
+                    setBuildingAdapter(buildings, rooms);
                     break;
                 case "NEW_DATA":
                     initNaviButton(navNewData, drawer);
@@ -461,7 +459,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if ("success".equals(result)) {
                     buildings = getBuildingResult.getBuildings();
 
-                    setBuildingAdapter(buildings);
+                    setBuildingAdapter(buildings, rooms);
                 }
             }
 
@@ -472,7 +470,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void setBuildingAdapter(final List<Building> buildings) {
+    private void setBuildingAdapter(final List<Building> buildings, final List<Room> rooms) {
+
+        JSLog.D("rooms.size             :::     " + rooms.size(), null);
         buildingAdapter = new BuildingAdapter(buildingFragment.getContext(), buildings, rooms);
         ((BuildingFragment) buildingFragment).getBinding().rvBuilding.setAdapter(buildingAdapter);
         ((BuildingFragment) buildingFragment).getBinding().rvBuilding.setLayoutManager(new LinearLayoutManager(buildingFragment.getContext()));
@@ -498,6 +498,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 if ("success".equals(result)) {
                     rooms = getRoomResult.getRooms();
+
+
+                    initNav();
+                    setInitFrag();
                 }
             }
 

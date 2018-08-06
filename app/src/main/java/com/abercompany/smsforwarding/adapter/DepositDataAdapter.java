@@ -317,13 +317,13 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
 
         JSLog.D("editDeposits size              :::         " + editDeposits.size(), null);
         if (i < editDeposits.size() && bindingHolder.binding.spToName.getSelectedItemPosition() != 0) {
-            updateTrimmedData(editDeposits.get(i).getName(), editDeposits.get(i).getDate(), editDeposits.get(i).getDestinationName(), editDeposits.get(i).getType(), editDeposits.get(i).getViewPosition(), editDeposits.get(i).getNote());
+            updateTrimmedData(editDeposits.get(i).getName(), editDeposits.get(i).getDate(), editDeposits.get(i).getDestinationName(), editDeposits.get(i).getType(), editDeposits.get(i).getNote());
         }
 
     }
 
 
-    private void updateTrimmedData(String name, String date, String objectName, final String type, final int position, String note) {
+    private void updateTrimmedData(String name, String date, String objectName, final String type, String note) {
         Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type, DeviceUtil.getDevicePhoneNumber(context), NEW_DATA, "", "", note);
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
@@ -341,14 +341,18 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                         Debug.showToast(context, "등록되었습니다");
                         JSLog.D("type           :::     " + DepositDataAdapter.this.type, null);
                         if (NEW_DATA.equals(DepositDataAdapter.this.type)) {
-                            deposits.remove(position);
-                            notifyDataSetChanged();
+//                            deposits.remove(position);
 
                             i++;
                             if (i < editDeposits.size()) {
                                 updateTrimmedData(editDeposits.get(i).getName(), editDeposits.get(i).getDate(), editDeposits.get(i).getDestinationName(), editDeposits.get(i).getType(), editDeposits.get(i).getViewPosition(),
                                         editDeposits.get(i).getNote());
                             } else {
+                                for (int i = 0; i < editDeposits.size(); i++) {
+                                    deposits.remove(editDeposits.get(i).getViewPosition());
+                                }
+                                notifyDataSetChanged();
+
                                 i = 0;
                                 editDeposits.clear();
                             }

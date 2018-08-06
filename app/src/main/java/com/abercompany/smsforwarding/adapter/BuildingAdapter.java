@@ -11,24 +11,20 @@ import android.view.ViewGroup;
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.databinding.ViewBuildingItemBinding;
 import com.abercompany.smsforwarding.model.Building;
-import com.abercompany.smsforwarding.model.GetRoomResult;
 import com.abercompany.smsforwarding.model.Room;
 import com.abercompany.smsforwarding.util.JSLog;
-import com.abercompany.smsforwarding.util.NetworkUtil;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.BindingHolder> {
 
     private Context context;
-    private List<Building> buildings;
+    private List<Building> buildings = new ArrayList<>();
     private List<Room> rooms;
 
-    private StringBuilder stringBuilder = new StringBuilder();
+    private StringBuilder emptyRoomBuilder = new StringBuilder();
+    private StringBuilder underContractRoomBuilder = new StringBuilder();
 
     private ItemClick itemClick;
 
@@ -73,13 +69,16 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Bindin
         for (int i = 0; i < rooms.size(); i++) {
             if (buildings.get(position).getName().equals(rooms.get(i).getBuildingName())) {
                 if ("퇴실".equals(rooms.get(i).getActive())) {
-                    stringBuilder.append(context.getString(R.string.str_room_info, rooms.get(i).getRoomNum(), rooms.get(i).getPrice()));
+                    emptyRoomBuilder.append(context.getString(R.string.str_room_info, rooms.get(i).getRoomNum(), rooms.get(i).getPrice()));
+                } else if ("계약".equals(rooms.get(i).getActive())) {
+                    underContractRoomBuilder.append(context.getString(R.string.str_room_info, rooms.get(i).getRoomNum(), rooms.get(i).getPrice()));
                 }
             }
 
         }
 
-        holder.binding.tvEmptyRoomInfo.setText(stringBuilder.toString());
+        holder.binding.tvEmptyRoomInfo.setText(emptyRoomBuilder.toString());
+        holder.binding.tvUnderContractRoom.setText("계약중:    " + underContractRoomBuilder.toString());
 
         holder.binding.viewItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +92,7 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Bindin
 
     @Override
     public int getItemCount() {
-        if (buildings.size() == 0) {
+        if (buildings == null || buildings.size() == 0) {
             return 0;
         }
         JSLog.D("buildings size         :::     " + buildings.size(), null);
