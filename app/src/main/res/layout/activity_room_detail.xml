@@ -32,8 +32,8 @@
             android:id="@+id/rg_active"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="@+id/tv_room_num"
             app:layout_constraintStart_toEndOf="@+id/tv_room_num"
@@ -51,6 +51,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="퇴실" />
+
+            <RadioButton
+                android:id="@+id/rb_under_contract"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="계약"/>
         </RadioGroup>
 
         <Button

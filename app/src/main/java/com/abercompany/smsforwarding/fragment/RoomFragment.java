@@ -96,7 +96,7 @@ public class RoomFragment extends Fragment {
                 intent.putExtra("buildingName", buildingName);
                 for (int i = 0; i < contracts.size(); i++) {
                     if (rooms.get(position).getRoomNum().equals(contracts.get(i).getRoomNum()) &&
-                            "재실".equals(contracts.get(i).getActive())) {
+                            !"퇴실".equals(contracts.get(i).getActive())) {
                         intent.putExtra("contract", contracts.get(i));
                     }
                 }

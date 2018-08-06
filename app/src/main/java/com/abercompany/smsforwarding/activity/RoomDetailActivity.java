@@ -68,12 +68,15 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
         if ("재실".equals(room.getActive())) {
             binding.rbCheckIn.setChecked(true);
             rbCheckOutSetOnClick();
-        } else {
+        } else if("퇴실".equals(room.getActive())){
             binding.rbCheckOut.setChecked(true);
             rbCheckInSetOnClick();
+        } else if ("계약".equals(room.getActive())) {
+            binding.rbUnderContract.setChecked(true);
         }
 
         if (contract != null) {
+            JSLog.D("contract.getDownPayment            :::     " + contract.getDownPayment(), null);
             binding.etName.setText(contract.getName());
             binding.etPhoneNum.setText(contract.getPhoneNum());
             binding.etIdNum.setText(contract.getIdNum());
@@ -396,6 +399,8 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
             active = "퇴실";
         } else if (binding.rbCheckIn.isChecked()) {
             active = "재실";
+        } else if (binding.rbUnderContract.isChecked()) {
+            active = "계약";
         }
         JSLog.D("active         :::     " + active, null);
 
