@@ -18,6 +18,12 @@ public class Resident implements Serializable {
     @SerializedName("etc_num")
     private String etcNum;
 
+    @SerializedName("active")
+    private String active;
+
+    @SerializedName("building_name")
+    private String buildingName;
+
     public String getName() {
         return name;
     }
@@ -44,5 +50,19 @@ public class Resident implements Serializable {
     }
     public void setEtcNum(String etcNum) {
         this.etcNum = etcNum;
+    }
+
+    public String getActive() {
+        return active;
+    }
+    public void setActive(String active) {
+        this.active = active;
+    }
+
+    public String getBuildingName() {
+        return buildingName;
+    }
+    public void setBuildingName(String buildingName) {
+        this.buildingName = buildingName;
     }
 }

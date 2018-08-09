@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.activity.AddCashActivity;
@@ -91,7 +92,9 @@ public class NewDataFragment extends Fragment {
     private void setDepositAdapter(final List<Deposit> newDatas, List<Resident> residents, List<Broker> brokers) {
         adapter = new DepositDataAdapter(getActivity(), getContext(), newDatas, residents, brokers, NEW_DATA);
         binding.rvDeposit.setAdapter(adapter);
+        binding.rvDeposit.setHasFixedSize(true);
         binding.rvDeposit.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvDeposit.getRecycledViewPool().setMaxRecycledViews(1, 0);
         adapter.notifyDataSetChanged();
     }
 

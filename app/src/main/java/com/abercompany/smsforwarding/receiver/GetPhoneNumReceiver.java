@@ -136,7 +136,7 @@ public class GetPhoneNumReceiver extends PhonecallReceiver {
                         .setContentTitle("전화가 왔습니다")
                         .setContentText(content)
                         .setDefaults(Notification.DEFAULT_ALL)
-                .setPriority(Notification.PRIORITY_MAX);
+                .setPriority(NotificationManager.IMPORTANCE_HIGH);
 
         Intent intent = new Intent(context, IncomingCallActivity.class);
         intent.putExtra("content", content);

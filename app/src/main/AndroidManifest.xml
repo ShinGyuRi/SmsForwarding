@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:name=".util.BaseApplication"
@@ -39,16 +41,16 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".receiver.GetPhoneNumReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="android.intent.action.PHONE_STATE" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver-->
+            <!--android:name=".receiver.GetPhoneNumReceiver"-->
+            <!--android:enabled="true">-->
+            <!--<intent-filter android:priority="-1">-->
+                <!--<action android:name="android.intent.action.PHONE_STATE" />-->
+            <!--</intent-filter>-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.NEW_OUTGOING_CALL" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
         <activity android:name=".activity.RoomDetailActivity" />
         <activity android:name=".activity.ContractActivity" />
@@ -59,8 +61,9 @@
         <activity android:name=".activity.SearchLeaveRoomActivity" />
         <activity android:name=".activity.AddBuildingActivity" />
         <activity android:name=".activity.ElecDefaulterActivity" />
-        <activity android:name=".activity.IncomingCallActivity"/>
-        <activity android:name=".activity.RegisterEtcNumActivity"></activity>
+        <activity android:name=".activity.IncomingCallActivity" />
+        <activity android:name=".activity.RegisterEtcNumActivity" />
+        <activity android:name=".activity.AddContactsActivity"></activity>
     </application>
 
 </manifest>

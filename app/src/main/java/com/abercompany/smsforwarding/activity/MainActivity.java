@@ -125,7 +125,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TedPermission.with(this)
                 .setPermissionListener(permissionlistener)
                 .setDeniedMessage("If you reject permission,you can not use this servicePlease turn on permissions at [Setting] > [Permission]")
-                .setPermissions(Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS, Manifest.permission.READ_PHONE_STATE)
+                .setPermissions(Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS, Manifest.permission.READ_PHONE_STATE,
+                        Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS)
                 .check();
 
 
@@ -171,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void setInitFrag() {
         buildingFragment = BuildingFragment.newInstance();
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, buildingFragment, "BUILDING").addToBackStack("BUILDING").commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, buildingFragment, "BUILDING").addToBackStack("BUILDING").commitAllowingStateLoss();
         navBuilding.setEnabled(false);
 
         getBuilding();
@@ -241,9 +242,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String currentTab = getSupportFragmentManager().findFragmentById(R.id.container).getTag();
             JSLog.D(currentTab, new Throwable());
 
-            getBroker();
-            getResident();
-            getDefaulter();
+//            getBroker();
+//            getResident();
+//            getDefaulter();
 
             if (currentTab == null) return;
             switch (currentTab) {
@@ -296,6 +297,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 if ("success".equals(result)) {
                     residents = getResidentResult.getResidents();
+
+//                    for (int i=0; i<getResidentResult.getResidents().size(); i++) {
+//                        if ("재실".equals(getResidentResult.getResidents().get(i).getActive())) {
+//                            inResidents.add(getResidentResult.getResidents().get(i));
+//                        }
+//                    }
 
 //                    List<String> residentPhoneNum = new ArrayList<>();
 //                    List<String> name = new ArrayList<>();
@@ -685,7 +692,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_setting) {
             initNaviButton(item, drawer);
             if (settingFragment == null) {
-                settingFragment = SettingFragment.newInstance(residents, brokers, nums, defaulters);
+                settingFragment = SettingFragment.newInstance(residents, brokers, nums, defaulters, buildings);
             }
             switchContent(settingFragment, "SETTING");
         }

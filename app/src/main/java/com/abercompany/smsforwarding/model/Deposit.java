@@ -30,6 +30,10 @@ public class Deposit {
 
     private int viewPosition;
 
+    private int spCategorySelectedPosition;
+
+    private int spTonameSelectedPosition;
+
     public String getIndex() {
         return index;
     }
@@ -91,5 +95,19 @@ public class Deposit {
     }
     public void setViewPosition(int viewPosition) {
         this.viewPosition = viewPosition;
+    }
+
+    public int getSpCategorySelectedPosition() {
+        return spCategorySelectedPosition;
+    }
+    public void setSpCategorySelectedPosition(int spCategorySelectedPosition) {
+        this.spCategorySelectedPosition = spCategorySelectedPosition;
+    }
+
+    public int getSpTonameSelectedPosition() {
+        return spTonameSelectedPosition;
+    }
+    public void setSpTonameSelectedPosition(int spTonameSelectedPosition) {
+        this.spTonameSelectedPosition = spTonameSelectedPosition;
     }
 }

@@ -106,23 +106,26 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
 
         bindingHolder = new BindingHolder(view);
 
+        for (int i=0; i<deposits.size(); i++) {
+            if (deposits.get(i).getMethod().contains("입금")) {
+                getBindingHolder().getBinding().spCategory.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, context.getResources().getStringArray(R.array.deposit)));
+            } else if (deposits.get(i).getMethod().contains("출금")) {
+                getBindingHolder().getBinding().spCategory.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, context.getResources().getStringArray(R.array.withdraw)));
+            }
+        }
+
         return bindingHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final BindingHolder holder, final int position) {
+//        holder.setIsRecyclable(false);
+
         holder.binding.tvMessage.setText(context.getString(R.string.str_deposit_message,
                 deposits.get(position).getName(),
                 deposits.get(position).getAmount(),
                 deposits.get(position).getDate(),
                 deposits.get(position).getMethod()));
-
-
-        if (deposits.get(position).getMethod().contains("입금")) {
-            holder.binding.spCategory.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, context.getResources().getStringArray(R.array.deposit)));
-        } else if (deposits.get(position).getMethod().contains("출금")) {
-            holder.binding.spCategory.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, context.getResources().getStringArray(R.array.withdraw)));
-        }
 
         if (EXISTING_DATA.equals(type)) {
             JSLog.D("getSelectedTypePosition        :::     " + getSelectedTypePosition(position), null);
@@ -305,6 +308,11 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
+    @Override
     public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         BusProvider.getInstance().unregister(this);
         super.onDetachedFromRecyclerView(recyclerView);
@@ -316,8 +324,14 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     public void FinishLoad(OnClickEvent event) {
 
         JSLog.D("editDeposits size              :::         " + editDeposits.size(), null);
-        if (i < editDeposits.size() && bindingHolder.binding.spToName.getSelectedItemPosition() != 0) {
-            updateTrimmedData(editDeposits.get(i).getName(), editDeposits.get(i).getDate(), editDeposits.get(i).getDestinationName(), editDeposits.get(i).getType(), editDeposits.get(i).getNote());
+        if (i < editDeposits.size()) {
+            if (bindingHolder.binding.spCategory.getSelectedItemPosition() == bindingHolder.binding.spCategory.getLastVisiblePosition()) {
+                updateTrimmedData(editDeposits.get(i).getName(), editDeposits.get(i).getDate(), editDeposits.get(i).getDestinationName(), editDeposits.get(i).getType(), editDeposits.get(i).getNote());
+            } else {
+                if (bindingHolder.binding.spToName.getSelectedItemPosition() != 0) {
+                    updateTrimmedData(editDeposits.get(i).getName(), editDeposits.get(i).getDate(), editDeposits.get(i).getDestinationName(), editDeposits.get(i).getType(), editDeposits.get(i).getNote());
+                }
+            }
         }
 
     }
@@ -396,4 +410,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         return 0;
     }
 
+    public BindingHolder getBindingHolder() {
+        return bindingHolder;
+    }
 }
