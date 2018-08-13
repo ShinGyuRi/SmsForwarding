@@ -215,8 +215,18 @@
             android:layout_marginTop="8dp"
             android:text="부동산"
             app:layout_constraintStart_toStartOf="@+id/et_elec_num"
-            app:layout_constraintTop_toBottomOf="@+id/et_elec_num"
-            android:onClick="@{roomDetail.onClick}"/>
+            app:layout_constraintTop_toBottomOf="@+id/et_elec_num"/>
+
+        <Button
+            android:id="@+id/btn_realty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:text="부동산"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/et_gas_num"
+            app:layout_constraintTop_toBottomOf="@+id/et_gas_num"
+            android:onClick="@{roomDetail.onClick}" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

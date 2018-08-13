@@ -170,7 +170,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
                 dpd.show(getFragmentManager(), "startDate");
                 break;
 
-            case R.id.tv_realty:
+            case R.id.btn_realty:
                 Intent intent = new Intent(this, RealtyActivity.class);
                 intent.putExtra("realtyName", realtyName);
                 intent.putExtra("realtyAccount", account);

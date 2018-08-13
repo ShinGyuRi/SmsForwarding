@@ -86,7 +86,17 @@ public class RoomFragment extends Fragment {
     private void setRoomAdapter(final List<Room> rooms, final List<Contract> contracts, List<Defaulter> defaulters, final String buildingName) {
         adapter = new RoomAdapter(getContext(), rooms, contracts, defaulters);
         binding.rvRoomNum.setAdapter(adapter);
-        binding.rvRoomNum.setLayoutManager(new GridLayoutManager(getContext(), 4));
+        GridLayoutManager manager = new GridLayoutManager(getContext(), 4);
+        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (position == 8) {
+                    return 4;
+                }
+                return 1;
+            }
+        });
+        binding.rvRoomNum.setLayoutManager(manager);
         adapter.notifyDataSetChanged();
         adapter.setItemClick(new RoomAdapter.ItemClick() {
             @Override
