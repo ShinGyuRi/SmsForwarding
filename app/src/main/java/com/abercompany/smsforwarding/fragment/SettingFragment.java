@@ -2,6 +2,7 @@ package com.abercompany.smsforwarding.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -10,13 +11,17 @@ import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.abercompany.smsforwarding.R;
@@ -26,6 +31,8 @@ import com.abercompany.smsforwarding.activity.RegisterEtcNumActivity;
 import com.abercompany.smsforwarding.activity.RegisterPhoneNumActivity;
 import com.abercompany.smsforwarding.activity.SearchDefaulterActivity;
 import com.abercompany.smsforwarding.activity.SearchLeaveRoomActivity;
+import com.abercompany.smsforwarding.databinding.DlgProgressCircleBinding;
+import com.abercompany.smsforwarding.databinding.DlgProgressHorizontalBinding;
 import com.abercompany.smsforwarding.databinding.FragmentSettingBinding;
 import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Building;
@@ -63,6 +70,12 @@ public class SettingFragment extends Fragment {
 
     private String buildingName = "";
 
+    private Handler progressHandler;
+
+
+    private Dialog progressDialog;
+    private DlgProgressCircleBinding progressBinding;
+
     public SettingFragment() {
         // Required empty public constructor
     }
@@ -79,7 +92,7 @@ public class SettingFragment extends Fragment {
 
         for (int i = 0; i < residents.size(); i++) {
             if ("아인스빌".equals(residents.get(i).getBuildingName())) {
-                buildingName = "JNK";
+                buildingName = "입주자JNK";
             }
 
             Contact contact = new Contact();
@@ -106,8 +119,6 @@ public class SettingFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_setting, container, false);
         View view = binding.getRoot();
         binding.setSetting(this);
-
-        getContactList();
 
         return view;
     }
@@ -151,50 +162,103 @@ public class SettingFragment extends Fragment {
                 break;
 
             case R.id.btn_refresh_contacts:
-                JSLog.D("contactName.size               :::         " + contactPhoneNum.size(), null);
-
-                if (contactPhoneNum.size() == 0) {
-
-                    for (int i = 0; i < residents.size(); i++) {
-                        JSLog.D("Add residentPhoneNum            :::     " + residents.get(i).getPhoneNum(), null);
-                        addContacts(buildingName +
-                                        residents.get(i).getHo() + residents.get(i).getName(),
-                                residents.get(i).getPhoneNum());
-                    }
-                } else {
-                    if (!residentContact.equals(contactPhoneNum)) {
-                        different.addAll(residentContact);
-                        different.addAll(contactPhoneNum);
-
-                        similar.retainAll(contactPhoneNum);
-                        different.removeAll(similar);
-
-                        residentContact.removeAll(similar);
-
-                        for (int i = 0; i < similar.size(); i++) {
-                            JSLog.D("similar            :::     " + similar.get(i), null);
-                        }
 
 
-                        for (int i = 0; i < residents.size(); i++) {
-                            for (int j = 0; j < residentContact.size(); j++) {
-                                if (residentContact.get(j).equals(residents.get(i).getPhoneNum())) {
-                                    JSLog.D("Add residentPhoneNum            :::     " + residentContact.get(i), null);
-                                    addContacts(buildingName +
-                                                    residents.get(i).getHo() + residents.get(i).getName(),
-                                            residentContact.get(i));
+                progressDialog = new Dialog(getContext(), android.R.style.Theme_Black);
+
+                progressBinding = DataBindingUtil
+                        .inflate(LayoutInflater.from(getContext()), R.layout.dlg_progress_circle, null, false);
+
+                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                progressDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
+                progressDialog.setContentView(progressBinding.getRoot());
+                progressDialog.show();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getContactList();
+
+                        if (contactPhoneNum.size() == 0) {
+
+
+                            for (int i = 0; i < residents.size(); i++) {
+                                Message msg = progressHandler.obtainMessage();
+
+                                JSLog.D("Add residentPhoneNum            :::     " + residents.get(i).getPhoneNum(), null);
+                                addContacts(buildingName +
+                                                residents.get(i).getHo() + residents.get(i).getName(),
+                                        residents.get(i).getPhoneNum());
+
+
+                                msg.obj = buildingName +
+                                        residents.get(i).getHo() + residents.get(i).getName() + " 추가";
+                                progressHandler.sendMessage(msg);
+                            }
+
+                            progressDialog.dismiss();
+
+                        } else {
+                            if (!residentContact.equals(contactPhoneNum)) {
+
+                                different.addAll(residentContact);
+                                different.addAll(contactPhoneNum);
+
+                                similar.retainAll(contactPhoneNum);
+                                different.removeAll(similar);
+
+                                residentContact.removeAll(similar);
+
+
+                                for (int i = 0; i < residents.size(); i++) {
+                                    for (int j = 0; j < residentContact.size(); j++) {
+                                        if (residentContact.get(j).equals(residents.get(i).getPhoneNum())) {
+                                            Message msg = progressHandler.obtainMessage();
+
+                                            JSLog.D("Add residentPhoneNum            :::     " + residentContact.get(j), null);
+                                            addContacts(buildingName +
+                                                            residents.get(i).getHo() + residents.get(i).getName(),
+                                                    residentContact.get(j));
+
+                                            msg.obj = buildingName +
+                                                    residents.get(i).getHo() + residents.get(i).getName() + " 추가";
+                                            progressHandler.sendMessage(msg);
+
+                                        }
+                                    }
+                                }
+
+                                contactPhoneNum.removeAll(similar);
+
+                                for (int i = 0; i < contactPhoneNum.size(); i++) {
+                                    Message msg = progressHandler.obtainMessage();
+
+                                    JSLog.D("Delete contactPhoneNum            :::     " + contactPhoneNum.get(i), null);
+                                    deleteContact(getActivity().getContentResolver(), contactPhoneNum.get(i));
+
+                                    msg.obj = contactPhoneNum.get(i) + " 삭제";
+                                    progressHandler.sendMessage(msg);
+
+
+                                }
+
+                                progressDialog.dismiss();
+                            } else {
+                                if (progressDialog.isShowing()) {
+                                    progressDialog.dismiss();
                                 }
                             }
                         }
-
-                        contactPhoneNum.removeAll(similar);
-
-                        for (int i = 0; i < contactPhoneNum.size(); i++) {
-                            JSLog.D("Delete contactPhoneNum            :::     " + contactPhoneNum.get(i), null);
-                            deleteContact(getActivity().getContentResolver(), contactPhoneNum.get(i));
-                        }
                     }
-                }
+                }).start();
+
+                progressHandler = new Handler() {
+                    public void handleMessage(Message msg) {
+
+                        progressBinding.tvProgress.setText((String) msg.obj);
+                    }
+                };
+
                 break;
 
         }
@@ -252,7 +316,7 @@ public class SettingFragment extends Fragment {
         try {
             // Executing all the insert operations as a single database transaction
             getContext().getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-            Toast.makeText(getActivity().getBaseContext(), "등록되었습니다", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity().getBaseContext(), "등록되었습니다", Toast.LENGTH_SHORT).show();
         } catch (RemoteException e) {
             e.printStackTrace();
         } catch (OperationApplicationException e) {
@@ -270,7 +334,8 @@ public class SettingFragment extends Fragment {
                 .withSelection(ContactsContract.RawContacts.CONTACT_ID + "=?", args).build());
         try {
             contactHelper.applyBatch(ContactsContract.AUTHORITY, ops);
-            Toast.makeText(getActivity().getBaseContext(), "삭제되었습니다", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity().getBaseContext(), "삭제되었습니다", Toast.LENGTH_SHORT).show();
+
         } catch (RemoteException e) {
             e.printStackTrace();
         } catch (OperationApplicationException e) {
@@ -302,6 +367,9 @@ public class SettingFragment extends Fragment {
     }
 
     private void getContactList() {
+
+        progressBinding.tvProgress.setText("연락처를 가져오는 중입니다");
+
         ContentResolver cr = getActivity().getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
                 null, null, null, null);
@@ -334,6 +402,7 @@ public class SettingFragment extends Fragment {
 
                             JSLog.D("contactPhoneNum            :::     " + phoneNo, null);
                             contactPhoneNum.add(phoneNo);
+
                         }
                     }
                     pCur.close();
@@ -344,4 +413,6 @@ public class SettingFragment extends Fragment {
             cur.close();
         }
     }
+
+
 }
