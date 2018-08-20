@@ -692,7 +692,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_setting) {
             initNaviButton(item, drawer);
             if (settingFragment == null) {
-                settingFragment = SettingFragment.newInstance(residents, brokers, nums, defaulters, buildings);
+                settingFragment = SettingFragment.newInstance(this, residents, brokers, nums, defaulters, buildings);
             }
             switchContent(settingFragment, "SETTING");
         }

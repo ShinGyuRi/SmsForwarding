@@ -19,4 +19,9 @@ public class Definitions {
         String NEW_DATA = "new";
         String EXISTING_DATA = "existing";
     }
+
+    public interface CONTACT_TYPE   {
+        String RESIDENT = "resident";
+        String BROKER = "broker";
+    }
 }

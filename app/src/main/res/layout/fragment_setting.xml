@@ -109,5 +109,18 @@
             app:layout_constraintTop_toBottomOf="@+id/btn_check_leave_room"
             android:onClick="@{setting.onClick}"/>
 
+        <Button
+            android:id="@+id/btn_refresh_contacts_realty"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:background="@color/black"
+            android:text="부동산 전화번호 갱신"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@+id/btn_refresh_contacts"
+            app:layout_constraintTop_toTopOf="@+id/btn_refresh_contacts"
+            android:onClick="@{setting.onClick}" />
+
     </android.support.constraint.ConstraintLayout>
 </layout>

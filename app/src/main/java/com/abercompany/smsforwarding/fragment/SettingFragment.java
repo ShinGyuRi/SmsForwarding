@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
@@ -47,6 +48,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.abercompany.smsforwarding.util.Definitions.CONTACT_TYPE.BROKER;
+import static com.abercompany.smsforwarding.util.Definitions.CONTACT_TYPE.RESIDENT;
 import static com.abercompany.smsforwarding.util.Definitions.TRIM_DATA.EXISTING_DATA;
 
 /**
@@ -55,6 +58,8 @@ import static com.abercompany.smsforwarding.util.Definitions.TRIM_DATA.EXISTING_
 public class SettingFragment extends Fragment {
 
     private FragmentSettingBinding binding;
+
+    private Context context;
 
     private List<Resident> residents;
     private List<Resident> inResidents;
@@ -65,8 +70,10 @@ public class SettingFragment extends Fragment {
 
     private List<String> residentContact = new ArrayList<>();
     private List<String> contactPhoneNum = new ArrayList<>();
+    private List<String> contactRealtyPhoneNum = new ArrayList<>();
     private List<String> similar;
     private List<String> different = new ArrayList<>();
+    private List<String> brokerContract = new ArrayList<>();
 
     private String buildingName = "";
 
@@ -81,7 +88,8 @@ public class SettingFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public SettingFragment(List<Resident> residents, List<Broker> brokers, List<String> nums, List<Defaulter> defaulters, List<Building> buildings) {
+    public SettingFragment(Context context, List<Resident> residents, List<Broker> brokers, List<String> nums, List<Defaulter> defaulters, List<Building> buildings) {
+        this.context = context;
         this.residents = residents;
         this.inResidents = inResidents;
         this.brokers = brokers;
@@ -102,11 +110,19 @@ public class SettingFragment extends Fragment {
             residentContact.add(residents.get(i).getPhoneNum());
         }
 
-        similar = new ArrayList<>(residentContact);
+        for (int i = 0; i < brokers.size(); i++) {
+            Contact contact = new Contact();
+            contact.setName(context.getString(R.string.str_deposit_realty,
+                    brokers.get(i).getRealtyName(), brokers.get(i).getName()));
+            contact.setPhoneNum(brokers.get(i).getPhoneNum());
+
+            brokerContract.add(brokers.get(i).getPhoneNum());
+        }
+
     }
 
-    public static SettingFragment newInstance(List<Resident> residents, List<Broker> brokers, List<String> nums, List<Defaulter> defaulters, List<Building> buildings) {
-        SettingFragment fragment = new SettingFragment(residents, brokers, nums, defaulters, buildings);
+    public static SettingFragment newInstance(Context context, List<Resident> residents, List<Broker> brokers, List<String> nums, List<Defaulter> defaulters, List<Building> buildings) {
+        SettingFragment fragment = new SettingFragment(context, residents, brokers, nums, defaulters, buildings);
         return fragment;
     }
 
@@ -163,105 +179,161 @@ public class SettingFragment extends Fragment {
 
             case R.id.btn_refresh_contacts:
 
+                similar = new ArrayList<>(residentContact);
 
-                progressDialog = new Dialog(getContext(), android.R.style.Theme_Black);
+                saveContract(residentContact, similar, RESIDENT, contactPhoneNum);
 
-                progressBinding = DataBindingUtil
-                        .inflate(LayoutInflater.from(getContext()), R.layout.dlg_progress_circle, null, false);
+                break;
 
-                progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                progressDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
-                progressDialog.setContentView(progressBinding.getRoot());
-                progressDialog.show();
+            case R.id.btn_refresh_contacts_realty:
 
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getContactList();
+                similar = new ArrayList<>(brokerContract);
 
-                        if (contactPhoneNum.size() == 0) {
+                saveContract(brokerContract, similar, BROKER, contactRealtyPhoneNum);
 
-
-                            for (int i = 0; i < residents.size(); i++) {
-                                Message msg = progressHandler.obtainMessage();
-
-                                JSLog.D("Add residentPhoneNum            :::     " + residents.get(i).getPhoneNum(), null);
-                                addContacts(buildingName +
-                                                residents.get(i).getHo() + residents.get(i).getName(),
-                                        residents.get(i).getPhoneNum());
-
-
-                                msg.obj = buildingName +
-                                        residents.get(i).getHo() + residents.get(i).getName() + " 추가";
-                                progressHandler.sendMessage(msg);
-                            }
-
-                            progressDialog.dismiss();
-
-                        } else {
-                            if (!residentContact.equals(contactPhoneNum)) {
-
-                                different.addAll(residentContact);
-                                different.addAll(contactPhoneNum);
-
-                                similar.retainAll(contactPhoneNum);
-                                different.removeAll(similar);
-
-                                residentContact.removeAll(similar);
-
-
-                                for (int i = 0; i < residents.size(); i++) {
-                                    for (int j = 0; j < residentContact.size(); j++) {
-                                        if (residentContact.get(j).equals(residents.get(i).getPhoneNum())) {
-                                            Message msg = progressHandler.obtainMessage();
-
-                                            JSLog.D("Add residentPhoneNum            :::     " + residentContact.get(j), null);
-                                            addContacts(buildingName +
-                                                            residents.get(i).getHo() + residents.get(i).getName(),
-                                                    residentContact.get(j));
-
-                                            msg.obj = buildingName +
-                                                    residents.get(i).getHo() + residents.get(i).getName() + " 추가";
-                                            progressHandler.sendMessage(msg);
-
-                                        }
-                                    }
-                                }
-
-                                contactPhoneNum.removeAll(similar);
-
-                                for (int i = 0; i < contactPhoneNum.size(); i++) {
-                                    Message msg = progressHandler.obtainMessage();
-
-                                    JSLog.D("Delete contactPhoneNum            :::     " + contactPhoneNum.get(i), null);
-                                    deleteContact(getActivity().getContentResolver(), contactPhoneNum.get(i));
-
-                                    msg.obj = contactPhoneNum.get(i) + " 삭제";
-                                    progressHandler.sendMessage(msg);
-
-
-                                }
-
-                                progressDialog.dismiss();
-                            } else {
-                                if (progressDialog.isShowing()) {
-                                    progressDialog.dismiss();
-                                }
-                            }
-                        }
-                    }
-                }).start();
-
-                progressHandler = new Handler() {
-                    public void handleMessage(Message msg) {
-
-                        progressBinding.tvProgress.setText((String) msg.obj);
-                    }
-                };
 
                 break;
 
         }
+    }
+
+    private void saveContract(final List<String> residentContact, final List<String> similar, final String type, final List<String> contactPhoneNum) {
+        progressDialog = new Dialog(getContext(), android.R.style.Theme_Black);
+
+        progressBinding = DataBindingUtil
+                .inflate(LayoutInflater.from(getContext()), R.layout.dlg_progress_circle, null, false);
+
+        progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        progressDialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
+        progressDialog.setContentView(progressBinding.getRoot());
+        progressDialog.show();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getContactList();
+
+                if (contactPhoneNum.size() == 0) {
+
+                    if (type.equals(RESIDENT)) {
+                        for (int i = 0; i < residents.size(); i++) {
+                            Message msg = progressHandler.obtainMessage();
+
+
+                            JSLog.D("Add residentPhoneNum            :::     " + residents.get(i).getPhoneNum(), null);
+                            addContacts(buildingName +
+                                            residents.get(i).getHo() + residents.get(i).getName(),
+                                    residents.get(i).getPhoneNum());
+
+
+                            msg.obj = buildingName +
+                                    residents.get(i).getHo() + residents.get(i).getName() + " 추가";
+                            progressHandler.sendMessage(msg);
+                        }
+                    } else if (type.equals(BROKER)) {
+                        for (int i = 0; i < brokers.size(); i++) {
+                            Message msg = progressHandler.obtainMessage();
+
+
+                            JSLog.D("Add residentPhoneNum            :::     " + brokers.get(i).getPhoneNum(), null);
+                            addContacts(getContext().getString(R.string.str_deposit_realty,
+                                    brokers.get(i).getRealtyName(),
+                                    brokers.get(i).getName()) + "부동산",
+                                    brokers.get(i).getPhoneNum());
+
+
+                            msg.obj = getContext().getString(R.string.str_deposit_realty,
+                                    brokers.get(i).getRealtyName(),
+                                    brokers.get(i).getName()) + " 추가";
+                            progressHandler.sendMessage(msg);
+                        }
+                    }
+
+
+                    progressDialog.dismiss();
+
+                } else {
+                    if (!residentContact.equals(contactPhoneNum)) {
+
+                        different.addAll(residentContact);
+                        different.addAll(contactPhoneNum);
+
+                        similar.retainAll(contactPhoneNum);
+                        different.removeAll(similar);
+
+                        residentContact.removeAll(similar);
+
+
+                        if (type.equals(RESIDENT)) {
+                            for (int i = 0; i < residents.size(); i++) {
+                                for (int j = 0; j < residentContact.size(); j++) {
+                                    if (residentContact.get(j).equals(residents.get(i).getPhoneNum())) {
+                                        Message msg = progressHandler.obtainMessage();
+
+                                        JSLog.D("Add residentPhoneNum            :::     " + residentContact.get(j), null);
+                                        addContacts(buildingName +
+                                                        residents.get(i).getHo() + residents.get(i).getName(),
+                                                residentContact.get(j));
+
+                                        msg.obj = buildingName +
+                                                residents.get(i).getHo() + residents.get(i).getName() + " 추가";
+                                        progressHandler.sendMessage(msg);
+
+                                    }
+                                }
+                            }
+                        } else if (type.equals(BROKER)) {
+                            for (int i = 0; i < brokers.size(); i++) {
+                                for (int j = 0; j < residentContact.size(); j++) {
+                                    if (residentContact.get(j).equals(brokers.get(i).getPhoneNum())) {
+                                        Message msg = progressHandler.obtainMessage();
+
+                                        JSLog.D("Add residentPhoneNum            :::     " + residentContact.get(j), null);
+                                        addContacts(getContext().getString(R.string.str_deposit_realty,
+                                                brokers.get(i).getRealtyName(),
+                                                brokers.get(i).getName()) + "부동산",
+                                                residentContact.get(j));
+
+                                        msg.obj = getContext().getString(R.string.str_deposit_realty,
+                                                brokers.get(i).getRealtyName(),
+                                                brokers.get(i).getName()) + " 추가";
+                                        progressHandler.sendMessage(msg);
+
+                                    }
+                                }
+                            }
+                        }
+
+                        contactPhoneNum.removeAll(similar);
+
+                        for (int i = 0; i < contactPhoneNum.size(); i++) {
+                            Message msg = progressHandler.obtainMessage();
+
+                            JSLog.D("Delete contactPhoneNum            :::     " + contactPhoneNum.get(i), null);
+                            deleteContact(getActivity().getContentResolver(), contactPhoneNum.get(i));
+
+                            msg.obj = contactPhoneNum.get(i) + " 삭제";
+                            progressHandler.sendMessage(msg);
+
+
+                        }
+
+                        progressDialog.dismiss();
+                    } else {
+                        if (progressDialog.isShowing()) {
+                            progressDialog.dismiss();
+                        }
+                    }
+                }
+            }
+        }).start();
+
+        progressHandler = new Handler() {
+            public void handleMessage(Message msg) {
+
+                progressBinding.tvProgress.setText((String) msg.obj);
+            }
+        };
     }
 
     private void addContacts(String name, String phoneNum) {
@@ -403,6 +475,16 @@ public class SettingFragment extends Fragment {
                             JSLog.D("contactPhoneNum            :::     " + phoneNo, null);
                             contactPhoneNum.add(phoneNo);
 
+                        }
+
+                        if (name.contains("부동산")) {
+
+                            Contact resident = new Contact();
+                            resident.setName(name);
+                            resident.setPhoneNum(phoneNo);
+
+                            JSLog.D("contactRealtyPhoneNum            :::     " + phoneNo, null);
+                            contactRealtyPhoneNum.add(phoneNo);
                         }
                     }
                     pCur.close();
