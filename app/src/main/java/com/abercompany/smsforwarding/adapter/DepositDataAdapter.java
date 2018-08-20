@@ -51,8 +51,6 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     private List<String> residentName = new ArrayList<>();
     private List<String> brokerName = new ArrayList<>();
 
-    private List<SpinnerItem> items = new ArrayList<>();
-
     private ArrayList<StateVO> listVOs = new ArrayList<>();
 
     private CheckboxSpinnerAdapter checkboxSpinnerAdapter;
@@ -61,11 +59,8 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     private String type = "";
     private StringBuilder sumNote = new StringBuilder();
 
-    private SpinnerItem item;
-
     private BindingHolder bindingHolder;
 
-    private int iCurrentSelection = 0;
 
 
     public class BindingHolder extends RecyclerView.ViewHolder {
@@ -128,20 +123,6 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
             holder.binding.spCategory.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, context.getResources().getStringArray(R.array.withdraw)));
         }
 
-        if (items.size() > 0) {
-            JSLog.D("items size             :::         " + items.size(), null);
-            for (int i = 0; i < items.size(); i++) {
-                JSLog.D("getSpinnerSelectedIndex            :::         " + items.get(i).getSpinnerSelectedIndex(), null);
-                if (position == items.get(i).getPosition()) {
-                    holder.binding.spCategory.setSelection(items.get(i).getSpinnerSelectedIndex());
-                } else {
-                    holder.binding.spCategory.setSelection(0);
-                    holder.binding.spExtraToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item));
-                    holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item));
-                }
-            }
-        }
-
         holder.binding.tvMessage.setText(context.getString(R.string.str_deposit_message,
                 deposits.get(position).getName(),
                 deposits.get(position).getAmount(),
@@ -163,25 +144,15 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
             }
         }
 
-
-        iCurrentSelection = holder.binding.spCategory.getSelectedItemPosition();
+        if (holder.binding.spCategory.getTag() != null) {
+            holder.binding.spCategory.setSelection((Integer) holder.binding.spCategory.getTag());
+        }
 
         holder.binding.spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int itemPosition, long id) {
 
-
-                JSLog.D("iCurrentSelection              :::         " + iCurrentSelection, null);
-                if (iCurrentSelection != itemPosition) {
-                    for (int i = 0; i < items.size(); i++) {
-                        if (items.get(i).getPosition() == itemPosition) {
-                            items.remove(i);
-                        }
-                    }
-                    item = new SpinnerItem();
-                    item.setSpinnerSelectedIndex(itemPosition);
-                    item.setPosition(position);
-                    items.add(item);
+                holder.binding.spCategory.setTag(itemPosition);
 
 
                     if (deposits.get(position).getMethod().contains("입금")) {
@@ -228,7 +199,8 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                                 selectedFlag = false;
                                 break;
                         }
-                    } else if (deposits.get(position).getMethod().contains("출금")) {
+                    } else if (deposits.get(position).getMethod().contains("출금") ||
+                            deposits.get(position).getMethod().contains("공동CMS출")) {
                         switch (itemPosition) {
                             case 0:
                                 for (int i = 0; i < editDeposits.size(); i++) {
@@ -286,8 +258,6 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                                 break;
                         }
                     }
-                }
-                iCurrentSelection = itemPosition;
 
 
             }
@@ -346,7 +316,10 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         if (deposits.size() == 0) {
             return 0;
         }
-        return deposits.size();
+        if (deposits.size() < 10) {
+            return deposits.size();
+        }
+        return 10;
     }
 
     @Override
@@ -364,8 +337,6 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
 
     @Subscribe
     public void FinishLoad(OnClickEvent event) {
-
-        items.clear();
 
         JSLog.D("editDeposits size              :::         " + editDeposits.size(), null);
         if (i < editDeposits.size()) {
