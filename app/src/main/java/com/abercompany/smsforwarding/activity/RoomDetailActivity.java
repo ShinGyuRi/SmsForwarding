@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.RadioGroup;
 
 import com.abercompany.smsforwarding.R;
@@ -51,6 +52,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_room_detail);
         binding.setRoomDetail(this);
 
@@ -182,6 +184,19 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
                 intent.putExtra("realtyBrokerName", brokerName);
                 intent.putExtra("realtyBrokerPhoneNum", brokerPhoneNum);
                 startActivityForResult(intent, REQUEST_REALTY);
+                break;
+
+            case R.id.btn_add_zero_deposit:
+                binding.etDeposit.append("0000");
+                break;
+            case R.id.btn_add_zero_down_payment:
+                binding.etDownPayment.append("0000");
+                break;
+            case R.id.btn_add_zero_manage_fee:
+                binding.etManageFee.append("0000");
+                break;
+            case R.id.btn_add_zero_rent:
+                binding.etRent.append("0000");
                 break;
         }
     }
