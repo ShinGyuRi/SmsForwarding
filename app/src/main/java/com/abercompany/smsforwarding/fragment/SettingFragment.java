@@ -76,6 +76,7 @@ public class SettingFragment extends Fragment {
     private List<String> brokerContract = new ArrayList<>();
 
     private String buildingName = "";
+    private String realty = "부동산";
 
     private Handler progressHandler;
 
@@ -238,7 +239,7 @@ public class SettingFragment extends Fragment {
                             JSLog.D("Add residentPhoneNum            :::     " + brokers.get(i).getPhoneNum(), null);
                             addContacts(getContext().getString(R.string.str_deposit_realty,
                                     brokers.get(i).getRealtyName(),
-                                    brokers.get(i).getName()) + "부동산",
+                                    brokers.get(i).getName()) + realty,
                                     brokers.get(i).getPhoneNum());
 
 
@@ -291,7 +292,7 @@ public class SettingFragment extends Fragment {
                                         JSLog.D("Add residentPhoneNum            :::     " + residentContact.get(j), null);
                                         addContacts(getContext().getString(R.string.str_deposit_realty,
                                                 brokers.get(i).getRealtyName(),
-                                                brokers.get(i).getName()) + "부동산",
+                                                brokers.get(i).getName()) + realty,
                                                 residentContact.get(j));
 
                                         msg.obj = getContext().getString(R.string.str_deposit_realty,
@@ -477,7 +478,7 @@ public class SettingFragment extends Fragment {
 
                         }
 
-                        if (name.contains("부동산")) {
+                        if (name.contains(realty)) {
 
                             Contact resident = new Contact();
                             resident.setName(name);

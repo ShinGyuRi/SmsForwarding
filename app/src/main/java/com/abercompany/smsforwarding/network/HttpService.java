@@ -16,6 +16,8 @@ import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -168,4 +170,10 @@ public interface HttpService {
     @FormUrlEncoded
     @POST("getElecDefaulter")
     Call<GetElecDefaulter> getElecDefaulter(@Field("") String empty);
+
+    @FormUrlEncoded
+    @POST("insertRoomInfo")
+    Call<JsonObject> insertRoomInfo(@Field("building_name") String buildingName,
+                                    @Field("room_num") String room_num,
+                                    @Field("room_price") String price);
 }

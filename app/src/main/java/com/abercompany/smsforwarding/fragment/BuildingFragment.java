@@ -1,6 +1,7 @@
 package com.abercompany.smsforwarding.fragment;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.abercompany.smsforwarding.activity.AddBuildingActivity;
 import com.abercompany.smsforwarding.adapter.BuildingAdapter;
 import com.abercompany.smsforwarding.databinding.FragmentBuildingBinding;
 import com.abercompany.smsforwarding.model.Building;
+import com.abercompany.smsforwarding.model.Room;
 
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class BuildingFragment extends Fragment {
     private FragmentBuildingBinding binding;
 
     private List<Building> buildings;
+    private List<Room> rooms;
 
     private BuildingAdapter adapter;
 
@@ -32,7 +35,12 @@ public class BuildingFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static BuildingFragment newInstance() {
+    @SuppressLint("ValidFragment")
+    public BuildingFragment(List<Room> rooms) {
+        this.rooms = rooms;
+    }
+
+    public static BuildingFragment newInstance(List<Room> rooms) {
         BuildingFragment fragment = new BuildingFragment();
         return fragment;
     }

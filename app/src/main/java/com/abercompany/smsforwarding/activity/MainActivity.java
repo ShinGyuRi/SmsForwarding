@@ -56,6 +56,7 @@ import com.google.gson.JsonObject;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +65,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private String TAG = MainActivity.class.getSimpleName();
 
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private List<Defaulter> defaulters = new ArrayList<>();
     private List<Building> buildings;
     private List<Room> rooms;
+    private List<Room> splitRooms;
 
     private BuildingAdapter buildingAdapter;
 
@@ -171,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setInitFrag() {
-        buildingFragment = BuildingFragment.newInstance();
+        buildingFragment = BuildingFragment.newInstance(rooms);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, buildingFragment, "BUILDING").addToBackStack("BUILDING").commitAllowingStateLoss();
         navBuilding.setEnabled(false);
 
@@ -212,19 +214,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (getSupportFragmentManager().getBackStackEntryCount() == 1){
+            if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
                 finish();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-                {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     MainActivity.this.finishAffinity();
-                }
-                else
-                {
+                } else {
                     System.exit(0);
                 }
                 android.os.Process.killProcess(android.os.Process.myPid());
-            }
-            else {
+            } else {
                 super.onBackPressed();
             }
         }
@@ -487,10 +485,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         buildingAdapter.setItemClick(new BuildingAdapter.ItemClick() {
             @Override
             public void onClick(View view, int position) {
-                if (roomFragment == null) {
-                    roomFragment = RoomFragment.newInstance(defaulters, buildings.get(position).getName(), rooms);
+                if (view.getId() == R.id.view_item) {
+                    splitRooms = new ArrayList<>();
+                    for (int i = 0; i < rooms.size(); i++) {
+                        if (buildings.get(position).getName().equals(rooms.get(i).getBuildingName())) {
+                            splitRooms.add(rooms.get(i));
+                        }
+                    }
+                    roomFragment = RoomFragment.newInstance(defaulters, buildings.get(position).getName(), splitRooms);
+                    switchContent(roomFragment, "ROOM");
+                } else if (view.getId() == R.id.btn_add_building) {
+
+                    Intent intent = new Intent(MainActivity.this, AddBuildingActivity.class);
+                    intent.putExtra("room", (Serializable) rooms);
+                    startActivity(intent);
                 }
-                switchContent(roomFragment, "ROOM");
             }
         });
     }
@@ -594,7 +603,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Uri message = Uri.parse("content://sms/");
         ContentResolver cr = this.getContentResolver();
 
-        c = cr.query(message, null, "address='"+phoneNum+"'", null, null);
+        c = cr.query(message, null, "address='" + phoneNum + "'", null, null);
         this.startManagingCursor(c);
         int totalSMS = c.getCount();
 
@@ -666,14 +675,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
 
 
-
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_building) {
             initNaviButton(item, drawer);
             if (buildingFragment == null) {
-                buildingFragment = BuildingFragment.newInstance();
+                buildingFragment = BuildingFragment.newInstance(rooms);
                 getBuilding();
             }
             switchContent(buildingFragment, "BUILDING");

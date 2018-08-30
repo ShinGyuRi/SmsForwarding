@@ -10,12 +10,12 @@ public class GetElecDefaulter {
     private String result;
 
     @SerializedName("message")
-    private List<ElecDefaulter> elecDefaulterList;
+    private List<Defaulter> elecDefaulterList;
 
     public String getResult() {
         return result;
     }
-    public List<ElecDefaulter> getElecDefaulterList() {
+    public List<Defaulter> getElecDefaulterList() {
         return elecDefaulterList;
     }
 }

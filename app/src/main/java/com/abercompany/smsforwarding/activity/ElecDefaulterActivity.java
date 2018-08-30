@@ -3,10 +3,13 @@ package com.abercompany.smsforwarding.activity;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.abercompany.smsforwarding.R;
+import com.abercompany.smsforwarding.adapter.SmsRecyclerAdapter;
 import com.abercompany.smsforwarding.databinding.ActivityElecDefaulterBinding;
+import com.abercompany.smsforwarding.model.Defaulter;
 import com.abercompany.smsforwarding.model.ElecDefaulter;
 import com.abercompany.smsforwarding.model.GetElecDefaulter;
 import com.abercompany.smsforwarding.util.NetworkUtil;
@@ -21,7 +24,8 @@ public class ElecDefaulterActivity extends AppCompatActivity {
 
     private ActivityElecDefaulterBinding binding;
 
-    private List<ElecDefaulter> elecDefaulters;
+    private List<Defaulter> elecDefaulters;
+    private SmsRecyclerAdapter smsRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,7 @@ public class ElecDefaulterActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_search:
+                getElecDefaulter();
                 break;
         }
     }
@@ -47,6 +52,8 @@ public class ElecDefaulterActivity extends AppCompatActivity {
 
                 if ("success".equals(result)) {
                     elecDefaulters = getElecDefaulter.getElecDefaulterList();
+
+                    setElecDefaulterAdapter(elecDefaulters);
                 }
             }
 
@@ -57,7 +64,11 @@ public class ElecDefaulterActivity extends AppCompatActivity {
         });
     }
 
-    private void setElecDefaulterAdapter(List<ElecDefaulter> elecDefaulters) {
+    private void setElecDefaulterAdapter(List<Defaulter> elecDefaulters) {
+        smsRecyclerAdapter = new SmsRecyclerAdapter(this, elecDefaulters);
+        binding.rvElecDefaulter.setAdapter(smsRecyclerAdapter);
+        binding.rvElecDefaulter.setLayoutManager(new LinearLayoutManager(this));
+        smsRecyclerAdapter.notifyDataSetChanged();
 
     }
 }

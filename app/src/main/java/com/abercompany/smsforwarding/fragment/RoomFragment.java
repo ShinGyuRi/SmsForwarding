@@ -84,7 +84,7 @@ public class RoomFragment extends Fragment {
     }
 
     private void setRoomAdapter(final List<Room> rooms, final List<Contract> contracts, List<Defaulter> defaulters, final String buildingName) {
-        adapter = new RoomAdapter(getContext(), rooms, contracts, defaulters);
+        adapter = new RoomAdapter(getContext(), rooms, contracts, defaulters, buildingName);
         binding.rvRoomNum.setAdapter(adapter);
         GridLayoutManager manager = new GridLayoutManager(getContext(), 4);
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {

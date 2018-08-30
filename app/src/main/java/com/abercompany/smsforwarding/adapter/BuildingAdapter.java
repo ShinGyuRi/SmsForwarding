@@ -68,9 +68,11 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Bindin
 
         for (int i = 0; i < rooms.size(); i++) {
             if (buildings.get(position).getName().equals(rooms.get(i).getBuildingName())) {
-                if ("퇴실".equals(rooms.get(i).getActive())) {
+                if ("퇴실".equals(rooms.get(i).getActive()) &&
+                        holder.binding.tvBuildingName.getText().toString().equals(rooms.get(i).getBuildingName())) {
                     emptyRoomBuilder.append(context.getString(R.string.str_room_info, rooms.get(i).getRoomNum(), rooms.get(i).getPrice()));
-                } else if ("계약".equals(rooms.get(i).getActive())) {
+                } else if ("계약".equals(rooms.get(i).getActive()) &&
+                        holder.binding.tvBuildingName.getText().toString().equals(rooms.get(i).getBuildingName())) {
                     underContractRoomBuilder.append(context.getString(R.string.str_room_info, rooms.get(i).getRoomNum(), rooms.get(i).getPrice()));
                 }
             }
@@ -79,8 +81,19 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Bindin
 
         holder.binding.tvEmptyRoomInfo.setText(emptyRoomBuilder.toString());
         holder.binding.tvUnderContractRoom.setText("계약중:    " + underContractRoomBuilder.toString());
+        emptyRoomBuilder.setLength(0);
+        underContractRoomBuilder.setLength(0);
 
         holder.binding.viewItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemClick != null) {
+                    itemClick.onClick(v, position);
+                }
+            }
+        });
+
+        holder.binding.btnAddBuilding.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (itemClick != null) {

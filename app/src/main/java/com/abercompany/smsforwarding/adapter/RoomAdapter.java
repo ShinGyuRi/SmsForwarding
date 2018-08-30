@@ -22,6 +22,7 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.BindingHolder>
     private List<Room> rooms;
     private List<Contract> contracts;
     private List<Defaulter> defaulters;
+    private String buildingName = "";
 
     private ItemClick itemClick;
 
@@ -43,11 +44,12 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.BindingHolder>
     }
 
 
-    public RoomAdapter(Context context, List<Room> rooms, List<Contract> contracts, List<Defaulter> defaulters) {
+    public RoomAdapter(Context context, List<Room> rooms, List<Contract> contracts, List<Defaulter> defaulters, String buildingName) {
         this.context = context;
         this.rooms = rooms;
         this.contracts = contracts;
         this.defaulters = defaulters;
+        this.buildingName = buildingName;
     }
 
     @NonNull
