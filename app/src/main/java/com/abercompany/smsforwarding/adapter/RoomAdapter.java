@@ -88,6 +88,9 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.BindingHolder>
                     holder.binding.tvStatus.setText(contracts.get(j).getActive());
                     holder.binding.tvName.setText(contracts.get(j).getName());
                     holder.binding.tvCharges.setText(contracts.get(j).getDownPayment());
+                    holder.binding.tvStatus.setVisibility(View.VISIBLE);
+                    holder.binding.tvName.setVisibility(View.VISIBLE);
+                    holder.binding.tvCharges.setVisibility(View.VISIBLE);
                 }
 
 
