@@ -693,6 +693,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 existingDataFragment = ExistingDataFragment.newInstance(existingDatas, residents, brokers);
             }
             switchContent(existingDataFragment, "EXISTING_DATA");
+        } else if(id == R.id.nav_realty)    {
+            initNaviButton(item, drawer);
+            Intent intent = new Intent(this, RealtyActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_setting) {
             initNaviButton(item, drawer);
             if (settingFragment == null) {
