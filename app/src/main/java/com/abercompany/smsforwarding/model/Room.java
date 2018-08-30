@@ -18,6 +18,9 @@ public class Room implements Serializable{
     @SerializedName("building_name")
     private String buildingName;
 
+    @SerializedName("floor")
+    private String floor;
+
     public String getRoomNum() {
         return roomNum;
     }
@@ -29,5 +32,8 @@ public class Room implements Serializable{
     }
     public String getBuildingName() {
         return buildingName;
+    }
+    public String getFloor() {
+        return floor;
     }
 }

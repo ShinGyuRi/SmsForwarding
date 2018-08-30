@@ -1,5 +1,6 @@
 package com.abercompany.smsforwarding.activity;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.adapter.AddBuildingAdapter;
 import com.abercompany.smsforwarding.databinding.ActivityAddBuildingBinding;
 import com.abercompany.smsforwarding.model.OnClickEvent;
+import com.abercompany.smsforwarding.model.Room;
 import com.abercompany.smsforwarding.provider.BusProvider;
 import com.abercompany.smsforwarding.util.Debug;
 import com.abercompany.smsforwarding.util.JSLog;
@@ -30,11 +32,20 @@ public class AddBuildingActivity extends AppCompatActivity {
 
     private AddBuildingAdapter adapter;
 
+    private List<Room> rooms;
+    private String buildingName = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add_building);
         binding.setAddBuilding(this);
+
+        Intent intent = getIntent();
+        rooms = (List<Room>) intent.getSerializableExtra("room");
+        buildingName = intent.getStringExtra("buildingName");
+
+        binding.etBuildingName.setText(buildingName);
 
         setRoomInfoAdapter();
     }
@@ -56,7 +67,7 @@ public class AddBuildingActivity extends AppCompatActivity {
 
     private void setRoomInfoAdapter() {
 
-        adapter = new AddBuildingAdapter(this, this, binding.etBuildingName.getText().toString());
+        adapter = new AddBuildingAdapter(this, this, binding.etBuildingName.getText().toString(), rooms);
         binding.rvRoomInfo.setAdapter(adapter);
         binding.rvRoomInfo.setLayoutManager(new LinearLayoutManager(this));
         adapter.notifyDataSetChanged();
@@ -77,7 +88,8 @@ public class AddBuildingActivity extends AppCompatActivity {
 
                             String roomNum = ((EditText) binding.rvRoomInfo.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.et_room_num)).getText().toString();
                             String price = ((EditText) binding.rvRoomInfo.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.et_room_price)).getText().toString();
-                            insertRoomInfo(name, roomNum, price);
+                            String floor = ((EditText) binding.rvRoomInfo.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.et_floor)).getText().toString();
+                            insertRoomInfo(name, roomNum, price, floor);
                         }
                     }
                 }
@@ -90,8 +102,8 @@ public class AddBuildingActivity extends AppCompatActivity {
         });
     }
 
-    private void insertRoomInfo(String buildingName, String roomNum, String price) {
-        final Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertRoomInfo(buildingName, roomNum, price);
+    private void insertRoomInfo(String buildingName, String roomNum, String price, String floor) {
+        final Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertRoomInfo(buildingName, roomNum, price, floor);
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

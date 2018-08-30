@@ -12,15 +12,19 @@ import android.view.ViewGroup;
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.databinding.ViewRoomInfoItemBinding;
 import com.abercompany.smsforwarding.model.OnClickEvent;
+import com.abercompany.smsforwarding.model.Room;
 import com.abercompany.smsforwarding.provider.BusProvider;
 
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
 
 public class AddBuildingAdapter extends RecyclerView.Adapter<AddBuildingAdapter.BindingHolder>  {
 
     private Context context;
     private Activity activity;
     private String buildingName = "";
+    private List<Room> rooms;
 
 
     private int itemCount = 1;
@@ -36,10 +40,13 @@ public class AddBuildingAdapter extends RecyclerView.Adapter<AddBuildingAdapter.
         }
     }
 
-    public AddBuildingAdapter(Context context, Activity activity, String buildingName) {
+    public AddBuildingAdapter(Context context, Activity activity, String buildingName, List<Room> rooms) {
         this.context = context;
         this.activity = activity;
         this.buildingName = buildingName;
+        this.rooms = rooms;
+
+        itemCount = rooms.size();
 
         BusProvider.getInstance().register(this);
     }
@@ -54,6 +61,9 @@ public class AddBuildingAdapter extends RecyclerView.Adapter<AddBuildingAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull BindingHolder holder, int position) {
+        holder.binding.etFloor.setText(rooms.get(position).getFloor());
+        holder.binding.etRoomNum.setText(rooms.get(position).getRoomNum());
+        holder.binding.etRoomPrice.setText(rooms.get(position).getPrice());
     }
 
     @Override

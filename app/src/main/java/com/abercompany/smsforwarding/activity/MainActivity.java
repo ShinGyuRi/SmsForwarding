@@ -485,19 +485,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         buildingAdapter.setItemClick(new BuildingAdapter.ItemClick() {
             @Override
             public void onClick(View view, int position) {
-                if (view.getId() == R.id.view_item) {
-                    splitRooms = new ArrayList<>();
-                    for (int i = 0; i < rooms.size(); i++) {
-                        if (buildings.get(position).getName().equals(rooms.get(i).getBuildingName())) {
-                            splitRooms.add(rooms.get(i));
-                        }
+                splitRooms = new ArrayList<>();
+                for (int i = 0; i < rooms.size(); i++) {
+                    if (buildings.get(position).getName().equals(rooms.get(i).getBuildingName())) {
+                        splitRooms.add(rooms.get(i));
                     }
+                }
+
+                if (view.getId() == R.id.view_item) {
                     roomFragment = RoomFragment.newInstance(defaulters, buildings.get(position).getName(), splitRooms);
                     switchContent(roomFragment, "ROOM");
                 } else if (view.getId() == R.id.btn_add_building) {
 
                     Intent intent = new Intent(MainActivity.this, AddBuildingActivity.class);
-                    intent.putExtra("room", (Serializable) rooms);
+                    intent.putExtra("room", (Serializable) splitRooms);
+                    intent.putExtra("buildingName", buildings.get(position).getName());
                     startActivity(intent);
                 }
             }

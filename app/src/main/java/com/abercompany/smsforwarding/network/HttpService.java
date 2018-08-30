@@ -175,5 +175,6 @@ public interface HttpService {
     @POST("insertRoomInfo")
     Call<JsonObject> insertRoomInfo(@Field("building_name") String buildingName,
                                     @Field("room_num") String room_num,
-                                    @Field("room_price") String price);
+                                    @Field("room_price") String price,
+                                    @Field("floor") String floor);
 }
