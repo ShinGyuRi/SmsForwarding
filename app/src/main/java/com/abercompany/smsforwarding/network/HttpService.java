@@ -80,7 +80,7 @@ public interface HttpService {
 
     @FormUrlEncoded
     @POST("getContract")
-    Call<GetContractResult> getContract(@Field("") String empty);
+    Call<GetContractResult> getContract(@Field("building_name") String buildingName);
 
     @FormUrlEncoded
     @POST("insertContract")

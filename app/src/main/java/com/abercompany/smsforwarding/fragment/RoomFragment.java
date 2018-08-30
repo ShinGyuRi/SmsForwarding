@@ -80,7 +80,7 @@ public class RoomFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        getContract(rooms);
+        getContract(rooms, buildingName);
     }
 
     private void setRoomAdapter(final List<Room> rooms, final List<Contract> contracts, List<Defaulter> defaulters, final String buildingName) {
@@ -116,8 +116,8 @@ public class RoomFragment extends Fragment {
     }
 
 
-    private void getContract(final List<Room> rooms) {
-        Call<GetContractResult> getContractResultCall = NetworkUtil.getInstace().getContract("");
+    private void getContract(final List<Room> rooms, final String buildingName) {
+        Call<GetContractResult> getContractResultCall = NetworkUtil.getInstace().getContract(buildingName);
         getContractResultCall.enqueue(new Callback<GetContractResult>() {
             @Override
             public void onResponse(Call<GetContractResult> call, Response<GetContractResult> response) {
