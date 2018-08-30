@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
 import android.widget.RadioGroup;
 
@@ -64,6 +65,9 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
 
     private void setInitView(Room room, Contract contract) {
         binding.tvRoomNum.setText(room.getRoomNum());
+        binding.etPhoneNum.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        binding.etEtcNum.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        binding.etEmerNum.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
 
         if ("재실".equals(room.getActive())) {
             binding.rbCheckIn.setChecked(true);
@@ -382,11 +386,11 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
     private void uploadContract(String buildingName) {
         String roomNum = binding.tvRoomNum.getText().toString();
         String name = binding.etName.getText().toString();
-        String phoneNum = binding.etPhoneNum.getText().toString();
+        String phoneNum = binding.etPhoneNum.getText().toString().replace("-", "");
         String idNum = binding.etIdNum.getText().toString();
-        String etcNum = binding.etEtcNum.getText().toString();
+        String etcNum = binding.etEtcNum.getText().toString().replace("-", "");
         String address = binding.etAddress.getText().toString();
-        String emerNum = binding.etEmerNum.getText().toString();
+        String emerNum = binding.etEmerNum.getText().toString().replace("-", "");
         String emerName = binding.etEmerName.getText().toString();
         String downPayment = binding.etDownPayment.getText().toString();
         String deposit = binding.etDeposit.getText().toString();
