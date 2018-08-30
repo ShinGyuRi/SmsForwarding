@@ -177,4 +177,8 @@ public interface HttpService {
                                     @Field("room_num") String room_num,
                                     @Field("room_price") String price,
                                     @Field("floor") String floor);
+
+    @FormUrlEncoded
+    @POST("getRawMessage")
+    Call<JsonObject> getRawMessage(@Field("time_stamp") String timeStamp);
 }

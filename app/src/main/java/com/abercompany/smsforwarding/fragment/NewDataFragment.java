@@ -2,6 +2,7 @@ package com.abercompany.smsforwarding.fragment;
 
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -23,9 +24,16 @@ import com.abercompany.smsforwarding.model.OnClickEvent;
 import com.abercompany.smsforwarding.model.Resident;
 import com.abercompany.smsforwarding.provider.BusProvider;
 import com.abercompany.smsforwarding.util.JSLog;
+import com.abercompany.smsforwarding.util.NetworkUtil;
+import com.abercompany.smsforwarding.util.SmsLib;
+import com.google.gson.JsonObject;
 
 import java.io.Serializable;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.abercompany.smsforwarding.util.Definitions.TRIM_DATA.NEW_DATA;
 
@@ -96,6 +104,38 @@ public class NewDataFragment extends Fragment {
         binding.rvDeposit.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvDeposit.getRecycledViewPool().setMaxRecycledViews(1, 0);
         adapter.notifyDataSetChanged();
+        adapter.setItemClick(new DepositDataAdapter.ItemClick() {
+            @Override
+            public void onClick(View view, int position) {
+                getRawMessage(newDatas.get(position).getTimeStamp());
+            }
+        });
+    }
+
+    private void getRawMessage(String timeStamp) {
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().getRawMessage(timeStamp);
+        jsonObjectCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject jsonObject = response.body();
+                String result = jsonObject.get("result").getAsString();
+
+                if ("success".equals(result)) {
+                    String message = jsonObject.get("message").getAsString();
+                    SmsLib.getInstance().showSimpleDialog(getContext(), message, "OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
     }
 
 }

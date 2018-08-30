@@ -28,6 +28,9 @@ public class Deposit {
     @SerializedName("note")
     private String note;
 
+    @SerializedName("time_stamp")
+    private String timeStamp;
+
     private int viewPosition;
 
     private int spCategorySelectedPosition;
@@ -88,6 +91,13 @@ public class Deposit {
     }
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
     public int getViewPosition() {

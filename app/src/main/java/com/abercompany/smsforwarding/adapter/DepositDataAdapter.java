@@ -62,6 +62,16 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     private BindingHolder bindingHolder;
 
 
+    private ItemClick itemClick;
+
+    public interface ItemClick {
+        public void onClick(View view, int position);
+    }
+
+    public void setItemClick(ItemClick itemClick) {
+        this.itemClick = itemClick;
+    }
+
 
     public class BindingHolder extends RecyclerView.ViewHolder {
 
@@ -307,6 +317,15 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
             }
         });
 
+
+        holder.binding.viewItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemClick != null) {
+                    itemClick.onClick(v, position);
+                }
+            }
+        });
 
     }
 
