@@ -495,12 +495,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (view.getId() == R.id.view_item) {
                     roomFragment = RoomFragment.newInstance(defaulters, buildings.get(position).getName(), splitRooms);
                     switchContent(roomFragment, "ROOM");
-                } else if (view.getId() == R.id.btn_add_building) {
-
-                    Intent intent = new Intent(MainActivity.this, AddBuildingActivity.class);
-                    intent.putExtra("room", (Serializable) splitRooms);
-                    intent.putExtra("buildingName", buildings.get(position).getName());
-                    startActivity(intent);
                 }
             }
         });

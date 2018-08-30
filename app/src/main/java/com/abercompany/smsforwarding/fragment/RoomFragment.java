@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.abercompany.smsforwarding.R;
+import com.abercompany.smsforwarding.activity.AddBuildingActivity;
+import com.abercompany.smsforwarding.activity.MainActivity;
 import com.abercompany.smsforwarding.activity.RoomDetailActivity;
 import com.abercompany.smsforwarding.adapter.RoomAdapter;
 import com.abercompany.smsforwarding.databinding.FragmentRoomBinding;
@@ -71,6 +73,7 @@ public class RoomFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_room, container, false);
         View view = binding.getRoot();
+        binding.setRoom(this);
 
 
         return view;
@@ -81,6 +84,17 @@ public class RoomFragment extends Fragment {
         super.onResume();
 
         getContract(rooms, buildingName);
+    }
+
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_add_building:
+                Intent intent = new Intent(getContext(), AddBuildingActivity.class);
+                intent.putExtra("room", (Serializable) rooms);
+                intent.putExtra("buildingName", buildingName);
+                startActivity(intent);
+                break;
+        }
     }
 
     private void setRoomAdapter(final List<Room> rooms, final List<Contract> contracts, List<Defaulter> defaulters, final String buildingName) {

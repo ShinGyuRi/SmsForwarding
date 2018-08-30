@@ -15,14 +15,6 @@
         android:layout_height="match_parent">
 
 
-        <Button
-            android:id="@+id/btn_add_building"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@drawable/plus_icon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="420dp"
@@ -30,10 +22,11 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/rectangle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_add_building">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/tv_building_name"

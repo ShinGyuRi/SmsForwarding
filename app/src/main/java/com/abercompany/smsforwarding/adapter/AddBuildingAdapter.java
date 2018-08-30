@@ -46,7 +46,9 @@ public class AddBuildingAdapter extends RecyclerView.Adapter<AddBuildingAdapter.
         this.buildingName = buildingName;
         this.rooms = rooms;
 
-        itemCount = rooms.size();
+        if (rooms != null) {
+            itemCount = rooms.size();
+        }
 
         BusProvider.getInstance().register(this);
     }
@@ -61,9 +63,11 @@ public class AddBuildingAdapter extends RecyclerView.Adapter<AddBuildingAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull BindingHolder holder, int position) {
-        holder.binding.etFloor.setText(rooms.get(position).getFloor());
-        holder.binding.etRoomNum.setText(rooms.get(position).getRoomNum());
-        holder.binding.etRoomPrice.setText(rooms.get(position).getPrice());
+        if (rooms != null) {
+            holder.binding.etFloor.setText(rooms.get(position).getFloor());
+            holder.binding.etRoomNum.setText(rooms.get(position).getRoomNum());
+            holder.binding.etRoomPrice.setText(rooms.get(position).getPrice());
+        }
     }
 
     @Override

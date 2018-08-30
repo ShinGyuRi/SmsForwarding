@@ -92,15 +92,6 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Bindin
                 }
             }
         });
-
-        holder.binding.btnAddBuilding.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (itemClick != null) {
-                    itemClick.onClick(v, position);
-                }
-            }
-        });
     }
 
     @Override
