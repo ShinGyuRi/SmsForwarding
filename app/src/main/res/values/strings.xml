@@ -7,7 +7,7 @@
     <string name="str_deposit_message">이름:%1s 입금액:%2s\n날짜:%3s 방법:%4s</string>
     <string name="str_deposit_realty">%1s(%2s)</string>
     <string name="str_charges">%1s/%2s/%3s</string>
-    <string name="str_term">%1s ~ %2s</string>
+    <string name="str_term">계약기간: %1s ~ %2s</string>
     <string name="str_realty_info">\n%1s\t%2s\n%3s\t%4s</string>
     <string name="str_sms_message_cash">%1s\n%2s\n%3s\n%4s\n%5s</string>
     <string name="str_adjustment_amount">정산금액: %1s원</string>

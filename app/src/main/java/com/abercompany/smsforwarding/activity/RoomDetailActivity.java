@@ -167,6 +167,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
                         startDate.get(Calendar.MONTH),
                         startDate.get(Calendar.DAY_OF_MONTH)
                 );
+                dpd.setTitle("입실일");
                 dpd.show(getFragmentManager(), "startDate");
                 break;
 
@@ -458,6 +459,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
                     endDate.get(Calendar.MONTH),
                     endDate.get(Calendar.DAY_OF_MONTH)
             );
+            dpd.setTitle("퇴실일");
             dpd.show(getFragmentManager(), "endDate");
         } else if ("endDate".equals(view.getTag())) {
             endDate = year + "-" + monthResult + "-" + dayResult;
