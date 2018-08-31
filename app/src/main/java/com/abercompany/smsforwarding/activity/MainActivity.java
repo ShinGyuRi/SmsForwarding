@@ -42,10 +42,12 @@ import com.abercompany.smsforwarding.model.GetDefaulterResult;
 import com.abercompany.smsforwarding.model.GetDepositResult;
 import com.abercompany.smsforwarding.model.GetResidentResult;
 import com.abercompany.smsforwarding.model.GetRoomResult;
+import com.abercompany.smsforwarding.model.OnClickEvent;
 import com.abercompany.smsforwarding.model.Resident;
 import com.abercompany.smsforwarding.model.Room;
 import com.abercompany.smsforwarding.model.Sms;
 import com.abercompany.smsforwarding.network.QuestionsSpreadsheetWebService;
+import com.abercompany.smsforwarding.provider.BusProvider;
 import com.abercompany.smsforwarding.service.SmsService;
 import com.abercompany.smsforwarding.util.DeviceUtil;
 import com.abercompany.smsforwarding.util.JSLog;
@@ -55,6 +57,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -99,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        BusProvider.getInstance().register(this);
 
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
@@ -396,7 +402,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void getTrimmedData(String phoneNum) {
+    public void getTrimmedData(String phoneNum) {
         Call<GetDepositResult> jsonObjectCall = NetworkUtil.getInstace().getDeposit(phoneNum);
         jsonObjectCall.enqueue(new Callback<GetDepositResult>() {
             @Override
@@ -546,7 +552,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void getDefaulter() {
+    public void getDefaulter() {
         Call<GetDefaulterResult> getDefaulterResultCall = NetworkUtil.getInstace().getDefaulter("");
         getDefaulterResultCall.enqueue(new Callback<GetDefaulterResult>() {
             @Override
@@ -609,6 +615,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        BusProvider.getInstance().unregister(this);
         if (c != null) {
             if (!c.isClosed()) {
                 c.close();
@@ -680,5 +687,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         return true;
+    }
+
+    @Subscribe
+    public void FinishLoad(OnClickEvent event) {
+
+        getTrimmedData(DeviceUtil.getDevicePhoneNumber(this));
+        getDefaulter();
+
     }
 }

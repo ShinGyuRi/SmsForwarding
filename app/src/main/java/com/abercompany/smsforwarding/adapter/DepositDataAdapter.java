@@ -420,6 +420,8 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
 
                                 i = 0;
                                 editDeposits.clear();
+
+                                BusProvider.getInstance().post(new OnClickEvent());
                             }
                         }
                     } else {
