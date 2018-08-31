@@ -13,6 +13,9 @@ import com.abercompany.smsforwarding.model.Defaulter;
 import com.abercompany.smsforwarding.model.GetElecDefaulter;
 import com.abercompany.smsforwarding.util.NetworkUtil;
 
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -24,6 +27,7 @@ public class ElecStatusActivity extends AppCompatActivity {
     private ActivityElecStatusBinding binding;
 
     private List<Defaulter> elecStatus;
+    private List<Defaulter> filterElec;
     private SmsRecyclerAdapter adapter;
 
     @Override
@@ -36,6 +40,7 @@ public class ElecStatusActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_search:
+                filterElec = new ArrayList<>();
                 getElecStatus();
                 break;
         }
@@ -51,8 +56,22 @@ public class ElecStatusActivity extends AppCompatActivity {
 
                 if ("success".equals(result)) {
                     elecStatus = getElecDefaulter.getElecDefaulterList();
+                    String keyword = binding.etKeyword.getText().toString();
 
-                    setElecDefaulterAdapter(elecStatus);
+                    if ("".equals(keyword)) {
+                        filterElec = elecStatus;
+                    } else {
+                        for (int i = 0; i < elecStatus.size(); i++) {
+                            if (elecStatus.get(i).getEndDate().contains(keyword) ||
+                                    elecStatus.get(i).getDstName().contains(keyword) ||
+                                    elecStatus.get(i).getName().contains(keyword) ||
+                                    elecStatus.get(i).getRoomNum().contains(keyword)) {
+                                filterElec.add(elecStatus.get(i));
+                            }
+                        }
+                    }
+
+                    setElecDefaulterAdapter(filterElec);
                 }
 
             }
@@ -71,4 +90,12 @@ public class ElecStatusActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
     }
+
+    private final Comparator<Defaulter> sortByDate = new Comparator<Defaulter>() {
+        @Override
+        public int compare(Defaulter o1, Defaulter o2) {
+            return Collator.getInstance().compare(o1.getEndDate(), o2.getEndDate());
+        }
+    };
+
 }
