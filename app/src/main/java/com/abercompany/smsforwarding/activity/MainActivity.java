@@ -294,35 +294,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String result = getResidentResult.getResult();
 
                 if ("success".equals(result)) {
-                    residents = getResidentResult.getResidents();
+                    residents = getResidentResult.getResidents();;
 
-//                    for (int i=0; i<getResidentResult.getResidents().size(); i++) {
-//                        if ("재실".equals(getResidentResult.getResidents().get(i).getActive())) {
-//                            inResidents.add(getResidentResult.getResidents().get(i));
-//                        }
-//                    }
-
-//                    List<String> residentPhoneNum = new ArrayList<>();
-//                    List<String> name = new ArrayList<>();
-//                    List<String> roomNum = new ArrayList<>();
-//                    for (int i=0; i<residents.size(); i++) {
-//                        residentPhoneNum.add(residents.get(i).getPhoneNum());
-//                        name.add(residents.get(i).getName());
-//                        roomNum.add(residents.get(i).getHo());
-//                    }
-//
-//                    Set<String> set = new HashSet<String>();
-//                    set.addAll(residentPhoneNum);
-//                    PrefUtil.getInstance().putPreference("residentPhoneNum", set);
-//                    set.clear();
-//                    set.addAll(name);
-//                    PrefUtil.getInstance().putPreference("residentName", set);
-//                    set.clear();
-//                    set.addAll(roomNum);
-//                    PrefUtil.getInstance().putPreference("residentRoomNum", set);
-//                    set.clear();
-
-                    PrefUtil.getInstance().putPreference("resident", residents);
                 }
             }
 
@@ -684,13 +657,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_new_data) {
             initNaviButton(item, drawer);
             if (newDataFragment == null) {
-                newDataFragment = NewDataFragment.newInstance(newDatas, residents, brokers);
+                newDataFragment = NewDataFragment.newInstance(newDatas, residents, brokers, rooms);
             }
             switchContent(newDataFragment, "NEW_DATA");
         } else if (id == R.id.nav_existing_data) {
             initNaviButton(item, drawer);
             if (existingDataFragment == null) {
-                existingDataFragment = ExistingDataFragment.newInstance(existingDatas, residents, brokers);
+                existingDataFragment = ExistingDataFragment.newInstance(existingDatas, residents, brokers, rooms);
             }
             switchContent(existingDataFragment, "EXISTING_DATA");
         } else if(id == R.id.nav_realty)    {

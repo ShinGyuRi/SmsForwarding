@@ -20,6 +20,7 @@ import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.OnClickEvent;
 import com.abercompany.smsforwarding.model.Resident;
+import com.abercompany.smsforwarding.model.Room;
 import com.abercompany.smsforwarding.model.SelectedSpinnerEvent;
 import com.abercompany.smsforwarding.provider.BusProvider;
 import com.abercompany.smsforwarding.util.Debug;
@@ -49,6 +50,7 @@ public class ExistingDataFragment extends Fragment {
     private List<Deposit> existingDatas;
     private List<Broker> brokers;
     private List<Resident> residents;
+    private List<Room> rooms;
     private DepositDataAdapter adapter;
 
 
@@ -57,14 +59,15 @@ public class ExistingDataFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public ExistingDataFragment(List<Deposit> existingDatas, List<Resident> residents, List<Broker> brokers) {
+    public ExistingDataFragment(List<Deposit> existingDatas, List<Resident> residents, List<Broker> brokers, List<Room> rooms) {
         this.existingDatas = existingDatas;
         this.residents = residents;
         this.brokers = brokers;
+        this.rooms = rooms;
     }
 
-    public static ExistingDataFragment newInstance(List<Deposit> existingDatas, List<Resident> residents, List<Broker> brokers) {
-        ExistingDataFragment fragment = new ExistingDataFragment(existingDatas, residents, brokers);
+    public static ExistingDataFragment newInstance(List<Deposit> existingDatas, List<Resident> residents, List<Broker> brokers, List<Room> rooms) {
+        ExistingDataFragment fragment = new ExistingDataFragment(existingDatas, residents, brokers, rooms);
         return fragment;
     }
 
@@ -100,7 +103,7 @@ public class ExistingDataFragment extends Fragment {
     }
 
     private void setDepositAdapter(List<Deposit> existingDatas ,List<Resident> residents, List<Broker> brokers) {
-        adapter = new DepositDataAdapter(getActivity(), getContext(), existingDatas, residents, brokers, EXISTING_DATA);
+        adapter = new DepositDataAdapter(getActivity(), getContext(), existingDatas, residents, brokers, EXISTING_DATA, rooms);
         binding.rvDeposit.setAdapter(adapter);
         binding.rvDeposit.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.notifyDataSetChanged();

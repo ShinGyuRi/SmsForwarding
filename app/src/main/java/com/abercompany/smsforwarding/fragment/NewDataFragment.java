@@ -22,6 +22,7 @@ import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.OnClickEvent;
 import com.abercompany.smsforwarding.model.Resident;
+import com.abercompany.smsforwarding.model.Room;
 import com.abercompany.smsforwarding.provider.BusProvider;
 import com.abercompany.smsforwarding.util.JSLog;
 import com.abercompany.smsforwarding.util.NetworkUtil;
@@ -46,6 +47,7 @@ public class NewDataFragment extends Fragment {
     private List<Deposit> newDatas;
     private List<Resident> residents;
     private List<Broker> brokers;
+    private List<Room> rooms;
     private DepositDataAdapter adapter;
 
 
@@ -54,14 +56,15 @@ public class NewDataFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public NewDataFragment(List<Deposit> newDatas, List<Resident> residents, List<Broker> brokers) {
+    public NewDataFragment(List<Deposit> newDatas, List<Resident> residents, List<Broker> brokers, List<Room> rooms) {
         this.newDatas = newDatas;
         this.residents = residents;
         this.brokers = brokers;
+        this.rooms = rooms;
     }
 
-    public static NewDataFragment newInstance(List<Deposit> newDatas, List<Resident> residents, List<Broker> brokers) {
-        NewDataFragment fragment = new NewDataFragment(newDatas, residents, brokers);
+    public static NewDataFragment newInstance(List<Deposit> newDatas, List<Resident> residents, List<Broker> brokers, List<Room> rooms) {
+        NewDataFragment fragment = new NewDataFragment(newDatas, residents, brokers, rooms);
         return fragment;
     }
 
@@ -98,7 +101,7 @@ public class NewDataFragment extends Fragment {
     }
 
     private void setDepositAdapter(final List<Deposit> newDatas, List<Resident> residents, List<Broker> brokers) {
-        adapter = new DepositDataAdapter(getActivity(), getContext(), newDatas, residents, brokers, NEW_DATA);
+        adapter = new DepositDataAdapter(getActivity(), getContext(), newDatas, residents, brokers, NEW_DATA, rooms);
         binding.rvDeposit.setAdapter(adapter);
         binding.rvDeposit.setHasFixedSize(true);
         binding.rvDeposit.setLayoutManager(new LinearLayoutManager(getContext()));

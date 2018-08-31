@@ -18,6 +18,7 @@ import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.OnClickEvent;
 import com.abercompany.smsforwarding.model.Resident;
+import com.abercompany.smsforwarding.model.Room;
 import com.abercompany.smsforwarding.model.SpinnerItem;
 import com.abercompany.smsforwarding.model.StateVO;
 import com.abercompany.smsforwarding.provider.BusProvider;
@@ -47,6 +48,8 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     private List<Resident> residents;
     private List<Broker> brokers;
     private List<Deposit> editDeposits = new ArrayList<>();
+    private List<Room> rooms;
+    private List<Room> checkOutRooms = new ArrayList<>();
 
     private List<String> residentName = new ArrayList<>();
     private List<String> brokerName = new ArrayList<>();
@@ -88,16 +91,29 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         }
     }
 
-    public DepositDataAdapter(Activity activity, Context context, List<Deposit> deposits, List<Resident> residents, List<Broker> brokers, String type) {
+    public DepositDataAdapter(Activity activity, Context context, List<Deposit> deposits, List<Resident> residents, List<Broker> brokers, String type, List<Room> rooms) {
         this.activity = activity;
         this.context = context;
         this.deposits = deposits;
         this.residents = residents;
         this.brokers = brokers;
         this.type = type;
+        this.rooms = rooms;
 
         residentName.add("입주자");
         brokerName.add("중개인");
+
+        for (int i=0; i<rooms.size(); i++) {
+            if ("퇴실".equals(rooms.get(i).getActive())) {
+                checkOutRooms.add(rooms.get(i));
+            }
+        }
+        for (int i = 0; i < checkOutRooms.size(); i++) {
+            Resident resident = new Resident();
+            resident.setHo(checkOutRooms.get(i).getRoomNum());
+            resident.setName(checkOutRooms.get(i).getBuildingName());
+            residents.add(resident);
+        }
 
         for (int i = 0; i < residents.size(); i++) {
             residentName.add(context.getString(R.string.str_deposit_realty, residents.get(i).getName(), residents.get(i).getHo()));
@@ -105,6 +121,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         for (int i = 0; i < brokers.size(); i++) {
             brokerName.add(context.getString(R.string.str_deposit_realty, brokers.get(i).getName(), brokers.get(i).getRealtyName()));
         }
+
 
 
         BusProvider.getInstance().register(this);
