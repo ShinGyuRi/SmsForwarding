@@ -5,314 +5,361 @@
 
 
     <data>
+
         <variable
             name="roomDetail"
-            type="com.abercompany.smsforwarding.activity.RoomDetailActivity"/>
+            type="com.abercompany.smsforwarding.activity.RoomDetailActivity" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".activity.RoomDetailActivity">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_room_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="RoomNum"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".activity.RoomDetailActivity">
 
-        <RadioGroup
-            android:id="@+id/rg_active"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_room_num"
-            app:layout_constraintStart_toEndOf="@+id/tv_room_num"
-            app:layout_constraintTop_toTopOf="@+id/tv_room_num">
-
-            <RadioButton
-                android:id="@+id/rb_check_in"
+            <TextView
+                android:id="@+id/tv_room_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="입실"
-                android:checked="true"/>
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="RoomNum"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <RadioButton
-                android:id="@+id/rb_check_out"
+            <RadioGroup
+                android:id="@+id/rg_active"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="퇴실" />
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_room_num"
+                app:layout_constraintStart_toEndOf="@+id/tv_room_num"
+                app:layout_constraintTop_toTopOf="@+id/tv_room_num">
 
-            <RadioButton
-                android:id="@+id/rb_under_contract"
+                <RadioButton
+                    android:id="@+id/rb_check_in"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="입실" />
+
+                <RadioButton
+                    android:id="@+id/rb_check_out"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="퇴실" />
+
+                <RadioButton
+                    android:id="@+id/rb_under_contract"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="계약" />
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/btn_upload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="계약"/>
-        </RadioGroup>
-
-        <Button
-            android:id="@+id/btn_upload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:text="업로드"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:onClick="@{roomDetail.onClick}"/>
-
-        <EditText
-            android:id="@+id/et_name"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="50dp"
-            android:hint="이름"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/et_phone_num"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:hint="핸드폰번호"
-            android:inputType="phone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/et_name" />
-
-        <EditText
-            android:id="@+id/et_id_num"
-            android:layout_width="170dp"
-            android:layout_height="46dp"
-            android:layout_marginTop="8dp"
-            android:hint="주민번호"
-            app:layout_constraintStart_toStartOf="@+id/et_name"
-            app:layout_constraintTop_toBottomOf="@+id/et_name" />
-
-        <EditText
-            android:id="@+id/et_etc_num"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="그외전화"
-            android:inputType="phone"
-            app:layout_constraintEnd_toEndOf="@+id/et_phone_num"
-            app:layout_constraintTop_toBottomOf="@+id/et_phone_num" />
-
-        <EditText
-            android:id="@+id/et_address"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:hint="주소"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_id_num" />
-
-        <EditText
-            android:id="@+id/et_emer_num"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="응급연락처"
-            android:inputType="phone"
-            app:layout_constraintStart_toStartOf="@+id/et_name"
-            app:layout_constraintTop_toBottomOf="@+id/et_address" />
-
-        <EditText
-            android:id="@+id/et_emer_name"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="이름/관계"
-            app:layout_constraintEnd_toEndOf="@+id/et_phone_num"
-            app:layout_constraintTop_toBottomOf="@+id/et_address" />
-
-        <LinearLayout
-            android:id="@+id/layout_down_payment"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@+id/et_name"
-            app:layout_constraintTop_toBottomOf="@+id/et_emer_num">
+                android:background="@color/black"
+                android:onClick="@{roomDetail.onClick}"
+                android:text="업로드"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/et_down_payment"
-                android:layout_width="100dp"
+                android:id="@+id/et_name"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:maxLines="1"
-                android:hint="계약금" />
-
-            <Button
-                android:id="@+id/btn_add_zero_down_payment"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:background="@color/black"
-                android:textColor="@color/white"
-                android:text="만원"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center"
-                android:onClick="@{roomDetail.onClick}"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/layout_deposit"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="@+id/et_phone_num"
-            app:layout_constraintTop_toBottomOf="@+id/et_emer_name">
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="50dp"
+                android:hint="이름"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/et_deposit"
-                android:layout_width="100dp"
+                android:id="@+id/et_phone_num"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:maxLines="1"
-                android:hint="보증금" />
-
-            <Button
-                android:id="@+id/btn_add_zero_deposit"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:background="@color/black"
-                android:textColor="@color/white"
-                android:text="만원"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center"
-                android:onClick="@{roomDetail.onClick}"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/layout_rent"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="@+id/et_name"
-            app:layout_constraintTop_toBottomOf="@+id/layout_down_payment">
-
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:hint="핸드폰번호"
+                android:inputType="phone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/et_name" />
 
             <EditText
-                android:id="@+id/et_rent"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
+                android:id="@+id/et_id_num"
+                android:layout_width="170dp"
+                android:layout_height="46dp"
                 android:layout_marginTop="8dp"
-                android:maxLines="1"
-                android:hint="월세" />
-
-            <Button
-                android:id="@+id/btn_add_zero_rent"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
-                android:background="@color/black"
-                android:textColor="@color/white"
-                android:text="만원"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center"
-                android:onClick="@{roomDetail.onClick}"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_manage_fee"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="@+id/et_phone_num"
-            app:layout_constraintTop_toBottomOf="@+id/layout_deposit">
-
-
+                android:hint="주민번호"
+                app:layout_constraintStart_toStartOf="@+id/et_name"
+                app:layout_constraintTop_toBottomOf="@+id/et_name" />
 
             <EditText
-                android:id="@+id/et_manage_fee"
-                android:layout_width="100dp"
+                android:id="@+id/et_etc_num"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:maxLines="1"
-                android:hint="관리비" />
+                android:hint="그외전화"
+                android:inputType="phone"
+                app:layout_constraintEnd_toEndOf="@+id/et_phone_num"
+                app:layout_constraintTop_toBottomOf="@+id/et_phone_num" />
+
+            <EditText
+                android:id="@+id/et_address"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:hint="주소"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_id_num" />
+
+            <EditText
+                android:id="@+id/et_emer_num"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="응급연락처"
+                android:inputType="phone"
+                app:layout_constraintStart_toStartOf="@+id/et_name"
+                app:layout_constraintTop_toBottomOf="@+id/et_address" />
+
+            <EditText
+                android:id="@+id/et_emer_name"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="이름/관계"
+                app:layout_constraintEnd_toEndOf="@+id/et_phone_num"
+                app:layout_constraintTop_toBottomOf="@+id/et_address" />
+
+            <LinearLayout
+                android:id="@+id/layout_down_payment"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="@+id/et_name"
+                app:layout_constraintTop_toBottomOf="@+id/et_emer_num">
+
+                <EditText
+                    android:id="@+id/et_down_payment"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:hint="계약금"
+                    android:maxLines="1" />
+
+                <Button
+                    android:id="@+id/btn_add_zero_down_payment"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/black"
+                    android:onClick="@{roomDetail.onClick}"
+                    android:text="만원"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/layout_deposit"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/et_phone_num"
+                app:layout_constraintTop_toBottomOf="@+id/et_emer_name">
+
+                <EditText
+                    android:id="@+id/et_deposit"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:hint="보증금"
+                    android:maxLines="1" />
+
+                <Button
+                    android:id="@+id/btn_add_zero_deposit"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/black"
+                    android:onClick="@{roomDetail.onClick}"
+                    android:text="만원"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/layout_rent"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="@+id/et_name"
+                app:layout_constraintTop_toBottomOf="@+id/layout_down_payment">
+
+
+                <EditText
+                    android:id="@+id/et_rent"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:hint="월세"
+                    android:maxLines="1" />
+
+                <Button
+                    android:id="@+id/btn_add_zero_rent"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/black"
+                    android:onClick="@{roomDetail.onClick}"
+                    android:text="만원"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_manage_fee"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/et_phone_num"
+                app:layout_constraintTop_toBottomOf="@+id/layout_deposit">
+
+
+                <EditText
+                    android:id="@+id/et_manage_fee"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:hint="관리비"
+                    android:maxLines="1" />
+
+                <Button
+                    android:id="@+id/btn_add_zero_manage_fee"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/black"
+                    android:onClick="@{roomDetail.onClick}"
+                    android:text="만원"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tv_term"
+                android:layout_width="350dp"
+                android:layout_height="22dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:onClick="@{roomDetail.onClick}"
+                android:text="계약기간을 입력하려면 터치하세요"
+                android:textSize="18dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_rent" />
+
+            <EditText
+                android:id="@+id/et_elec_num"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="전기계량기"
+                app:layout_constraintStart_toStartOf="@+id/et_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_term" />
+
+            <EditText
+                android:id="@+id/et_gas_num"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="가스계량기"
+                app:layout_constraintEnd_toEndOf="@+id/et_phone_num"
+                app:layout_constraintTop_toBottomOf="@+id/tv_term" />
+
+            <TextView
+                android:id="@+id/tv_realty"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="부동산"
+                app:layout_constraintStart_toStartOf="@+id/et_elec_num"
+                app:layout_constraintTop_toBottomOf="@+id/et_elec_num" />
 
             <Button
-                android:id="@+id/btn_add_zero_manage_fee"
-                android:layout_width="50dp"
-                android:layout_height="30dp"
+                android:id="@+id/btn_realty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@color/black"
+                android:onClick="@{roomDetail.onClick}"
+                android:text="부동산"
                 android:textColor="@color/white"
-                android:text="만원"
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center"
-                android:onClick="@{roomDetail.onClick}"/>
-        </LinearLayout>
+                app:layout_constraintEnd_toEndOf="@+id/et_gas_num"
+                app:layout_constraintTop_toBottomOf="@+id/et_gas_num" />
 
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                android:weightSum="5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_realty">
 
-        <TextView
-            android:id="@+id/tv_term"
-            android:layout_width="350dp"
-            android:layout_height="22dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:onClick="@{roomDetail.onClick}"
-            android:gravity="center"
-            android:text="계약기간을 입력하려면 터치하세요"
-            android:textSize="18dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layout_rent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="입실기간" />
 
-        <EditText
-            android:id="@+id/et_elec_num"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="전기계량기"
-            app:layout_constraintStart_toStartOf="@+id/et_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_term" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="입금 날짜" />
 
-        <EditText
-            android:id="@+id/et_gas_num"
-            android:layout_width="170dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="가스계량기"
-            app:layout_constraintEnd_toEndOf="@+id/et_phone_num"
-            app:layout_constraintTop_toBottomOf="@+id/tv_term" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="입금 액" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_realty"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="부동산"
-            app:layout_constraintStart_toStartOf="@+id/et_elec_num"
-            app:layout_constraintTop_toBottomOf="@+id/et_elec_num"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_deposit_log"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout4"></android.support.v7.widget.RecyclerView>
 
-        <Button
-            android:id="@+id/btn_realty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:text="부동산"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/et_gas_num"
-            app:layout_constraintTop_toBottomOf="@+id/et_gas_num"
-            android:onClick="@{roomDetail.onClick}" />
-
-    </android.support.constraint.ConstraintLayout>
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 </layout>

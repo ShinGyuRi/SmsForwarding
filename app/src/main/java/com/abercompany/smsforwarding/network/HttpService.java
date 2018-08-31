@@ -7,6 +7,7 @@ import com.abercompany.smsforwarding.model.GetCheckInListResult;
 import com.abercompany.smsforwarding.model.GetCheckOutListResult;
 import com.abercompany.smsforwarding.model.GetContractResult;
 import com.abercompany.smsforwarding.model.GetDefaulterResult;
+import com.abercompany.smsforwarding.model.GetDepositLogResult;
 import com.abercompany.smsforwarding.model.GetDepositResult;
 import com.abercompany.smsforwarding.model.GetElecDefaulter;
 import com.abercompany.smsforwarding.model.GetRealtyResult;
@@ -185,4 +186,9 @@ public interface HttpService {
     @FormUrlEncoded
     @POST("getElecStatus")
     Call<GetElecDefaulter> getElecStatus(@Field("") String empty);
+
+    @FormUrlEncoded
+    @POST("getDepositLog")
+    Call<GetDepositLogResult> getDepositLog(@Field("room_num") String roomNum,
+                                            @Field("name") String name);
 }

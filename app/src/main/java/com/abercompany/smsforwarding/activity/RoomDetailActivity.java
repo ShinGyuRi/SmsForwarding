@@ -4,20 +4,24 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RadioGroup;
 
 import com.abercompany.smsforwarding.R;
+import com.abercompany.smsforwarding.adapter.DepositLogAdapter;
 import com.abercompany.smsforwarding.databinding.ActivityRoomDetailBinding;
 import com.abercompany.smsforwarding.dialog.CheckInListDialog;
 import com.abercompany.smsforwarding.dialog.CheckOutListDialog;
 import com.abercompany.smsforwarding.model.CheckIn;
 import com.abercompany.smsforwarding.model.CheckOut;
 import com.abercompany.smsforwarding.model.Contract;
+import com.abercompany.smsforwarding.model.DepositLog;
 import com.abercompany.smsforwarding.model.GetCheckInListResult;
 import com.abercompany.smsforwarding.model.GetCheckOutListResult;
+import com.abercompany.smsforwarding.model.GetDepositLogResult;
 import com.abercompany.smsforwarding.model.Room;
 import com.abercompany.smsforwarding.util.Debug;
 import com.abercompany.smsforwarding.util.JSLog;
@@ -26,6 +30,7 @@ import com.google.gson.JsonObject;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.Calendar;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,6 +53,10 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
     private String brokerName = "";
     private String brokerPhoneNum = "";
     private String buildingName = "";
+
+    private List<DepositLog> depositLogs;
+
+    private DepositLogAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +91,8 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
         }
 
         if (contract != null) {
+            getDepositLog(room.getRoomNum(), contract.getName());
+
             JSLog.D("contract.getDownPayment            :::     " + contract.getDownPayment(), null);
             binding.etName.setText(contract.getName());
             binding.etPhoneNum.setText(contract.getPhoneNum());
@@ -450,6 +461,35 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
 
             }
         });
+    }
+
+    private void getDepositLog(String roomNum, String name) {
+        Call<GetDepositLogResult> getDepositLogResultCall = NetworkUtil.getInstace().getDepositLog(roomNum, name);
+        getDepositLogResultCall.enqueue(new Callback<GetDepositLogResult>() {
+            @Override
+            public void onResponse(Call<GetDepositLogResult> call, Response<GetDepositLogResult> response) {
+                GetDepositLogResult getDepositLogResult = response.body();
+                String result = getDepositLogResult.getResult();
+
+                if ("success".equals(result)) {
+                    depositLogs = getDepositLogResult.getDepositLogs();
+
+                    setDepositLogAdapter(depositLogs);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetDepositLogResult> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void setDepositLogAdapter(List<DepositLog> depositLogs) {
+        adapter = new DepositLogAdapter(this, depositLogs);
+        binding.rvDepositLog.setAdapter(adapter);
+        binding.rvDepositLog.setLayoutManager(new LinearLayoutManager(this));
+        adapter.notifyDataSetChanged();
     }
 
     @Override
