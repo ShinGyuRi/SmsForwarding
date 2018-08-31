@@ -64,7 +64,8 @@
         <activity android:name=".activity.IncomingCallActivity" />
         <activity android:name=".activity.RegisterEtcNumActivity" />
         <activity android:name=".activity.AddContactsActivity" />
-        <activity android:name=".activity.ElecStatusActivity"></activity>
+        <activity android:name=".activity.ElecStatusActivity" />
+        <activity android:name=".activity.ManageBuildingContractActivity"></activity>
     </application>
 
 </manifest>
