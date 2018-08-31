@@ -181,4 +181,8 @@ public interface HttpService {
     @FormUrlEncoded
     @POST("getRawMessage")
     Call<JsonObject> getRawMessage(@Field("time_stamp") String timeStamp);
+
+    @FormUrlEncoded
+    @POST("getElecStatus")
+    Call<GetElecDefaulter> getElecStatus(@Field("") String empty);
 }

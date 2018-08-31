@@ -47,7 +47,13 @@ public class SmsRecyclerAdapter extends RecyclerView.Adapter<SmsRecyclerAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull BindingHolder holder, int position) {
-        holder.binding.tvSmsBody.setText(defaulters.get(position).getDstName() + defaulters.get(position).getEndDate());
+        if ("".equals(defaulters.get(position).getStatus()) ||
+                defaulters.get(position).getStatus() == null) {
+            holder.binding.tvSmsBody.setText(defaulters.get(position).getDstName() + defaulters.get(position).getEndDate());
+        } else {
+            holder.binding.tvSmsBody.setText(defaulters.get(position).getDstName() + defaulters.get(position).getEndDate() +
+            defaulters.get(position).getStatus());
+        }
     }
 
     @Override

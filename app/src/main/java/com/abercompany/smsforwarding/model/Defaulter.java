@@ -18,6 +18,9 @@ public class Defaulter implements Serializable{
     @SerializedName("name")
     private String name;
 
+    @SerializedName("status")
+    private String status;
+
     public String getDstName() {
         return dstName;
     }
@@ -29,5 +32,8 @@ public class Defaulter implements Serializable{
     }
     public String getName() {
         return name;
+    }
+    public String getStatus() {
+        return status;
     }
 }

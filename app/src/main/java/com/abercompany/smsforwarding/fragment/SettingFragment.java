@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.activity.AddCashActivity;
 import com.abercompany.smsforwarding.activity.ElecDefaulterActivity;
+import com.abercompany.smsforwarding.activity.ElecStatusActivity;
 import com.abercompany.smsforwarding.activity.RegisterEtcNumActivity;
 import com.abercompany.smsforwarding.activity.RegisterPhoneNumActivity;
 import com.abercompany.smsforwarding.activity.SearchDefaulterActivity;
@@ -195,6 +196,10 @@ public class SettingFragment extends Fragment {
 
                 break;
 
+            case R.id.btn_manage_elec:
+                Intent intent6 = new Intent(getContext(), ElecStatusActivity.class);
+                startActivity(intent6);
+                break;
         }
     }
 
