@@ -717,13 +717,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_new_data) {
             initNaviButton(item, drawer);
             if (newDataFragment == null) {
-                newDataFragment = NewDataFragment.newInstance(newDatas, residents, brokers, rooms);
+                newDataFragment = NewDataFragment.newInstance(newDatas, residents, brokers, rooms, buildings);
             }
             switchContent(newDataFragment, "NEW_DATA");
         } else if (id == R.id.nav_existing_data) {
             initNaviButton(item, drawer);
             if (existingDataFragment == null) {
-                existingDataFragment = ExistingDataFragment.newInstance(existingDatas, residents, brokers, rooms);
+                existingDataFragment = ExistingDataFragment.newInstance(existingDatas, residents, brokers, rooms, buildings);
             }
             switchContent(existingDataFragment, "EXISTING_DATA");
         } else if(id == R.id.nav_realty)    {

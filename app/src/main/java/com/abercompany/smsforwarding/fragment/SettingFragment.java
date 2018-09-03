@@ -149,6 +149,7 @@ public class SettingFragment extends Fragment {
                 intent.putExtra("resident", (Serializable) inResidents);
                 intent.putExtra("broker", (Serializable) brokers);
                 intent.putExtra("dataType", EXISTING_DATA);
+                intent.putExtra("building", (Serializable) buildings);
                 startActivity(intent);
                 break;
 

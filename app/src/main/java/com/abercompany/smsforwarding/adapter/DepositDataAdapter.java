@@ -15,6 +15,7 @@ import android.widget.CompoundButton;
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.databinding.ViewDepositItemBinding;
 import com.abercompany.smsforwarding.model.Broker;
+import com.abercompany.smsforwarding.model.Building;
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.OnClickEvent;
 import com.abercompany.smsforwarding.model.Resident;
@@ -50,9 +51,11 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     private List<Deposit> editDeposits = new ArrayList<>();
     private List<Room> rooms;
     private List<Room> checkOutRooms = new ArrayList<>();
+    private List<Building> buildings;
 
     private List<String> residentName = new ArrayList<>();
     private List<String> brokerName = new ArrayList<>();
+    private List<String> buildingName = new ArrayList<>();
 
     private ArrayList<StateVO> listVOs = new ArrayList<>();
 
@@ -91,7 +94,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         }
     }
 
-    public DepositDataAdapter(Activity activity, Context context, List<Deposit> deposits, List<Resident> residents, List<Broker> brokers, String type, List<Room> rooms) {
+    public DepositDataAdapter(Activity activity, Context context, List<Deposit> deposits, List<Resident> residents, List<Broker> brokers, String type, List<Room> rooms, List<Building> buildings) {
         this.activity = activity;
         this.context = context;
         this.deposits = deposits;
@@ -99,9 +102,11 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         this.brokers = brokers;
         this.type = type;
         this.rooms = rooms;
+        this.buildings = buildings;
 
         residentName.add("입주자");
         brokerName.add("중개인");
+        buildingName.add("건물");
 
         for (int i=0; i<rooms.size(); i++) {
             if ("퇴실".equals(rooms.get(i).getActive())) {
@@ -120,6 +125,9 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         }
         for (int i = 0; i < brokers.size(); i++) {
             brokerName.add(context.getString(R.string.str_deposit_realty, brokers.get(i).getName(), brokers.get(i).getRealtyName()));
+        }
+        for (int i = 0; i < buildings.size(); i++) {
+            buildingName.add(buildings.get(i).getName());
         }
 
 
@@ -149,6 +157,8 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                 deposits.get(position).getMethod().contains("공동CMS출")) {
             holder.binding.spCategory.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, context.getResources().getStringArray(R.array.withdraw)));
         }
+
+        holder.binding.spBuildingName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, buildingName));
 
         holder.binding.tvMessage.setText(context.getString(R.string.str_deposit_message,
                 deposits.get(position).getName(),
@@ -202,6 +212,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                                     deposit.setType(holder.binding.spCategory.getSelectedItem().toString());
                                     deposit.setIndex(deposits.get(position).getIndex());
                                     deposit.setViewPosition(position);
+                                    deposit.setBuildingName(holder.binding.spBuildingName.getSelectedItem().toString());
 
                                     for (int i = 0; i < editDeposits.size(); i++) {
                                         if (deposits.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
@@ -249,6 +260,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                                     deposit.setType(holder.binding.spCategory.getSelectedItem().toString());
                                     deposit.setIndex(deposits.get(position).getIndex());
                                     deposit.setViewPosition(position);
+                                    deposit.setBuildingName(holder.binding.spBuildingName.getSelectedItem().toString());
 
                                     for (int i = 0; i < editDeposits.size(); i++) {
                                         if (deposits.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
@@ -314,6 +326,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                     }
                     deposit.setNote(sumNote.toString());
                     deposit.setViewPosition(position);
+                    deposit.setBuildingName(holder.binding.spBuildingName.getSelectedItem().toString());
 
                     for (int i = 0; i < editDeposits.size(); i++) {
                         if (deposits.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
@@ -377,10 +390,10 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         JSLog.D("editDeposits size              :::         " + editDeposits.size(), null);
         if (i < editDeposits.size()) {
             if (bindingHolder.binding.spCategory.getSelectedItemPosition() == bindingHolder.binding.spCategory.getLastVisiblePosition()) {
-                updateTrimmedData(editDeposits.get(i).getName(), editDeposits.get(i).getDate(), editDeposits.get(i).getDestinationName(), editDeposits.get(i).getType(), editDeposits.get(i).getNote());
+                updateTrimmedData(editDeposits.get(i).getName(), editDeposits.get(i).getDate(), editDeposits.get(i).getDestinationName(), editDeposits.get(i).getType(), editDeposits.get(i).getNote(), editDeposits.get(i).getBuildingName());
             } else {
                 if (bindingHolder.binding.spToName.getSelectedItemPosition() != 0) {
-                    updateTrimmedData(editDeposits.get(i).getName(), editDeposits.get(i).getDate(), editDeposits.get(i).getDestinationName(), editDeposits.get(i).getType(), editDeposits.get(i).getNote());
+                    updateTrimmedData(editDeposits.get(i).getName(), editDeposits.get(i).getDate(), editDeposits.get(i).getDestinationName(), editDeposits.get(i).getType(), editDeposits.get(i).getNote(), editDeposits.get(i).getBuildingName());
                 }
             }
         }
@@ -388,8 +401,9 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     }
 
 
-    private void updateTrimmedData(String name, String date, String objectName, final String type, String note) {
-        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type, DeviceUtil.getDevicePhoneNumber(context), NEW_DATA, "", "", note);
+    private void updateTrimmedData(String name, String date, String objectName, final String type, String note, String buildingName) {
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type, DeviceUtil.getDevicePhoneNumber(context), NEW_DATA, "", "", note,
+                buildingName);
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -411,7 +425,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                             i++;
                             if (i < editDeposits.size()) {
                                 updateTrimmedData(editDeposits.get(i).getName(), editDeposits.get(i).getDate(), editDeposits.get(i).getDestinationName(), editDeposits.get(i).getType(),
-                                        editDeposits.get(i).getNote());
+                                        editDeposits.get(i).getNote(), editDeposits.get(i).getBuildingName());
                             } else {
                                 for (int i = 0; i < editDeposits.size(); i++) {
                                     deposits.remove(editDeposits.get(i).getViewPosition());

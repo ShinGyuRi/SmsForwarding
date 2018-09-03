@@ -31,6 +31,9 @@ public class Deposit {
     @SerializedName("time_stamp")
     private String timeStamp;
 
+    @SerializedName("building_name")
+    private String buildingName;
+
     private int viewPosition;
 
     private int spCategorySelectedPosition;
@@ -105,6 +108,13 @@ public class Deposit {
     }
     public void setViewPosition(int viewPosition) {
         this.viewPosition = viewPosition;
+    }
+
+    public String getBuildingName() {
+        return buildingName;
+    }
+    public void setBuildingName(String buildingName) {
+        this.buildingName = buildingName;
     }
 
     public int getSpCategorySelectedPosition() {

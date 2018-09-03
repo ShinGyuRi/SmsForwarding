@@ -17,6 +17,7 @@ import com.abercompany.smsforwarding.activity.AddCashActivity;
 import com.abercompany.smsforwarding.adapter.DepositDataAdapter;
 import com.abercompany.smsforwarding.databinding.FragmentExistingDataBinding;
 import com.abercompany.smsforwarding.model.Broker;
+import com.abercompany.smsforwarding.model.Building;
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.OnClickEvent;
 import com.abercompany.smsforwarding.model.Resident;
@@ -51,6 +52,7 @@ public class ExistingDataFragment extends Fragment {
     private List<Broker> brokers;
     private List<Resident> residents;
     private List<Room> rooms;
+    private List<Building> buildings;
     private DepositDataAdapter adapter;
 
 
@@ -59,15 +61,16 @@ public class ExistingDataFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public ExistingDataFragment(List<Deposit> existingDatas, List<Resident> residents, List<Broker> brokers, List<Room> rooms) {
+    public ExistingDataFragment(List<Deposit> existingDatas, List<Resident> residents, List<Broker> brokers, List<Room> rooms, List<Building> buildings) {
         this.existingDatas = existingDatas;
         this.residents = residents;
         this.brokers = brokers;
         this.rooms = rooms;
+        this.buildings = buildings;
     }
 
-    public static ExistingDataFragment newInstance(List<Deposit> existingDatas, List<Resident> residents, List<Broker> brokers, List<Room> rooms) {
-        ExistingDataFragment fragment = new ExistingDataFragment(existingDatas, residents, brokers, rooms);
+    public static ExistingDataFragment newInstance(List<Deposit> existingDatas, List<Resident> residents, List<Broker> brokers, List<Room> rooms, List<Building> buildings) {
+        ExistingDataFragment fragment = new ExistingDataFragment(existingDatas, residents, brokers, rooms, buildings);
         return fragment;
     }
 
@@ -93,6 +96,7 @@ public class ExistingDataFragment extends Fragment {
                 intent.putExtra("resident", (Serializable) residents);
                 intent.putExtra("broker", (Serializable) brokers);
                 intent.putExtra("dataType", EXISTING_DATA);
+                intent.putExtra("building", (Serializable) buildings);
                 startActivity(intent);
                 break;
 
@@ -103,7 +107,7 @@ public class ExistingDataFragment extends Fragment {
     }
 
     private void setDepositAdapter(List<Deposit> existingDatas ,List<Resident> residents, List<Broker> brokers) {
-        adapter = new DepositDataAdapter(getActivity(), getContext(), existingDatas, residents, brokers, EXISTING_DATA, rooms);
+        adapter = new DepositDataAdapter(getActivity(), getContext(), existingDatas, residents, brokers, EXISTING_DATA, rooms, buildings);
         binding.rvDeposit.setAdapter(adapter);
         binding.rvDeposit.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.notifyDataSetChanged();

@@ -12,6 +12,7 @@ import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.adapter.DepositDataAdapter;
 import com.abercompany.smsforwarding.databinding.ActivityAddCashBinding;
 import com.abercompany.smsforwarding.model.Broker;
+import com.abercompany.smsforwarding.model.Building;
 import com.abercompany.smsforwarding.model.Resident;
 import com.abercompany.smsforwarding.util.Debug;
 import com.abercompany.smsforwarding.util.DeviceUtil;
@@ -37,8 +38,10 @@ public class AddCashActivity extends AppCompatActivity implements DatePickerDial
 
     private List<Resident> residents;
     private List<Broker> brokers;
+    private List<Building> buildings;
     private List<String> residentName = new ArrayList<>();
     private List<String> brokerName = new ArrayList<>();
+    private List<String> buildingName = new ArrayList<>();
 
     private String date = "";
     private DatePickerDialog dpd;
@@ -56,6 +59,7 @@ public class AddCashActivity extends AppCompatActivity implements DatePickerDial
 
         setResidentBrokerName();
 
+        binding.spBuildingName.setAdapter(new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, buildingName));
         binding.spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int itemPosition, long id) {
@@ -95,12 +99,16 @@ public class AddCashActivity extends AppCompatActivity implements DatePickerDial
         residents = (ArrayList<Resident>) intent.getSerializableExtra("resident");
         brokers = (ArrayList<Broker>) intent.getSerializableExtra("broker");
         dataType = intent.getStringExtra("dataType");
+        buildings = (List<Building>) intent.getSerializableExtra("building");
 
         for (int i = 0; i < residents.size(); i++) {
             residentName.add(getString(R.string.str_deposit_realty, residents.get(i).getName(), residents.get(i).getHo()));
         }
         for (int i = 0; i < brokers.size(); i++) {
             brokerName.add(getString(R.string.str_deposit_realty, brokers.get(i).getName(), brokers.get(i).getRealtyName()));
+        }
+        for (int i = 0; i < buildings.size(); i++) {
+            buildingName.add(buildings.get(i).getName());
         }
 
         if (EXISTING_DATA.equals(dataType)) {
@@ -115,18 +123,19 @@ public class AddCashActivity extends AppCompatActivity implements DatePickerDial
                 String objectName = "";
                 String type = "";
                 String amount = binding.etAmount.getText().toString();
+                String buildingName = binding.spBuildingName.getSelectedItem().toString();
 
-                if (!"".equals(binding.spToName.getSelectedView().toString())) {
+                if (!"선택".equals(binding.spToName.getSelectedView().toString())) {
                     objectName = binding.spToName.getSelectedItem().toString();
                 }
-                if (!"".equals(binding.spCategory.getSelectedItem().toString())) {
+                if (!"선택".equals(binding.spCategory.getSelectedItem().toString())) {
                     type = binding.spCategory.getSelectedItem().toString();
                 }
                 if (!"".equals(name) &&
                         !"".equals(type) &&
                         !"".equals(date) &&
                         !"".equals(amount)) {
-                    insertCash(name, amount, objectName, type);
+                    insertCash(name, amount, objectName, type, buildingName);
                 }
                 break;
 
@@ -155,7 +164,7 @@ public class AddCashActivity extends AppCompatActivity implements DatePickerDial
         }
     }
 
-    private void insertCash(final String name, String amount, final String objectName, final String type) {
+    private void insertCash(final String name, String amount, final String objectName, final String type, final String buildingName) {
         String message = getString(R.string.str_sms_message_cash, date, "", name, "현금", amount);
         JSLog.D("sms message            :::     " + message, null);
 
@@ -174,7 +183,7 @@ public class AddCashActivity extends AppCompatActivity implements DatePickerDial
                     boolean success = jsonObject.get("message").getAsBoolean();
                     JSLog.D("success          :::     " + success, null);
                     if (success) {
-                        updateTrimmedData(name, date, objectName, type, dataType);
+                        updateTrimmedData(name, date, objectName, type, dataType, buildingName);
                     } else {
                     }
                 }
@@ -188,8 +197,8 @@ public class AddCashActivity extends AppCompatActivity implements DatePickerDial
         });
     }
 
-    private void updateTrimmedData(String name, String date, String objectName, final String type, String dataType) {
-        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type, DeviceUtil.getDevicePhoneNumber(this), dataType, startDate, endDate, "");
+    private void updateTrimmedData(String name, String date, String objectName, final String type, String dataType, String buildingName) {
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().updateTrimmedData(name, date, objectName, type, DeviceUtil.getDevicePhoneNumber(this), dataType, startDate, endDate, "", buildingName);
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

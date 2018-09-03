@@ -69,7 +69,8 @@ public interface HttpService {
                                        @Field("data_type") String dataType,
                                        @Field("last_start_date") String lastStartDate,
                                        @Field("last_end_date") String lastEndDate,
-                                       @Field("note") String note);
+                                       @Field("note") String note,
+                                       @Field("building_name") String buildingName);
 
     @FormUrlEncoded
     @POST("getDefaulter")
