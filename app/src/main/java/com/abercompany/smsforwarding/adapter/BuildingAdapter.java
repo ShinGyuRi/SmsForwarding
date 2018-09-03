@@ -32,10 +32,12 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Bindin
     private List<Room> rooms;
     private List<Contract> contracts;
     private List<Defaulter> defaulters;
+    private List<Contract> leaveContract;
 
     private StringBuilder emptyRoomBuilder = new StringBuilder();
     private StringBuilder contractRoomBuilder = new StringBuilder();
     private StringBuilder defaulterBuilder = new StringBuilder();
+    private StringBuilder leaveBuilder = new StringBuilder();
 
     private ItemClick itemClick;
 
@@ -57,12 +59,14 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Bindin
         }
     }
 
-    public BuildingAdapter(Context context, List<Building> buildingList, List<Room> rooms, List<Contract> contracts, List<Defaulter> defaulters) {
+    public BuildingAdapter(Context context, List<Building> buildingList, List<Room> rooms, List<Contract> contracts, List<Defaulter> defaulters,
+                           List<Contract> leaveContract) {
         this.context = context;
         this.buildings = buildingList;
         this.rooms = rooms;
         this.contracts = contracts;
         this.defaulters = defaulters;
+        this.leaveContract = leaveContract;
     }
 
     @NonNull
@@ -115,12 +119,22 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Bindin
             }
         }
 
-        holder.binding.tvEmptyRoomInfo.setText(emptyRoomBuilder.toString());
+        for (int i = 0; i < leaveContract.size(); i++) {
+            if (buildings.get(position).getName().equals(leaveContract.get(i).getBuildingName())) {
+                leaveBuilder.append(context.getString(R.string.str_leave_info, leaveContract.get(i).getName(),
+                        leaveContract.get(i).getRoomNum(),
+                        leaveContract.get(i).getEndDate()));
+            }
+        }
+
+        holder.binding.tvEmptyRoomInfo.setText("빈방:\n" + emptyRoomBuilder.toString());
         holder.binding.tvContractRoom.setText("계약중:\n" + contractRoomBuilder.toString());
         holder.binding.tvDefaulter.setText("미납자:\n" + defaulterBuilder.toString());
+        holder.binding.tvSoonLeave.setText("퇴실임박자:\n" + leaveBuilder.toString());
         emptyRoomBuilder.setLength(0);
         contractRoomBuilder.setLength(0);
         defaulterBuilder.setLength(0);
+        leaveBuilder.setLength(0);
 
 
         holder.binding.viewItem.setOnClickListener(new View.OnClickListener() {

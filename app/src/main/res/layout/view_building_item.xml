@@ -17,7 +17,7 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="420dp"
+            android:layout_height="460dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -46,7 +46,7 @@
             <TextView
                 android:id="@+id/tv_empty_room_info"
                 android:layout_width="wrap_content"
-                android:layout_height="19dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="32dp"
                 android:layout_marginLeft="32dp"
                 android:layout_marginRight="32dp"
@@ -86,10 +86,24 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_contract_room" />
 
             <TextView
+                android:id="@+id/tv_soon_leave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="퇴실 임박자"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_defaulter" />
+
+            <TextView
                 android:id="@+id/tv_count_empty_room"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="64dp"
+                android:layout_marginBottom="52dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"

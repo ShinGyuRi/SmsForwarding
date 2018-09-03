@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private List<Room> rooms;
     private List<Room> splitRooms;
     private List<Contract> contracts;
+    private List<Contract> leaveContracts;
 
     private BuildingAdapter buildingAdapter;
 
@@ -256,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (currentTab) {
                 case "BUILDING":
                     initNaviButton(navBuilding, drawer);
-                    setBuildingAdapter(buildings, rooms, contracts, defaulters);
+                    setBuildingAdapter(buildings, rooms, contracts, defaulters, leaveContracts);
                     break;
                 case "NEW_DATA":
                     initNaviButton(navNewData, drawer);
@@ -456,10 +457,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void setBuildingAdapter(final List<Building> buildings, final List<Room> rooms, List<Contract> contracts, final List<Defaulter> defaulters) {
+    private void setBuildingAdapter(final List<Building> buildings, final List<Room> rooms, List<Contract> contracts, final List<Defaulter> defaulters,
+                                    List<Contract> leaveContracts) {
 
         JSLog.D("rooms.size             :::     " + rooms.size(), null);
-        buildingAdapter = new BuildingAdapter(buildingFragment.getContext(), buildings, rooms, contracts, defaulters);
+        buildingAdapter = new BuildingAdapter(buildingFragment.getContext(), buildings, rooms, contracts, defaulters, leaveContracts);
         ((BuildingFragment) buildingFragment).getBinding().rvBuilding.setAdapter(buildingAdapter);
         ((BuildingFragment) buildingFragment).getBinding().rvBuilding.setLayoutManager(new LinearLayoutManager(buildingFragment.getContext()));
         buildingAdapter.notifyDataSetChanged();
@@ -517,7 +519,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     contracts = getContractResult.getContracts();
 
 
-                    setBuildingAdapter(buildings, rooms, contracts, defaulters);
+                    setBuildingAdapter(buildings, rooms, contracts, defaulters, leaveContracts);
                 }
             }
 
@@ -588,9 +590,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if ("success".equals(result)) {
                     defaulters = getDefaulterResult.getDefaulters();
 
+                    getLeaveRoom();
 
-                    initNav();
-                    setInitFrag();
                 }
             }
 
@@ -599,6 +600,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+    }
+
+    private void getLeaveRoom() {
+        Call<GetContractResult> getContractResultCall = NetworkUtil.getInstace().getLeaveRoom("");
+        getContractResultCall.enqueue(new Callback<GetContractResult>() {
+            @Override
+            public void onResponse(Call<GetContractResult> call, Response<GetContractResult> response) {
+                GetContractResult getContractResult = response.body();
+                String result = getContractResult.getResult();
+
+                if ("success".equals(result)) {
+                    leaveContracts = getContractResult.getContracts();
+
+                    initNav();
+                    setInitFrag();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetContractResult> call, Throwable t) {
+
+            }
+        });
     }
 
     public List<Sms> getAllSms(String phoneNum) {
