@@ -83,15 +83,21 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Bindin
                         holder.binding.tvBuildingName.getText().toString().equals(rooms.get(i).getBuildingName())) {
 
                     String date = "";
+                    String downPayment = "";
                     for (int j = 0; j < contracts.size(); j++) {
                         if (rooms.get(i).getBuildingName().equals(contracts.get(j).getBuildingName()) &&
                                 rooms.get(i).getRoomNum().equals(contracts.get(j).getRoomNum()) &&
                                 "계약".equals(contracts.get(j).getActive())) {
                             date = contracts.get(j).getStartDate();
+                            downPayment = contracts.get(j).getDownPayment();
+                            if (downPayment.contains("0000")) {
+                                downPayment = downPayment.replace("0000", "") + "만원";
+                            }
                             contractRoomBuilder.append(context.getString(R.string.str_contract_room_info,
                                     rooms.get(i).getRoomNum(),
                                     rooms.get(i).getPrice(),
-                                    date));
+                                    date,
+                                    downPayment));
                         }
                     }
                 }
