@@ -34,10 +34,12 @@ import com.abercompany.smsforwarding.fragment.RoomFragment;
 import com.abercompany.smsforwarding.fragment.SettingFragment;
 import com.abercompany.smsforwarding.model.Broker;
 import com.abercompany.smsforwarding.model.Building;
+import com.abercompany.smsforwarding.model.Contract;
 import com.abercompany.smsforwarding.model.Defaulter;
 import com.abercompany.smsforwarding.model.Deposit;
 import com.abercompany.smsforwarding.model.GetBrokerResult;
 import com.abercompany.smsforwarding.model.GetBuildingResult;
+import com.abercompany.smsforwarding.model.GetContractResult;
 import com.abercompany.smsforwarding.model.GetDefaulterResult;
 import com.abercompany.smsforwarding.model.GetDepositResult;
 import com.abercompany.smsforwarding.model.GetResidentResult;
@@ -91,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private List<Building> buildings;
     private List<Room> rooms;
     private List<Room> splitRooms;
+    private List<Contract> contracts;
 
     private BuildingAdapter buildingAdapter;
 
@@ -254,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (currentTab) {
                 case "BUILDING":
                     initNaviButton(navBuilding, drawer);
-                    setBuildingAdapter(buildings, rooms);
+                    setBuildingAdapter(buildings, rooms, contracts);
                     break;
                 case "NEW_DATA":
                     initNaviButton(navNewData, drawer);
@@ -443,7 +446,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if ("success".equals(result)) {
                     buildings = getBuildingResult.getBuildings();
 
-                    setBuildingAdapter(buildings, rooms);
+                    getContract();
                 }
             }
 
@@ -454,10 +457,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void setBuildingAdapter(final List<Building> buildings, final List<Room> rooms) {
+    private void setBuildingAdapter(final List<Building> buildings, final List<Room> rooms, List<Contract> contracts) {
 
         JSLog.D("rooms.size             :::     " + rooms.size(), null);
-        buildingAdapter = new BuildingAdapter(buildingFragment.getContext(), buildings, rooms);
+        buildingAdapter = new BuildingAdapter(buildingFragment.getContext(), buildings, rooms, contracts);
         ((BuildingFragment) buildingFragment).getBinding().rvBuilding.setAdapter(buildingAdapter);
         ((BuildingFragment) buildingFragment).getBinding().rvBuilding.setLayoutManager(new LinearLayoutManager(buildingFragment.getContext()));
         buildingAdapter.notifyDataSetChanged();
@@ -498,6 +501,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onFailure(Call<GetRoomResult> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getContract() {
+        Call<GetContractResult> getContractResultCall = NetworkUtil.getInstace().getContract("");
+        getContractResultCall.enqueue(new Callback<GetContractResult>() {
+            @Override
+            public void onResponse(Call<GetContractResult> call, Response<GetContractResult> response) {
+                GetContractResult getContractResult = response.body();
+                String result = getContractResult.getResult();
+
+                if ("success".equals(result)) {
+                    contracts = getContractResult.getContracts();
+
+
+                    setBuildingAdapter(buildings, rooms, contracts);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetContractResult> call, Throwable t) {
 
             }
         });

@@ -11,20 +11,28 @@ import android.view.ViewGroup;
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.databinding.ViewBuildingItemBinding;
 import com.abercompany.smsforwarding.model.Building;
+import com.abercompany.smsforwarding.model.Contract;
+import com.abercompany.smsforwarding.model.GetContractResult;
 import com.abercompany.smsforwarding.model.Room;
 import com.abercompany.smsforwarding.util.JSLog;
+import com.abercompany.smsforwarding.util.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.BindingHolder> {
 
     private Context context;
     private List<Building> buildings = new ArrayList<>();
     private List<Room> rooms;
+    private List<Contract> contracts;
 
     private StringBuilder emptyRoomBuilder = new StringBuilder();
-    private StringBuilder underContractRoomBuilder = new StringBuilder();
+    private StringBuilder contractRoomBuilder = new StringBuilder();
 
     private ItemClick itemClick;
 
@@ -46,11 +54,11 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Bindin
         }
     }
 
-    public BuildingAdapter(Context context, List<Building> buildingList, List<Room> rooms) {
+    public BuildingAdapter(Context context, List<Building> buildingList, List<Room> rooms, List<Contract> contracts) {
         this.context = context;
         this.buildings = buildingList;
         this.rooms = rooms;
-
+        this.contracts = contracts;
     }
 
     @NonNull
@@ -73,16 +81,28 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Bindin
                     emptyRoomBuilder.append(context.getString(R.string.str_room_info, rooms.get(i).getRoomNum(), rooms.get(i).getPrice()));
                 } else if ("계약".equals(rooms.get(i).getActive()) &&
                         holder.binding.tvBuildingName.getText().toString().equals(rooms.get(i).getBuildingName())) {
-                    underContractRoomBuilder.append(context.getString(R.string.str_room_info, rooms.get(i).getRoomNum(), rooms.get(i).getPrice()));
+
+                    String date = "";
+                    for (int j = 0; j < contracts.size(); j++) {
+                        if (rooms.get(i).getBuildingName().equals(contracts.get(j).getBuildingName()) &&
+                                rooms.get(i).getRoomNum().equals(contracts.get(j).getRoomNum()) &&
+                                "계약".equals(contracts.get(j).getActive())) {
+                            date = contracts.get(j).getStartDate();
+                            contractRoomBuilder.append(context.getString(R.string.str_contract_room_info,
+                                    rooms.get(i).getRoomNum(),
+                                    rooms.get(i).getPrice(),
+                                    date));
+                        }
+                    }
                 }
             }
 
         }
 
         holder.binding.tvEmptyRoomInfo.setText(emptyRoomBuilder.toString());
-        holder.binding.tvUnderContractRoom.setText("계약중:    " + underContractRoomBuilder.toString());
+        holder.binding.tvContractRoom.setText("계약중:\n" + contractRoomBuilder.toString());
         emptyRoomBuilder.setLength(0);
-        underContractRoomBuilder.setLength(0);
+        contractRoomBuilder.setLength(0);
 
         holder.binding.viewItem.setOnClickListener(new View.OnClickListener() {
             @Override
