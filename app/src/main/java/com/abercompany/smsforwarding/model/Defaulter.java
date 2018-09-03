@@ -21,6 +21,9 @@ public class Defaulter implements Serializable{
     @SerializedName("status")
     private String status;
 
+    @SerializedName("building_name")
+    private String buildingName;
+
     public String getDstName() {
         return dstName;
     }
@@ -35,5 +38,8 @@ public class Defaulter implements Serializable{
     }
     public String getStatus() {
         return status;
+    }
+    public String getBuildingName() {
+        return buildingName;
     }
 }

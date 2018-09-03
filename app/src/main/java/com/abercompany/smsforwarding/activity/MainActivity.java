@@ -122,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getTrimmedData(DeviceUtil.getDevicePhoneNumber(MainActivity.this));
                 getBroker();
                 getResident();
-                getDefaulter();
                 getRoom();
 
             }
@@ -257,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (currentTab) {
                 case "BUILDING":
                     initNaviButton(navBuilding, drawer);
-                    setBuildingAdapter(buildings, rooms, contracts);
+                    setBuildingAdapter(buildings, rooms, contracts, defaulters);
                     break;
                 case "NEW_DATA":
                     initNaviButton(navNewData, drawer);
@@ -457,10 +456,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void setBuildingAdapter(final List<Building> buildings, final List<Room> rooms, List<Contract> contracts) {
+    private void setBuildingAdapter(final List<Building> buildings, final List<Room> rooms, List<Contract> contracts, final List<Defaulter> defaulters) {
 
         JSLog.D("rooms.size             :::     " + rooms.size(), null);
-        buildingAdapter = new BuildingAdapter(buildingFragment.getContext(), buildings, rooms, contracts);
+        buildingAdapter = new BuildingAdapter(buildingFragment.getContext(), buildings, rooms, contracts, defaulters);
         ((BuildingFragment) buildingFragment).getBinding().rvBuilding.setAdapter(buildingAdapter);
         ((BuildingFragment) buildingFragment).getBinding().rvBuilding.setLayoutManager(new LinearLayoutManager(buildingFragment.getContext()));
         buildingAdapter.notifyDataSetChanged();
@@ -494,8 +493,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     rooms = getRoomResult.getRooms();
 
 
-                    initNav();
-                    setInitFrag();
+                    getDefaulter();
+
                 }
             }
 
@@ -518,7 +517,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     contracts = getContractResult.getContracts();
 
 
-                    setBuildingAdapter(buildings, rooms, contracts);
+                    setBuildingAdapter(buildings, rooms, contracts, defaulters);
                 }
             }
 
@@ -588,6 +587,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 if ("success".equals(result)) {
                     defaulters = getDefaulterResult.getDefaulters();
+
+
+                    initNav();
+                    setInitFrag();
                 }
             }
 
