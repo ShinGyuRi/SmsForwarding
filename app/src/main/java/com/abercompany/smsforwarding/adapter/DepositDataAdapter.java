@@ -179,6 +179,9 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                 holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residentName));
                 holder.binding.spToName.setSelection(getSelectedPosition(position, residentName));
             }
+
+            holder.binding.spBuildingName.setSelection(getSelectedBuildingPosition(position, buildingName));
+
         }
 
         if (holder.binding.spCategory.getTag() != null) {
@@ -471,6 +474,17 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
             } else if (deposits.get(position).getMethod().contains("출금")) {
                 if ((deposits.get(position).getType()).equals(context.getResources().getStringArray(R.array.withdraw)[j])) {
                     return j;
+                }
+            }
+        }
+        return 0;
+    }
+
+    private int getSelectedBuildingPosition(int position, List<String> compareList) {
+        for (int i = 0; i < deposits.size(); i++) {
+            if (deposits.get(position).getBuildingName() != null) {
+                if (deposits.get(position).getBuildingName().equals(compareList.get(i))) {
+                    return i;
                 }
             }
         }
