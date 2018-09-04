@@ -53,6 +53,7 @@ public class ExistingDataFragment extends Fragment {
     private List<Resident> residents;
     private List<Room> rooms;
     private List<Building> buildings;
+    private List<Deposit> searchDatas;
     private DepositDataAdapter adapter;
 
 
@@ -103,6 +104,13 @@ public class ExistingDataFragment extends Fragment {
             case R.id.btn_upload:
                 BusProvider.getInstance().post(new OnClickEvent());
                 break;
+
+            case R.id.btn_search:
+                searchDatas = new ArrayList<>();
+                if (binding.spMonth.getSelectedItemPosition() != 0) {
+                    searchData(existingDatas, binding.spMonth.getSelectedItem().toString().replace("월", ""));
+                }
+                break;
         }
     }
 
@@ -113,4 +121,16 @@ public class ExistingDataFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    private void searchData(List<Deposit> existingDatas, String month) {
+        for (int i = 0; i < existingDatas.size(); i++) {
+            String date = existingDatas.get(i).getDate().replace("[KB]", "");
+            String dateMonth = date.split("/")[0];
+
+            if (dateMonth.contains(month)) {
+                searchDatas.add(existingDatas.get(i));
+            }
+        }
+
+        setDepositAdapter(searchDatas, residents, brokers);
+    }
 }
