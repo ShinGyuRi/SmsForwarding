@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private BuildingAdapter buildingAdapter;
 
     private Menu menu;
-    private MenuItem navBuilding, navNewData, navExistingData, navSetting;
+    private MenuItem navBuilding, navNewData, navExistingData, navSetting, navRealty, navReport;
     private DrawerLayout drawer;
 
 
@@ -168,6 +168,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navNewData = menu.findItem(R.id.nav_new_data);
         navExistingData = menu.findItem(R.id.nav_existing_data);
         navSetting = menu.findItem(R.id.nav_setting);
+        navRealty = menu.findItem(R.id.nav_realty);
+        navReport = menu.findItem(R.id.nav_report);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -198,6 +200,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navNewData.setEnabled(true);
         navExistingData.setEnabled(true);
         navSetting.setEnabled(true);
+        navRealty.setEnabled(true);
+        navReport.setEnabled(true);
         menu.setEnabled(false);
     }
 
@@ -736,6 +740,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 settingFragment = SettingFragment.newInstance(this, residents, brokers, nums, defaulters, buildings);
             }
             switchContent(settingFragment, "SETTING");
+        } else if (id == R.id.nav_report) {
+            initNaviButton(item, drawer);
+            Intent intent = new Intent(this, ReportActivity.class);
+            intent.putExtra("trimmedData", (Serializable) trimmedData);
+            startActivity(intent);
         }
 
 

@@ -2,7 +2,9 @@ package com.abercompany.smsforwarding.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Deposit {
+import java.io.Serializable;
+
+public class Deposit implements Serializable {
 
     @SerializedName("index")
     private String index;
@@ -33,6 +35,12 @@ public class Deposit {
 
     @SerializedName("building_name")
     private String buildingName;
+
+    @SerializedName("account")
+    private String account;
+
+    @SerializedName("dst_name")
+    private String dstName;
 
     private int viewPosition;
 
@@ -115,6 +123,20 @@ public class Deposit {
     }
     public void setBuildingName(String buildingName) {
         this.buildingName = buildingName;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getDstName() {
+        return dstName;
+    }
+    public void setDstName(String dstName) {
+        this.dstName = dstName;
     }
 
     public int getSpCategorySelectedPosition() {
