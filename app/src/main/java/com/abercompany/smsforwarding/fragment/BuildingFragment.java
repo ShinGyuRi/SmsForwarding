@@ -15,7 +15,9 @@ import com.abercompany.smsforwarding.activity.AddBuildingActivity;
 import com.abercompany.smsforwarding.adapter.BuildingAdapter;
 import com.abercompany.smsforwarding.databinding.FragmentBuildingBinding;
 import com.abercompany.smsforwarding.model.Building;
+import com.abercompany.smsforwarding.model.OnClickEvent;
 import com.abercompany.smsforwarding.model.Room;
+import com.abercompany.smsforwarding.provider.BusProvider;
 
 import java.util.List;
 
@@ -69,6 +71,12 @@ public class BuildingFragment extends Fragment {
             case R.id.btn_add_building:
                 Intent intent = new Intent(getContext(), AddBuildingActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.btn_refresh:
+                OnClickEvent event = new OnClickEvent();
+                event.setDep("building");
+                BusProvider.getInstance().post(event);
                 break;
         }
     }

@@ -99,7 +99,9 @@ public class NewDataFragment extends Fragment {
                 break;
 
             case R.id.btn_upload:
-                BusProvider.getInstance().post(new OnClickEvent());
+                OnClickEvent event = new OnClickEvent();
+                event.setDep("newData");
+                BusProvider.getInstance().post(event);
                 break;
         }
     }

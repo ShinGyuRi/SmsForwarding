@@ -121,7 +121,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         }
 
         for (int i = 0; i < residents.size(); i++) {
-            residentName.add(context.getString(R.string.str_deposit_realty, residents.get(i).getHo(), residents.get(i).getName()));
+            residentName.add(context.getString(R.string.str_deposit_realty, residents.get(i).getName(), residents.get(i).getHo()));
         }
         for (int i = 0; i < brokers.size(); i++) {
             brokerName.add(context.getString(R.string.str_deposit_realty, brokers.get(i).getName(), brokers.get(i).getRealtyName()));

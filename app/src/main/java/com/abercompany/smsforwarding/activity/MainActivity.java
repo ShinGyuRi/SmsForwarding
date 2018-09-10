@@ -307,7 +307,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String result = getResidentResult.getResult();
 
                 if ("success".equals(result)) {
-                    residents = getResidentResult.getResidents();;
+                    residents = getResidentResult.getResidents();
+                    ;
 
                 }
             }
@@ -730,7 +731,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 existingDataFragment = ExistingDataFragment.newInstance(existingDatas, residents, brokers, rooms, buildings);
             }
             switchContent(existingDataFragment, "EXISTING_DATA");
-        } else if(id == R.id.nav_realty)    {
+        } else if (id == R.id.nav_realty) {
             initNaviButton(item, drawer);
             Intent intent = new Intent(this, RealtyActivity.class);
             startActivity(intent);
@@ -754,8 +755,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Subscribe
     public void FinishLoad(OnClickEvent event) {
 
-        getTrimmedData(DeviceUtil.getDevicePhoneNumber(this));
-        getDefaulter();
+        if ("building".equals(event.getDep())) {
+            getTrimmedData(DeviceUtil.getDevicePhoneNumber(this));
+            getDefaulter();
+        }
 
     }
 }
