@@ -35,4 +35,13 @@ public class SmsLib {
         alertBuilder.setCancelable(false);
         alertBuilder.create().show();
     }
+
+    public void showSimplSelect2Dialog(Context context, String message, String yesBtn, String noBtn, DialogInterface.OnClickListener yesBtnListener, DialogInterface.OnClickListener noBtnListener) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+        alertBuilder.setMessage(message);
+        alertBuilder.setPositiveButton(yesBtn,yesBtnListener);
+        alertBuilder.setNegativeButton(noBtn,noBtnListener);
+        alertBuilder.setCancelable(false);
+        alertBuilder.create().show();
+    }
 }
