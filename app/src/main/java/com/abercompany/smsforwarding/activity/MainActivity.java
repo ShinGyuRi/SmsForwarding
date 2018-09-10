@@ -184,8 +184,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setInitFrag() {
-        buildingFragment = BuildingFragment.newInstance(rooms);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, buildingFragment, "BUILDING").addToBackStack("BUILDING").commitAllowingStateLoss();
+        if (buildingFragment == null) {
+            buildingFragment = BuildingFragment.newInstance(rooms);
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, buildingFragment, "BUILDING").addToBackStack("BUILDING").commitAllowingStateLoss();
+        }
         navBuilding.setEnabled(false);
 
         getBuilding();
