@@ -120,9 +120,6 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
             residents.add(resident);
         }
 
-        for (int i = 0; i < residents.size(); i++) {
-            residentName.add(context.getString(R.string.str_deposit_realty, residents.get(i).getName(), residents.get(i).getHo()));
-        }
         for (int i = 0; i < brokers.size(); i++) {
             brokerName.add(context.getString(R.string.str_deposit_realty, brokers.get(i).getName(), brokers.get(i).getRealtyName()));
         }
@@ -165,6 +162,22 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                 deposits.get(position).getAmount(),
                 deposits.get(position).getDate(),
                 deposits.get(position).getMethod()));
+
+        holder.binding.spBuildingName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                for (int i = 0; i < residents.size(); i++) {
+                    if (holder.binding.spBuildingName.getSelectedItem().toString().equals(residents.get(i).getBuildingName())) {
+                        residentName.add(context.getString(R.string.str_deposit_realty, residents.get(i).getName(), residents.get(i).getHo()));
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         if (EXISTING_DATA.equals(type)) {
             JSLog.D("getSelectedTypePosition        :::     " + getSelectedTypePosition(position), null);
