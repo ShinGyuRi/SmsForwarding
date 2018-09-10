@@ -28,11 +28,17 @@ import com.abercompany.smsforwarding.util.Debug;
 import com.abercompany.smsforwarding.util.JSLog;
 import com.abercompany.smsforwarding.util.NetworkUtil;
 import com.google.gson.JsonObject;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -45,7 +51,7 @@ import static com.abercompany.smsforwarding.util.Definitions.TRIM_DATA.NEW_DATA;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ExistingDataFragment extends Fragment {
+public class ExistingDataFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
     private FragmentExistingDataBinding binding;
     private List<Deposit> existingDatas;
@@ -56,6 +62,9 @@ public class ExistingDataFragment extends Fragment {
     private List<Deposit> searchDatas;
     private DepositDataAdapter adapter;
 
+
+    private String startDate = "";
+    private String endDate = "";
 
     public ExistingDataFragment() {
         // Required empty public constructor
@@ -105,11 +114,22 @@ public class ExistingDataFragment extends Fragment {
                 BusProvider.getInstance().post(new OnClickEvent());
                 break;
 
-            case R.id.btn_search:
+            case R.id.tv_search_date:
                 searchDatas = new ArrayList<>();
-                if (binding.spMonth.getSelectedItemPosition() != 0) {
-                    searchData(existingDatas, binding.spMonth.getSelectedItem().toString().replace("월", ""));
-                }
+
+                Calendar startDate = Calendar.getInstance();
+                DatePickerDialog dpd = DatePickerDialog.newInstance(
+                        this,
+                        startDate.get(Calendar.YEAR),
+                        startDate.get(Calendar.MONTH),
+                        startDate.get(Calendar.DAY_OF_MONTH)
+                );
+                dpd.setTitle("시작일");
+                dpd.show(getActivity().getFragmentManager(), "startDate");
+                break;
+
+            case R.id.btn_search:
+                searchData(existingDatas, this.startDate, this.endDate);
                 break;
         }
     }
@@ -121,16 +141,70 @@ public class ExistingDataFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    private void searchData(List<Deposit> existingDatas, String month) {
+    private void searchData(List<Deposit> existingDatas, String startDate, String endDate) {
+        DateFormat dateFormat1 = new SimpleDateFormat("MM-dd");
+        DateFormat dateFormat2 = new SimpleDateFormat("MM/dd kk:mm");
+        Date startDt = null;
+        Date endDt = null;
+        Date compareDt = null;
+
         for (int i = 0; i < existingDatas.size(); i++) {
             String date = existingDatas.get(i).getDate().replace("[KB]", "");
+            JSLog.D("date               :::     " + date, null);
             String dateMonth = date.split("/")[0];
+            String dateDay = date.split("/")[1];
 
-            if (dateMonth.contains(month)) {
+            try {
+                startDt = dateFormat1.parse(startDate);
+                endDt = dateFormat1.parse(endDate);
+                compareDt = dateFormat2.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if (startDt.before(compareDt) &&
+                    endDt.after(compareDt)) {
                 searchDatas.add(existingDatas.get(i));
             }
+
+
         }
 
         setDepositAdapter(searchDatas, residents, brokers);
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        String monthResult = "";
+        String dayResult = "";
+        if (String.valueOf(monthOfYear + 1).length() == 1) {
+            monthResult = "0" + (monthOfYear + 1);
+        } else {
+            monthResult = String.valueOf(monthOfYear + 1);
+        }
+        if (String.valueOf(dayOfMonth).length() == 1) {
+            dayResult = "0" + dayOfMonth;
+        } else {
+            dayResult = String.valueOf(dayOfMonth);
+        }
+
+        if ("startDate".equals(view.getTag())) {
+            startDate = monthResult + "-" + dayResult;
+
+
+            Calendar endDate = Calendar.getInstance();
+            DatePickerDialog dpd = DatePickerDialog.newInstance(
+                    this,
+                    endDate.get(Calendar.YEAR),
+                    endDate.get(Calendar.MONTH),
+                    endDate.get(Calendar.DAY_OF_MONTH)
+            );
+            dpd.setTitle("끝일");
+            dpd.show(getActivity().getFragmentManager(), "endDate");
+        } else if ("endDate".equals(view.getTag())) {
+            endDate = monthResult + "-" + dayResult;
+
+            binding.tvSearchDate.setText(getString(R.string.str_period, startDate, endDate));
+        }
     }
 }
