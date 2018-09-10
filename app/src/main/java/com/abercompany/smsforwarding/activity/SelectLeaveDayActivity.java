@@ -24,9 +24,11 @@ public class SelectLeaveDayActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_register:
-                PrefUtil.getInstance().putPreference("leaveDay", binding.etDay.getText().toString());
-                Debug.showToast(this, "등록되었습니다");
-                finish();
+                if (!"".equals(binding.etDay.getText().toString())) {
+                    PrefUtil.getInstance().putPreference("leaveDay", binding.etDay.getText().toString());
+                    Debug.showToast(this, "등록되었습니다");
+                    finish();
+                }
                 break;
         }
     }
