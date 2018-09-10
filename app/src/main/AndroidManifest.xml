@@ -66,7 +66,8 @@
         <activity android:name=".activity.AddContactsActivity" />
         <activity android:name=".activity.ElecStatusActivity" />
         <activity android:name=".activity.ManageBuildingContractActivity" />
-        <activity android:name=".activity.ReportActivity"></activity>
+        <activity android:name=".activity.ReportActivity" />
+        <activity android:name=".activity.SelectLeaveDayActivity"></activity>
     </application>
 
 </manifest>

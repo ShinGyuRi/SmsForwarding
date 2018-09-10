@@ -34,6 +34,7 @@ import com.abercompany.smsforwarding.activity.RegisterEtcNumActivity;
 import com.abercompany.smsforwarding.activity.RegisterPhoneNumActivity;
 import com.abercompany.smsforwarding.activity.SearchDefaulterActivity;
 import com.abercompany.smsforwarding.activity.SearchLeaveRoomActivity;
+import com.abercompany.smsforwarding.activity.SelectLeaveDayActivity;
 import com.abercompany.smsforwarding.databinding.DlgProgressCircleBinding;
 import com.abercompany.smsforwarding.databinding.DlgProgressHorizontalBinding;
 import com.abercompany.smsforwarding.databinding.FragmentSettingBinding;
@@ -206,6 +207,11 @@ public class SettingFragment extends Fragment {
             case R.id.btn_add_manage_building_contact:
                 Intent intent7 = new Intent(getContext(), ManageBuildingContractActivity.class);
                 startActivity(intent7);
+                break;
+
+            case R.id.btn_select_leave_day:
+                Intent intent8 = new Intent(getContext(), SelectLeaveDayActivity.class);
+                startActivity(intent8);
                 break;
         }
     }

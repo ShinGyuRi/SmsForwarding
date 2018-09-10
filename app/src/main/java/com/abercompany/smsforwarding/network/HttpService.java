@@ -148,7 +148,7 @@ public interface HttpService {
 
     @FormUrlEncoded
     @POST("getLeaveRoom")
-    Call<GetContractResult> getLeaveRoom(@Field("") String empty);
+    Call<GetContractResult> getLeaveRoom(@Field("diff_day") String diffDay);
 
     @FormUrlEncoded
     @POST("getCountRoom")

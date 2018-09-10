@@ -597,7 +597,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if ("success".equals(result)) {
                     defaulters = getDefaulterResult.getDefaulters();
 
-                    getLeaveRoom();
+                    getLeaveRoom(PrefUtil.getInstance().getStringPreference("leaveDay"));
 
                 }
             }
@@ -609,8 +609,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void getLeaveRoom() {
-        Call<GetContractResult> getContractResultCall = NetworkUtil.getInstace().getLeaveRoom("");
+    private void getLeaveRoom(String diffDay) {
+        Call<GetContractResult> getContractResultCall = NetworkUtil.getInstace().getLeaveRoom(diffDay);
         getContractResultCall.enqueue(new Callback<GetContractResult>() {
             @Override
             public void onResponse(Call<GetContractResult> call, Response<GetContractResult> response) {
