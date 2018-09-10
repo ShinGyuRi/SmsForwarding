@@ -280,23 +280,51 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_rent" />
 
-            <EditText
-                android:id="@+id/et_elec_num"
+            <LinearLayout
+                android:id="@+id/linearLayout3"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="8dp"
-                android:hint="전기계량기"
                 app:layout_constraintStart_toStartOf="@+id/et_name"
-                app:layout_constraintTop_toBottomOf="@+id/tv_term" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_term">
 
-            <EditText
-                android:id="@+id/et_gas_num"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="전기"/>
+
+                <EditText
+                    android:id="@+id/et_elec_num"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:hint="전기계량기"
+                    android:layout_marginLeft="8dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout5"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="8dp"
-                android:hint="가스계량기"
                 app:layout_constraintEnd_toEndOf="@+id/et_phone_num"
-                app:layout_constraintTop_toBottomOf="@+id/tv_term" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_term">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="가스"/>
+
+                <EditText
+                    android:id="@+id/et_gas_num"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:hint="가스계량기"
+                    android:layout_marginLeft="8dp"/>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_realty"
@@ -304,8 +332,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="부동산"
-                app:layout_constraintStart_toStartOf="@+id/et_elec_num"
-                app:layout_constraintTop_toBottomOf="@+id/et_elec_num" />
+                app:layout_constraintStart_toStartOf="@+id/linearLayout3"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
             <Button
                 android:id="@+id/btn_realty"
@@ -315,8 +343,8 @@
                 android:onClick="@{roomDetail.onClick}"
                 android:text="부동산"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="@+id/et_gas_num"
-                app:layout_constraintTop_toBottomOf="@+id/et_gas_num" />
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout5"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 
             <LinearLayout
                 android:id="@+id/linearLayout4"
