@@ -74,7 +74,60 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
         setInitView(room, contract);
     }
 
+    private void setInitContent(boolean flag) {
+
+        binding.etName.setFocusable(flag);
+        binding.etName.setFocusableInTouchMode(flag);
+
+        binding.etPhoneNum.setFocusable(flag);
+        binding.etPhoneNum.setFocusableInTouchMode(flag);
+
+        binding.etIdNum.setFocusable(flag);
+        binding.etIdNum.setFocusableInTouchMode(flag);
+
+        binding.etEtcNum.setFocusable(flag);
+        binding.etEtcNum.setFocusableInTouchMode(flag);
+
+        binding.etAddress.setFocusable(flag);
+        binding.etAddress.setFocusableInTouchMode(flag);
+
+        binding.etEmerNum.setFocusable(flag);
+        binding.etEmerNum.setFocusableInTouchMode(flag);
+
+        binding.etEmerName.setFocusable(flag);
+        binding.etEmerName.setFocusableInTouchMode(flag);
+
+        binding.etDownPayment.setFocusable(flag);
+        binding.etDownPayment.setFocusableInTouchMode(flag);
+
+        binding.etDeposit.setFocusable(flag);
+        binding.etDeposit.setFocusableInTouchMode(flag);
+
+        binding.etRent.setFocusable(flag);
+        binding.etRent.setFocusableInTouchMode(flag);
+
+        binding.etManageFee.setFocusable(flag);
+        binding.etManageFee.setFocusableInTouchMode(flag);
+
+        binding.etElecNum.setFocusable(flag);
+        binding.etElecNum.setFocusableInTouchMode(flag);
+
+        binding.etGasNum.setFocusable(flag);
+        binding.etGasNum.setFocusableInTouchMode(flag);
+
+        binding.tvTerm.setEnabled(flag);
+        binding.btnRealty.setEnabled(flag);
+
+        if (!flag) {
+            binding.layoutRoomDetail.setBackgroundColor(getResources().getColor(R.color.transparent));
+        } else {
+            binding.layoutRoomDetail.setBackgroundColor(getResources().getColor(R.color.white));
+        }
+    }
+
     private void setInitView(Room room, Contract contract) {
+        setInitContent(false);
+
         binding.tvRoomNum.setText(room.getRoomNum());
         binding.etPhoneNum.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         binding.etEtcNum.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
@@ -208,6 +261,11 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
                 break;
             case R.id.btn_add_zero_rent:
                 binding.etRent.append("0000");
+                break;
+
+            case R.id.btn_edit:
+                JSLog.D("EDIT           !!!!    ", null);
+                setInitContent(true);
                 break;
         }
     }
