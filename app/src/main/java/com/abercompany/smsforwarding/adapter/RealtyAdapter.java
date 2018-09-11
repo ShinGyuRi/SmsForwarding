@@ -23,6 +23,7 @@ public class RealtyAdapter extends RecyclerView.Adapter<RealtyAdapter.BindingHol
 
     public interface ItemClick {
         public void onClick(View view, int position);
+        public void onLongClick(View view, int position);
     }
 
     public void setItemClick(ItemClick itemClick) {
@@ -66,6 +67,15 @@ public class RealtyAdapter extends RecyclerView.Adapter<RealtyAdapter.BindingHol
                 }
             }
         });
+        holder.binding.viewItem.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (itemClick != null) {
+                    itemClick.onLongClick(v, position);
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -74,5 +84,10 @@ public class RealtyAdapter extends RecyclerView.Adapter<RealtyAdapter.BindingHol
             return 0;
         }
         return realties.size();
+    }
+
+    public void remove(int position) {
+        realties.remove(position);
+        notifyDataSetChanged();
     }
 }

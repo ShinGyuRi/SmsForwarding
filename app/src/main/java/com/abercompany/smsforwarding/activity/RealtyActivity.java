@@ -1,5 +1,6 @@
 package com.abercompany.smsforwarding.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
@@ -12,8 +13,11 @@ import com.abercompany.smsforwarding.adapter.RealtyAdapter;
 import com.abercompany.smsforwarding.databinding.ActivityRealtyBinding;
 import com.abercompany.smsforwarding.model.GetRealtyResult;
 import com.abercompany.smsforwarding.model.Realty;
+import com.abercompany.smsforwarding.util.Debug;
 import com.abercompany.smsforwarding.util.JSLog;
 import com.abercompany.smsforwarding.util.NetworkUtil;
+import com.abercompany.smsforwarding.util.SmsLib;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 
@@ -90,6 +94,51 @@ public class RealtyActivity extends AppCompatActivity {
                 binding.etRealtyAccount.setText(realties.get(position).getRealtyAccount());
                 binding.etRealtyBrokerName.setText(realties.get(position).getRealtyBrokerName());
                 binding.etBrokerPhoneNum.setText(realties.get(position).getRealtyBrokerPhoneNum());
+            }
+
+            @Override
+            public void onLongClick(View view, final int position) {
+                SmsLib.getInstance().showSimplSelect2Dialog(RealtyActivity.this,
+                        "삭제하시겠습니까?",
+                        "예", "아니오",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteRealty(realties.get(position).getRealtyName(),
+                                        realties.get(position).getRealtyBrokerName(), adapter,
+                                        position);
+                            }
+                        }, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+            }
+        });
+    }
+
+    private void deleteRealty(String realtyName, String brokerName, final RealtyAdapter adapter, final int position) {
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().deleteRealty(realtyName, brokerName);
+        jsonObjectCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject jsonObject = response.body();
+                String result = jsonObject.get("result").getAsString();
+
+                if ("success".equals(result)) {
+                    boolean message = jsonObject.get("message").getAsBoolean();
+
+                    if (message) {
+                        Debug.showToast(RealtyActivity.this, "삭제되었습니다");
+                        adapter.remove(position);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
             }
         });
     }
