@@ -22,6 +22,17 @@ public class SmsRecyclerAdapter extends RecyclerView.Adapter<SmsRecyclerAdapter.
     private Context context;
     private List<Defaulter> defaulters = new ArrayList<>();
 
+
+    private ItemClick itemClick;
+
+    public interface ItemClick {
+        public void onClick(View view, int position);
+    }
+
+    public void setItemClick(ItemClick itemClick) {
+        this.itemClick = itemClick;
+    }
+
     public class BindingHolder extends RecyclerView.ViewHolder  {
 
         private ViewSmsItemBinding binding;

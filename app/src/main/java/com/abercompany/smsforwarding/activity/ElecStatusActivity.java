@@ -1,21 +1,24 @@
 package com.abercompany.smsforwarding.activity;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.view.View;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 
 import com.abercompany.smsforwarding.R;
-import com.abercompany.smsforwarding.adapter.SmsRecyclerAdapter;
+import com.abercompany.smsforwarding.adapter.ViewPagerAdapter;
 import com.abercompany.smsforwarding.databinding.ActivityElecStatusBinding;
+import com.abercompany.smsforwarding.fragment.InputElecFragment;
+import com.abercompany.smsforwarding.fragment.SearchElecFragment;
+import com.abercompany.smsforwarding.model.Building;
 import com.abercompany.smsforwarding.model.Defaulter;
 import com.abercompany.smsforwarding.model.GetElecDefaulter;
 import com.abercompany.smsforwarding.util.NetworkUtil;
 
-import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 
 import retrofit2.Call;
@@ -26,24 +29,63 @@ public class ElecStatusActivity extends AppCompatActivity {
 
     private ActivityElecStatusBinding binding;
 
-    private List<Defaulter> elecStatus;
-    private List<Defaulter> filterElec;
-    private SmsRecyclerAdapter adapter;
+    private List<Building> buildings;
+
+    private HashSet<Elec> elecHashSet = new HashSet<>();
+
+    public enum Elec {
+        InputElec(),
+        SearchElec();
+    }
+
+    private List<Defaulter> elec;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_elec_status);
-        binding.setElecStatus(this);
+
+        Intent intent = getIntent();
+        buildings = (List<Building>) intent.getSerializableExtra("building");
+
+
+        getElecStatus();
     }
 
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btn_search:
-                filterElec = new ArrayList<>();
-                getElecStatus();
-                break;
+    private void initViews() {
+        elecHashSet.add(Elec.InputElec);
+        elecHashSet.add(Elec.SearchElec);
+
+        final ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getListFragment());
+        binding.viewPager.setAdapter(pagerAdapter);
+
+        binding.tabLayout.addOnTabSelectedListener(getViewPagerOnTabSelectedListener());
+        binding.viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.tabLayout));
+    }
+
+    private TabLayout.ViewPagerOnTabSelectedListener getViewPagerOnTabSelectedListener() {
+        return new TabLayout.ViewPagerOnTabSelectedListener(binding.viewPager)  {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                super.onTabSelected(tab);
+            }
+        };
+    }
+
+    private ArrayList<Fragment> getListFragment() {
+        ArrayList<Fragment> fragments = new ArrayList<>();
+
+        if (elecHashSet.contains(Elec.InputElec)) {
+            fragments.add(InputElecFragment.newInstance(elec, buildings));
+            binding.tabLayout.addTab(binding.tabLayout.newTab().setText("INPUT"));
         }
+
+        if (elecHashSet.contains(Elec.SearchElec)) {
+            fragments.add(SearchElecFragment.newInstance(elec));
+            binding.tabLayout.addTab(binding.tabLayout.newTab().setText("SEARCH"));
+        }
+
+        return fragments;
     }
 
     private void getElecStatus() {
@@ -55,23 +97,9 @@ public class ElecStatusActivity extends AppCompatActivity {
                 String result = getElecDefaulter.getResult();
 
                 if ("success".equals(result)) {
-                    elecStatus = getElecDefaulter.getElecDefaulterList();
-                    String keyword = binding.etKeyword.getText().toString();
+                    elec = getElecDefaulter.getElecDefaulterList();
 
-                    if ("".equals(keyword)) {
-                        filterElec = elecStatus;
-                    } else {
-                        for (int i = 0; i < elecStatus.size(); i++) {
-                            if (elecStatus.get(i).getEndDate().contains(keyword) ||
-                                    elecStatus.get(i).getDstName().contains(keyword) ||
-                                    elecStatus.get(i).getName().contains(keyword) ||
-                                    elecStatus.get(i).getRoomNum().contains(keyword)) {
-                                filterElec.add(elecStatus.get(i));
-                            }
-                        }
-                    }
-
-                    setElecDefaulterAdapter(filterElec);
+                    initViews();
                 }
 
             }
@@ -82,20 +110,4 @@ public class ElecStatusActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void setElecDefaulterAdapter(List<Defaulter> elecStatus) {
-        adapter = new SmsRecyclerAdapter(this, elecStatus);
-        binding.rvElecStats.setAdapter(adapter);
-        binding.rvElecStats.setLayoutManager(new LinearLayoutManager(this));
-        adapter.notifyDataSetChanged();
-
-    }
-
-    private final Comparator<Defaulter> sortByDate = new Comparator<Defaulter>() {
-        @Override
-        public int compare(Defaulter o1, Defaulter o2) {
-            return Collator.getInstance().compare(o1.getEndDate(), o2.getEndDate());
-        }
-    };
-
 }

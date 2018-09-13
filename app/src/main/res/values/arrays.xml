@@ -65,15 +65,15 @@
 
     <string-array name="month">
         <item>월</item>
-        <item>1월</item>
-        <item>2월</item>
-        <item>3월</item>
-        <item>4월</item>
-        <item>5월</item>
-        <item>6월</item>
-        <item>7월</item>
-        <item>8월</item>
-        <item>9월</item>
+        <item>01월</item>
+        <item>02월</item>
+        <item>03월</item>
+        <item>04월</item>
+        <item>05월</item>
+        <item>06월</item>
+        <item>07월</item>
+        <item>08월</item>
+        <item>09월</item>
         <item>10월</item>
         <item>11월</item>
         <item>12월</item>

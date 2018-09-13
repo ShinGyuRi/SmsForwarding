@@ -24,6 +24,12 @@ public class Defaulter implements Serializable{
     @SerializedName("building_name")
     private String buildingName;
 
+    @SerializedName("elec_num")
+    private String elecNum;
+
+    @SerializedName("amount")
+    private String amount;
+
     public String getDstName() {
         return dstName;
     }
@@ -41,5 +47,11 @@ public class Defaulter implements Serializable{
     }
     public String getBuildingName() {
         return buildingName;
+    }
+    public String getElecNum() {
+        return elecNum;
+    }
+    public String getAmount() {
+        return amount;
     }
 }

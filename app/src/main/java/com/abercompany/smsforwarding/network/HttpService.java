@@ -197,4 +197,10 @@ public interface HttpService {
     @POST("deleteRealty")
     Call<JsonObject> deleteRealty(@Field("realty_name") String realtyName,
                                   @Field("broker_name") String brokerName);
+
+    @FormUrlEncoded
+    @POST("insertElec")
+    Call<JsonObject> insertElec(@Field("room_num") String roomNum,
+                                @Field("elec_num") String elecNum,
+                                @Field("check_date") String checkDate);
 }
