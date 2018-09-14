@@ -100,12 +100,25 @@ public class RoomFragment extends Fragment {
     private void setRoomAdapter(final List<Room> rooms, final List<Contract> contracts, List<Defaulter> defaulters, final String buildingName) {
         adapter = new RoomAdapter(getContext(), rooms, contracts, defaulters, buildingName);
         binding.rvRoomNum.setAdapter(adapter);
-        GridLayoutManager manager = new GridLayoutManager(getContext(), 4);
+        GridLayoutManager manager = new GridLayoutManager(getContext(), 3);
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (position == 8) {
-                    return 4;
+                int roomNumLastIndex = rooms.get(position).getRoomNum().length();
+                int remainder = Integer.parseInt(rooms.get(position).getRoomNum().substring(1, roomNumLastIndex)) % 3;
+                String roomNumFirstChar = rooms.get(position).getRoomNum().substring(0, 1);
+
+                if (position < rooms.size() -1 ) {
+                    if (roomNumFirstChar.compareTo(rooms.get(position+1).getRoomNum().substring(0, 1)) != 0) {
+                        if (remainder != 0) {
+                            if (remainder == 2) {
+                                return 2;
+                            } else if (remainder == 1) {
+                                return 3;
+                            }
+                        }
+                        return 1;
+                    }
                 }
                 return 1;
             }
