@@ -66,7 +66,8 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.BindingHolder>
         holder.binding.tvStatus.setVisibility(View.INVISIBLE);
         holder.binding.tvName.setVisibility(View.INVISIBLE);
         holder.binding.tvCharges.setVisibility(View.INVISIBLE);
-        holder.binding.tvDepositStatus.setVisibility(View.INVISIBLE);
+        holder.binding.tvLeaveDay.setVisibility(View.INVISIBLE);
+        holder.binding.tvTerm.setVisibility(View.INVISIBLE);
 
         for (int j = 0; j < contracts.size(); j++) {
             if (rooms.get(position).getRoomNum().equals(contracts.get(j).getRoomNum())) {
@@ -74,39 +75,37 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.BindingHolder>
                     holder.binding.tvStatus.setVisibility(View.VISIBLE);
                     holder.binding.tvName.setVisibility(View.VISIBLE);
                     holder.binding.tvCharges.setVisibility(View.VISIBLE);
+                    holder.binding.tvLeaveDay.setVisibility(View.VISIBLE);
                 }
 
-                if ("재실".equals(contracts.get(j).getActive())) {
+                if (!"퇴실".equals(contracts.get(j).getActive())) {
+                    holder.binding.tvTerm.setVisibility(View.VISIBLE);
+                    holder.binding.tvTerm.setText(contracts.get(j).getTerm() + "개월");
+                    if ("재실".equals(contracts.get(j).getActive())) {
 
-                    holder.binding.tvStatus.setText(contracts.get(j).getActive());
-                    holder.binding.tvName.setText(contracts.get(j).getName());
-                    holder.binding.tvCharges.setText(context.getString(R.string.str_charges,
-                            contracts.get(j).getDeposit().replace("0000", ""),
-                            contracts.get(j).getRent().replace("0000", ""),
-                            contracts.get(j).getManageFee().replace("0000", "")));
-                } else if ("계약".equals(contracts.get(j).getActive())) {
-                    holder.binding.tvStatus.setText(contracts.get(j).getActive());
-                    holder.binding.tvName.setText(contracts.get(j).getName());
-                    holder.binding.tvCharges.setText(contracts.get(j).getDownPayment());
-                    holder.binding.tvStatus.setVisibility(View.VISIBLE);
-                    holder.binding.tvName.setVisibility(View.VISIBLE);
-                    holder.binding.tvCharges.setVisibility(View.VISIBLE);
-                }
-
-
-            }
-        }
-
-        if (defaulters != null) {
-            for (int i = 0; i < defaulters.size(); i++) {
-                if (rooms.get(position).getRoomNum().equals(defaulters.get(i).getRoomNum())) {
-                    if ("재실".equals(rooms.get(position).getActive())) {
-                        holder.binding.tvDepositStatus.setVisibility(View.VISIBLE);
-                        holder.binding.tvDepositStatus.setText(defaulters.get(i).getEndDate());
+                        holder.binding.tvStatus.setText(contracts.get(j).getActive());
+                        holder.binding.tvName.setText(contracts.get(j).getName());
+                        holder.binding.tvCharges.setText(context.getString(R.string.str_charges,
+                                contracts.get(j).getDeposit().replace("0000", ""),
+                                contracts.get(j).getRent().replace("0000", ""),
+                                contracts.get(j).getManageFee().replace("0000", "")));
+                        holder.binding.tvLeaveDay.setText(context.getString(R.string.str_leave_info2, contracts.get(j).getEndDate()));
+                    } else if ("계약".equals(contracts.get(j).getActive())) {
+                        holder.binding.tvStatus.setText(contracts.get(j).getActive());
+                        holder.binding.tvName.setText(contracts.get(j).getName());
+                        holder.binding.tvCharges.setText(contracts.get(j).getDownPayment());
+                        holder.binding.tvStatus.setVisibility(View.VISIBLE);
+                        holder.binding.tvName.setVisibility(View.VISIBLE);
+                        holder.binding.tvCharges.setVisibility(View.VISIBLE);
                     }
                 }
+
+
+
             }
         }
+
+
 
 
         holder.binding.viewItem.setOnClickListener(new View.OnClickListener() {
