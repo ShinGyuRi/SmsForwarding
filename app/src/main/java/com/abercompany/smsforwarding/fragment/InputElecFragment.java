@@ -71,9 +71,21 @@ public class InputElecFragment extends Fragment {
         View view = binding.getRoot();
         binding.setInputElec(this);
 
-        setDate(elec);
+        JSLog.D("InputElec              !!!!        ", null);
+        JSLog.D("elec.size               :::     " + elec.size(), null);
+        if (elec != null) {
+            setDate(elec);
+        }
 
         return view;
+    }
+
+    public void notifyUpdate() {
+
+        JSLog.D("elec               :::     " + elec, null);
+        if (elec != null) {
+            setDate(elec);
+        }
     }
 
     public void onClick(View view) {
@@ -124,6 +136,7 @@ public class InputElecFragment extends Fragment {
                 filterData.add(elec.get(j));
             }
         }
+        JSLog.D("filterData.size                :::     " + filterData.size(), null);
         setElecAdapter(filterData);
 
         binding.datePicker.init(firstCheckYear, firstCheckMonth - 1, firstCheckDays,

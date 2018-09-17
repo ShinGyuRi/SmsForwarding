@@ -129,6 +129,9 @@ public class ExistingDataFragment extends Fragment implements DatePickerDialog.O
                 break;
 
             case R.id.btn_search:
+                if (!"".equals(this.startDate) &&
+                        !"".equals(this.endDate)) {
+                }
                 searchData(existingDatas, this.startDate, this.endDate);
                 break;
         }
@@ -147,6 +150,7 @@ public class ExistingDataFragment extends Fragment implements DatePickerDialog.O
         Date startDt = null;
         Date endDt = null;
         Date compareDt = null;
+        Calendar calendar = null;
 
         for (int i = 0; i < existingDatas.size(); i++) {
             String date = existingDatas.get(i).getDate().replace("[KB]", "");
@@ -155,15 +159,21 @@ public class ExistingDataFragment extends Fragment implements DatePickerDialog.O
             String dateDay = date.split("/")[1];
 
             try {
+
                 startDt = dateFormat1.parse(startDate);
                 endDt = dateFormat1.parse(endDate);
+
+                calendar = Calendar.getInstance();
+                calendar.setTime(endDt);
+                calendar.add(Calendar.DATE, 1);
+
                 compareDt = dateFormat2.parse(date);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
             if (startDt.before(compareDt) &&
-                    endDt.after(compareDt)) {
+                    calendar.getTime().after(compareDt)) {
                 searchDatas.add(existingDatas.get(i));
             }
 

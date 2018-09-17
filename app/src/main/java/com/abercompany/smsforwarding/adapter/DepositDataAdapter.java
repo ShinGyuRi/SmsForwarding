@@ -166,9 +166,14 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         holder.binding.spBuildingName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                residentName.clear();
+                residentName.add("입주자");
+                holder.binding.spToName.setSelection(0);
                 for (int i = 0; i < residents.size(); i++) {
                     if (holder.binding.spBuildingName.getSelectedItem().toString().equals(residents.get(i).getBuildingName())) {
-                        residentName.add(context.getString(R.string.str_deposit_realty, residents.get(i).getName(), residents.get(i).getHo()));
+                        if (!residentName.contains(context.getString(R.string.str_deposit_realty, residents.get(i).getName(), residents.get(i).getHo()))) {
+                            residentName.add(context.getString(R.string.str_deposit_realty, residents.get(i).getName(), residents.get(i).getHo()));
+                        }
                     }
                 }
             }
@@ -181,19 +186,20 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
 
         if (EXISTING_DATA.equals(type)) {
             JSLog.D("getSelectedTypePosition        :::     " + getSelectedTypePosition(position), null);
+            holder.binding.spBuildingName.setSelection(getSelectedBuildingPosition(position, buildingName));
 
             holder.binding.spCategory.setSelection(getSelectedTypePosition(position));
             if ("출금-수수료".equals(holder.binding.spCategory.getSelectedItem().toString())) {
-                JSLog.D("getSelectedPosition        :::     " + getSelectedPosition(position, brokerName), null);
+                JSLog.D("broker getSelectedPosition        :::     " + getSelectedPosition(position, brokerName), null);
                 holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, brokerName));
                 holder.binding.spToName.setSelection(getSelectedPosition(position, brokerName));
             } else {
-                JSLog.D("getSelectedPosition        :::     " + getSelectedPosition(position, residentName), null);
+                JSLog.D("resident getSelectedPosition        :::     " + getSelectedPosition(position, residentName), null);
+
                 holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residentName));
                 holder.binding.spToName.setSelection(getSelectedPosition(position, residentName));
             }
 
-            holder.binding.spBuildingName.setSelection(getSelectedBuildingPosition(position, buildingName));
 
         }
 
@@ -470,6 +476,8 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     private int getSelectedPosition(int position, List<String> compareList) {
         for (int j = 0; j < compareList.size(); j++) {
 
+            JSLog.D("dstName            :::     " + deposits.get(position).getDestinationName(), null);
+            JSLog.D("compareList            :::     " + compareList.get(j), null);
             if ((deposits.get(position).getDestinationName()).equals(compareList.get(j))) {
                 return j;
             }

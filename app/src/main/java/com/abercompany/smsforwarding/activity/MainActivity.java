@@ -108,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
+        initDefaulterValue();
+
         BusProvider.getInstance().register(this);
 
         PermissionListener permissionlistener = new PermissionListener() {
@@ -149,6 +151,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager().addOnBackStackChangedListener(backStackChangedListener);
     }
 
+    private void initDefaulterValue() {
+        PrefUtil.getInstance().putPreference("leaveDay", "7");
+        PrefUtil.getInstance().putPreference("smsLastTimeStamp", "0");
+    }
 
     private void initNav() {
 
@@ -619,6 +625,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 GetContractResult getContractResult = response.body();
                 String result = getContractResult.getResult();
 
+                JSLog.D("error          :::     " + response.errorBody(), null);
+
                 if ("success".equals(result)) {
                     leaveContracts = getContractResult.getContracts();
 
@@ -629,7 +637,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onFailure(Call<GetContractResult> call, Throwable t) {
-
+                JSLog.D("error              :::     " + t.getMessage(), null);
+                JSLog.D("error              :::     " + t.getLocalizedMessage(), null);
+                JSLog.D("error              :::     " + t.getStackTrace(), null);
             }
         });
     }
@@ -660,7 +670,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
                 if (phoneNum.equals(c.getString(c.getColumnIndexOrThrow("address")))) {
-                    lstSms.add(objSms);
+                    if (Integer.parseInt(objSms.getTime()) > Integer.parseInt(PrefUtil.getInstance().getStringPreference("smsLastTimeStamp"))) {
+                        lstSms.add(objSms);
+                    }
+                    if (i == totalSMS - 1) {
+                        PrefUtil.getInstance().putPreference("smsLastTimeStamp", objSms.getTime());
+                    }
                 }
                 c.moveToNext();
             }
@@ -767,6 +782,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if ("building".equals(event.getDep())) {
             getTrimmedData(DeviceUtil.getDevicePhoneNumber(this));
             getDefaulter();
+            getBuilding();
         }
 
     }

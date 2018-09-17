@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.adapter.ViewPagerAdapter;
@@ -16,6 +19,7 @@ import com.abercompany.smsforwarding.model.Building;
 import com.abercompany.smsforwarding.model.Defaulter;
 import com.abercompany.smsforwarding.model.GetElecDefaulter;
 import com.abercompany.smsforwarding.util.NetworkUtil;
+import com.abercompany.smsforwarding.util.ui.JinViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,8 +34,11 @@ public class ElecStatusActivity extends AppCompatActivity {
     private ActivityElecStatusBinding binding;
 
     private List<Building> buildings;
+    private List<String> buildingName = new ArrayList<>();
 
     private HashSet<Elec> elecHashSet = new HashSet<>();
+
+    private JinViewPagerAdapter pagerAdapter;
 
     public enum Elec {
         InputElec(),
@@ -48,15 +55,31 @@ public class ElecStatusActivity extends AppCompatActivity {
         Intent intent = getIntent();
         buildings = (List<Building>) intent.getSerializableExtra("building");
 
+        for (int i = 0; i < buildings.size(); i++) {
+            buildingName.add(buildings.get(i).getName());
+        }
 
-        getElecStatus();
+
+        binding.spBuildingName.setAdapter(new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, buildingName));
+        binding.spBuildingName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                getElecStatus(buildingName.get(position));
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void initViews() {
         elecHashSet.add(Elec.InputElec);
         elecHashSet.add(Elec.SearchElec);
 
-        final ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getListFragment());
+        pagerAdapter = new JinViewPagerAdapter(getSupportFragmentManager(), getListFragment());
         binding.viewPager.setAdapter(pagerAdapter);
 
         binding.tabLayout.addOnTabSelectedListener(getViewPagerOnTabSelectedListener());
@@ -77,19 +100,23 @@ public class ElecStatusActivity extends AppCompatActivity {
 
         if (elecHashSet.contains(Elec.InputElec)) {
             fragments.add(InputElecFragment.newInstance(elec, buildings));
-            binding.tabLayout.addTab(binding.tabLayout.newTab().setText("INPUT"));
+            if (binding.tabLayout.getTabCount() < 2) {
+                binding.tabLayout.addTab(binding.tabLayout.newTab().setText("INPUT"));
+            }
         }
 
         if (elecHashSet.contains(Elec.SearchElec)) {
             fragments.add(SearchElecFragment.newInstance(elec));
-            binding.tabLayout.addTab(binding.tabLayout.newTab().setText("SEARCH"));
+            if (binding.tabLayout.getTabCount() < 2) {
+                binding.tabLayout.addTab(binding.tabLayout.newTab().setText("SEARCH"));
+            }
         }
 
         return fragments;
     }
 
-    private void getElecStatus() {
-        Call<GetElecDefaulter> getElecDefaulterCall = NetworkUtil.getInstace().getElecStatus("");
+    private void getElecStatus(String buildingName) {
+        Call<GetElecDefaulter> getElecDefaulterCall = NetworkUtil.getInstace().getElecStatus(buildingName);
         getElecDefaulterCall.enqueue(new Callback<GetElecDefaulter>() {
             @Override
             public void onResponse(Call<GetElecDefaulter> call, Response<GetElecDefaulter> response) {

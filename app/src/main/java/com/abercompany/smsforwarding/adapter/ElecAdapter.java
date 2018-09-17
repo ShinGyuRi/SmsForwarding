@@ -38,6 +38,7 @@ public class ElecAdapter extends RecyclerView.Adapter<ElecAdapter.BindingHolder>
         this.elec = elec;
 
         if (elec != null) {
+            JSLog.D("elec.size              :::         " + elec.size(), null);
             itemCount = elec.size();
         } else {
             itemCount = 0;

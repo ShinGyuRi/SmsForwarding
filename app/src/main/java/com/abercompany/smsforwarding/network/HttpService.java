@@ -186,7 +186,7 @@ public interface HttpService {
 
     @FormUrlEncoded
     @POST("getElecStatus")
-    Call<GetElecDefaulter> getElecStatus(@Field("") String empty);
+    Call<GetElecDefaulter> getElecStatus(@Field("building_name") String buildingName);
 
     @FormUrlEncoded
     @POST("getDepositLog")
