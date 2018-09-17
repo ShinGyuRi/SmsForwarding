@@ -80,7 +80,7 @@ public class BuildingAdapter extends RecyclerView.Adapter<BuildingAdapter.Bindin
     @Override
     public void onBindViewHolder(@NonNull BindingHolder holder, final int position) {
         holder.binding.tvBuildingName.setText(buildings.get(position).getName());
-        holder.binding.tvCountEmptyRoom.setText("" + (buildings.get(position).getCountTotalRoom() - buildings.get(position).getCountUseRoom()));
+//        holder.binding.tvCountEmptyRoom.setText("" + (buildings.get(position).getCountTotalRoom() - buildings.get(position).getCountUseRoom()));
 
         for (int i = 0; i < rooms.size(); i++) {
             if (buildings.get(position).getName().equals(rooms.get(i).getBuildingName())) {

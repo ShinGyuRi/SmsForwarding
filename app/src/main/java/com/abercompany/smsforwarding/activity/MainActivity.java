@@ -670,10 +670,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
                 if (phoneNum.equals(c.getString(c.getColumnIndexOrThrow("address")))) {
-                    if (Integer.parseInt(objSms.getTime()) > Integer.parseInt(PrefUtil.getInstance().getStringPreference("smsLastTimeStamp"))) {
+                    if (Double.parseDouble(objSms.getTime()) > Double.parseDouble(PrefUtil.getInstance().getStringPreference("smsLastTimeStamp"))) {
                         lstSms.add(objSms);
                     }
-                    if (i == totalSMS - 1) {
+                    if (i == 0) {
                         PrefUtil.getInstance().putPreference("smsLastTimeStamp", objSms.getTime());
                     }
                 }
@@ -751,7 +751,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             switchContent(existingDataFragment, "EXISTING_DATA");
         } else if (id == R.id.nav_realty) {
-            initNaviButton(item, drawer);
             Intent intent = new Intent(this, RealtyActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_setting) {
@@ -761,12 +760,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             switchContent(settingFragment, "SETTING");
         } else if (id == R.id.nav_report) {
-            initNaviButton(item, drawer);
             Intent intent = new Intent(this, ReportActivity.class);
             intent.putExtra("trimmedData", (Serializable) trimmedData);
             startActivity(intent);
         } else if (id == R.id.nav_manage_elec) {
-            initNaviButton(item, drawer);
             Intent intent = new Intent(this, ElecStatusActivity.class);
             intent.putExtra("building", (Serializable) buildings);
             startActivity(intent);

@@ -13,6 +13,7 @@ import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.adapter.ReportAdapter;
 import com.abercompany.smsforwarding.databinding.ActivityReportBinding;
 import com.abercompany.smsforwarding.model.Deposit;
+import com.abercompany.smsforwarding.util.JSLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,11 +54,13 @@ public class ReportActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
+                        break;
+                    case 1:
                         binding.spDetailType.setAdapter(new ArrayAdapter(ReportActivity.this,
                                 R.layout.support_simple_spinner_dropdown_item,
                                 getResources().getStringArray(R.array.deposit)));
                         break;
-                    case 1:
+                    case 2:
                         binding.spDetailType.setAdapter(new ArrayAdapter(ReportActivity.this,
                                 R.layout.support_simple_spinner_dropdown_item,
                                 getResources().getStringArray(R.array.withdraw)));
@@ -75,10 +78,16 @@ public class ReportActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_search:
+                String detailType = "";
+
+                if (binding.spDetailType.getSelectedItem() != null) {
+                    detailType = binding.spDetailType.getSelectedItem().toString();
+                }
+
                 setReportAdapter(trimmedData, binding.spMonth.getSelectedItem().toString().replace("월", ""),
                         binding.spAccount.getSelectedItem().toString(),
                         binding.spType.getSelectedItem().toString(),
-                        binding.spDetailType.getSelectedItem().toString());
+                        detailType);
                 break;
         }
     }
@@ -92,13 +101,25 @@ public class ReportActivity extends AppCompatActivity {
             String dateMonth = date.split("/")[0];
 
             if (dateMonth.contains(month) &&
-                    trimmedData.get(i).getAccount().contains(account) &&
-                    trimmedData.get(i).getMethod().contains(type)) {
+                    trimmedData.get(i).getAccount().contains(account)) {
 
-                if ("선택".equals(detailType)) {
+                if (binding.spType.getSelectedItemPosition() == 0) {
                     filterData.add(trimmedData.get(i));
-                }else if (detailType.equals(trimmedData.get(i).getType())) {
-                    filterData.add(trimmedData.get(i));
+                }else {
+                    JSLog.D("reportAdapter type             ::::            " + type, null);
+                    if (trimmedData.get(i).getType() != null) {
+                        if (trimmedData.get(i).getType().contains(type)) {
+                            if (binding.spDetailType.getSelectedItemPosition() == 0) {
+                                filterData.add(trimmedData.get(i));
+                            } else {
+                                if ("선택".equals(detailType)) {
+                                    filterData.add(trimmedData.get(i));
+                                }else if (detailType.equals(trimmedData.get(i).getType())) {
+                                    filterData.add(trimmedData.get(i));
+                                }
+                            }
+                        }
+                    }
                 }
             }
 

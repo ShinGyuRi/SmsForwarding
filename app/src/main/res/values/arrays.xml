@@ -80,6 +80,7 @@
     </string-array>
 
     <string-array name="deposit_withdraw">
+        <item>선택</item>
         <item>입금</item>
         <item>출금</item>
     </string-array>
