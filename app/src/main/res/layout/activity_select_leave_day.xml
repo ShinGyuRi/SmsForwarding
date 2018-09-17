@@ -14,23 +14,37 @@
         android:layout_height="match_parent"
         tools:context=".activity.SelectLeaveDayActivity">
 
-        <EditText
-            android:id="@+id/et_day"
-            android:layout_width="300dp"
+
+        <LinearLayout
+            android:id="@+id/layout_input_leave_day"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:onClick="@{selectLeaveDay.onClick}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="퇴실임박 날짜"/>
+
+
+            <EditText
+                android:id="@+id/et_day"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:onClick="@{selectLeaveDay.onClick}" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_register"
-            android:layout_width="300dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
@@ -43,7 +57,7 @@
             android:onClick="@{selectLeaveDay.onClick}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_day" />
+            app:layout_constraintTop_toBottomOf="@+id/layout_input_leave_day" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>
