@@ -159,21 +159,21 @@ public class SettingFragment extends Fragment {
                 intent1.putExtra("nums", (Serializable) nums);
                 startActivity(intent1);
 
-            case R.id.btn_check_defaulter:
-                Intent intent2 = new Intent(getContext(), SearchDefaulterActivity.class);
-                intent2.putExtra("defaulter", (Serializable) defaulters);
-                startActivity(intent2);
-                break;
-
-            case R.id.btn_check_leave_room:
-                Intent intent3 = new Intent(getContext(), SearchLeaveRoomActivity.class);
-                startActivity(intent3);
-                break;
-
-            case R.id.btn_check_elec_defaulter:
-                Intent intent4 = new Intent(getContext(), ElecDefaulterActivity.class);
-                startActivity(intent4);
-                break;
+//            case R.id.btn_check_defaulter:
+//                Intent intent2 = new Intent(getContext(), SearchDefaulterActivity.class);
+//                intent2.putExtra("defaulter", (Serializable) defaulters);
+//                startActivity(intent2);
+//                break;
+//
+//            case R.id.btn_check_leave_room:
+//                Intent intent3 = new Intent(getContext(), SearchLeaveRoomActivity.class);
+//                startActivity(intent3);
+//                break;
+//
+//            case R.id.btn_check_elec_defaulter:
+//                Intent intent4 = new Intent(getContext(), ElecDefaulterActivity.class);
+//                startActivity(intent4);
+//                break;
 
             case R.id.btn_register_etc_num:
                 Intent intent5 = new Intent(getContext(), RegisterEtcNumActivity.class);
@@ -199,10 +199,10 @@ public class SettingFragment extends Fragment {
 
                 break;
 
-            case R.id.btn_manage_elec:
-                Intent intent6 = new Intent(getContext(), ElecStatusActivity.class);
-                startActivity(intent6);
-                break;
+//            case R.id.btn_manage_elec:
+//                Intent intent6 = new Intent(getContext(), ElecStatusActivity.class);
+//                startActivity(intent6);
+//                break;
 
             case R.id.btn_add_manage_building_contact:
                 Intent intent7 = new Intent(getContext(), ManageBuildingContractActivity.class);

@@ -19,6 +19,11 @@ public class SelectLeaveDayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_select_leave_day);
         binding.setSelectLeaveDay(this);
+
+        String leaveDay = PrefUtil.getInstance().getStringPreference("leaveDay");
+        if (!"".equals(leaveDay)) {
+            binding.etDay.setText(leaveDay);
+        }
     }
 
     public void onClick(View view) {
