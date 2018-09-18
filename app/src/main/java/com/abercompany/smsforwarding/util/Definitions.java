@@ -24,4 +24,9 @@ public class Definitions {
         String RESIDENT = "resident";
         String BROKER = "broker";
     }
+
+    public interface DEP_TYPE {
+        String ROOM_DETAIL = "roomDetail";
+        String MAIN = "main";
+    }
 }

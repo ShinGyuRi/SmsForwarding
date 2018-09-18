@@ -25,12 +25,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.abercompany.smsforwarding.util.Definitions.DEP_TYPE.MAIN;
+import static com.abercompany.smsforwarding.util.Definitions.DEP_TYPE.ROOM_DETAIL;
+
 public class RealtyActivity extends AppCompatActivity {
 
     private ActivityRealtyBinding binding;
 
     private List<Realty> realties;
     private RealtyAdapter adapter;
+    private String dep = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,25 +43,64 @@ public class RealtyActivity extends AppCompatActivity {
         binding.setRealty(this);
 
         Intent intent = getIntent();
-        binding.etRealtyName.setText(intent.getStringExtra("realtyName"));
-        binding.etRealtyAccount.setText(intent.getStringExtra("realtyAccount"));
-        binding.etRealtyBrokerName.setText(intent.getStringExtra("realtyBrokerName"));
-        binding.etBrokerPhoneNum.setText(intent.getStringExtra("realtyBrokerPhoneNum"));
+        dep = intent.getStringExtra("dep");
+        if (dep.equals(ROOM_DETAIL)) {
+            binding.etRealtyName.setText(intent.getStringExtra("realtyName"));
+            binding.etRealtyAccount.setText(intent.getStringExtra("realtyAccount"));
+            binding.etRealtyBrokerName.setText(intent.getStringExtra("realtyBrokerName"));
+            binding.etBrokerPhoneNum.setText(intent.getStringExtra("realtyBrokerPhoneNum"));
+        }
+
         getRealty();
     }
 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_register:
-                Intent intent = new Intent();
-                intent.putExtra("realtyName", binding.etRealtyName.getText().toString());
-                intent.putExtra("realtyBrokerName", binding.etRealtyBrokerName.getText().toString());
-                intent.putExtra("realtyBrokerPhoneNum", binding.etBrokerPhoneNum.getText().toString());
-                intent.putExtra("realtyAccount", binding.etRealtyAccount.getText().toString());
-                setResult(RESULT_OK, intent);
-                finish();
+                if (dep.equals(ROOM_DETAIL)) {
+                    Intent intent = new Intent();
+                    intent.putExtra("realtyName", binding.etRealtyName.getText().toString());
+                    intent.putExtra("realtyBrokerName", binding.etRealtyBrokerName.getText().toString());
+                    intent.putExtra("realtyBrokerPhoneNum", binding.etBrokerPhoneNum.getText().toString());
+                    intent.putExtra("realtyAccount", binding.etRealtyAccount.getText().toString());
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else if (dep.equals(MAIN)) {
+                    insertRealty(binding.etRealtyName.getText().toString(),
+                            binding.etRealtyBrokerName.getText().toString(),
+                            binding.etBrokerPhoneNum.getText().toString(),
+                            binding.etRealtyAccount.getText().toString());
+                }
                 break;
         }
+    }
+
+    private void insertRealty(String realtyName, String brokerName, String brokerPhoneNum, String account) {
+        Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertRealty(realtyName, brokerName, brokerPhoneNum, account);
+        jsonObjectCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                JsonObject jsonObject = response.body();
+                String result = jsonObject.get("result").getAsString();
+
+                if ("success".equals(result)) {
+                    boolean message = jsonObject.get("message").getAsBoolean();
+
+                    if (message) {
+                        Debug.showToast(RealtyActivity.this, "등록되었습니다");
+                        binding.etRealtyName.setText("");
+                        binding.etRealtyBrokerName.setText("");
+                        binding.etBrokerPhoneNum.setText("");
+                        binding.etRealtyAccount.setText("");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
     }
 
     private void getRealty() {

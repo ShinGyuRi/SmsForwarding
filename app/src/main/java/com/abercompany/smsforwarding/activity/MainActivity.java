@@ -71,6 +71,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.abercompany.smsforwarding.util.Definitions.DEP_TYPE.MAIN;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private String TAG = MainActivity.class.getSimpleName();
@@ -752,6 +754,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switchContent(existingDataFragment, "EXISTING_DATA");
         } else if (id == R.id.nav_realty) {
             Intent intent = new Intent(this, RealtyActivity.class);
+            intent.putExtra("dep", MAIN);
             startActivity(intent);
         } else if (id == R.id.nav_setting) {
             initNaviButton(item, drawer);

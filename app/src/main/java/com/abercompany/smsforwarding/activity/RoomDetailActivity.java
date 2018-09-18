@@ -36,6 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.abercompany.smsforwarding.util.Definitions.DEP_TYPE.ROOM_DETAIL;
 import static com.abercompany.smsforwarding.util.Definitions.REQUEST_REALTY;
 
 public class RoomDetailActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -243,6 +244,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
 
             case R.id.btn_realty:
                 Intent intent = new Intent(this, RealtyActivity.class);
+                intent.putExtra("dep", ROOM_DETAIL);
                 intent.putExtra("realtyName", realtyName);
                 intent.putExtra("realtyAccount", account);
                 intent.putExtra("realtyBrokerName", brokerName);

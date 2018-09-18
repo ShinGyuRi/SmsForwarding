@@ -203,4 +203,11 @@ public interface HttpService {
     Call<JsonObject> insertElec(@Field("room_num") String roomNum,
                                 @Field("elec_num") String elecNum,
                                 @Field("check_date") String checkDate);
+
+    @FormUrlEncoded
+    @POST("insertRealty")
+    Call<JsonObject> insertRealty(@Field("realty_name") String realtyName,
+                                  @Field("broker_name") String brokerName,
+                                  @Field("broker_phone_num") String brokerPhoneNum,
+                                  @Field("account") String account);
 }
