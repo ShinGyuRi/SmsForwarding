@@ -14,16 +14,49 @@
         android:layout_height="match_parent"
         tools:context=".activity.ManageBuildingContractActivity">
 
+        <Button
+            android:id="@+id/btn_refresh_contacts"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/refresh"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:onClick="@{manageBuildingContact.onClick}"/>
+
+        <Spinner
+            android:id="@+id/sp_building_name"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_refresh_contacts"></Spinner>
+
+        <Spinner
+            android:id="@+id/sp_contact_type"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:entries="@array/contact_type"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_refresh_contacts"></Spinner>
+
         <EditText
             android:id="@+id/et_contact_name"
             android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:hint="연락처 이름"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/sp_contact_type" />
 
         <EditText
             android:id="@+id/et_contact_num"
@@ -31,28 +64,54 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:hint="연락처 번호"
             android:inputType="phone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/sp_contact_type" />
 
         <Button
             android:id="@+id/btn_register"
-            android:layout_width="300dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:background="@color/black"
             android:onClick="@{manageBuildingContact.onClick}"
             android:text="등록"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_contact_name" />
+
+        <Button
+            android:id="@+id/btn_edit"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:background="@color/black"
+            android:onClick="@{manageBuildingContact.onClick}"
+            android:text="수정"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/btn_add_etc_num"
+            app:layout_constraintStart_toEndOf="@+id/btn_register"
+            app:layout_constraintTop_toTopOf="@+id/btn_register" />
+
+        <Button
+            android:id="@+id/btn_add_etc_num"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/black"
+            android:text="그외번호 등록"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_edit"
+            android:onClick="@{manageBuildingContact.onClick}" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_contract"

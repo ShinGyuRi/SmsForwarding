@@ -24,6 +24,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.BindingH
 
     public interface ItemClick {
         public void onClick(View view, int position);
+        public void onLongClick(View view, int position);
     }
 
     public void setItemClick(ItemClick itemClick) {
@@ -50,6 +51,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.BindingH
                 if (itemClick != null) {
                     itemClick.onClick(v, position);
                 }
+            }
+        });
+
+        holder.binding.viewItem.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (itemClick != null) {
+                    itemClick.onLongClick(v, position);
+                }
+                return true;
             }
         });
     }

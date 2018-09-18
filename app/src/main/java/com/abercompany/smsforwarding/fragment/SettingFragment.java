@@ -79,7 +79,7 @@ public class SettingFragment extends Fragment {
     private List<String> brokerContract = new ArrayList<>();
 
     private String buildingName = "";
-    private String realty = "부동산";
+    private String realty = "부동산JNK";
 
     private Handler progressHandler;
 
@@ -206,6 +206,9 @@ public class SettingFragment extends Fragment {
 
             case R.id.btn_add_manage_building_contact:
                 Intent intent7 = new Intent(getContext(), ManageBuildingContractActivity.class);
+                intent7.putExtra("building", (Serializable) buildings);
+                intent7.putExtra("resident", (Serializable) residents);
+                intent7.putExtra("broker", (Serializable) brokers);
                 startActivity(intent7);
                 break;
 
