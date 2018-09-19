@@ -39,9 +39,6 @@ public class Deposit implements Serializable {
     @SerializedName("account")
     private String account;
 
-    @SerializedName("dst_name")
-    private String dstName;
-
     private int viewPosition;
 
     private int spCategorySelectedPosition;
@@ -130,13 +127,6 @@ public class Deposit implements Serializable {
     }
     public void setAccount(String account) {
         this.account = account;
-    }
-
-    public String getDstName() {
-        return dstName;
-    }
-    public void setDstName(String dstName) {
-        this.dstName = dstName;
     }
 
     public int getSpCategorySelectedPosition() {

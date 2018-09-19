@@ -16,6 +16,9 @@
     <string name="str_period">%1s ~ %2s</string>
     <string name="str_leave_info">%1s(%2s) 퇴실일:%3s\n</string>
     <string name="str_leave_info2">퇴실일:\n%1s</string>
+    <string name="str_incoming">수입 총합: %1d</string>
+    <string name="str_outgoing">지출 총합: %1d</string>
+    <string name="str_total">총합: %1d</string>
 
 
     <string name="action_settings">Settings</string>

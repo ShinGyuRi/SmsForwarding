@@ -760,6 +760,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_report) {
             Intent intent = new Intent(this, ReportActivity.class);
             intent.putExtra("trimmedData", (Serializable) trimmedData);
+            intent.putExtra("building", (Serializable) buildings);
+            intent.putExtra("contract", (Serializable) contracts);
             startActivity(intent);
         } else if (id == R.id.nav_manage_elec) {
             Intent intent = new Intent(this, ElecStatusActivity.class);

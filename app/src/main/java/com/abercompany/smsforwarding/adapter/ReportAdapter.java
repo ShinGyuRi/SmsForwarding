@@ -10,14 +10,20 @@ import android.view.ViewGroup;
 
 import com.abercompany.smsforwarding.R;
 import com.abercompany.smsforwarding.databinding.ViewReportItemBinding;
+import com.abercompany.smsforwarding.model.Contract;
 import com.abercompany.smsforwarding.model.Deposit;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.BindingHolder> {
 
     private Context context;
     private List<Deposit> trimmedData;
+    private List<String> roomNums = new ArrayList<>();
+    private List<String> names = new ArrayList<>();
+
+    private List<Contract> contracts;
 
 
     public class BindingHolder extends RecyclerView.ViewHolder {
@@ -30,9 +36,24 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.BindingHol
         }
     }
 
-    public ReportAdapter(Context context, List<Deposit> trimmedData) {
+    public ReportAdapter(Context context, List<Deposit> trimmedData, List<Contract> contracts) {
         this.context = context;
         this.trimmedData = trimmedData;
+        this.contracts = contracts;
+
+        for (int i = 0; i < trimmedData.size(); i++) {
+            String dstName = trimmedData.get(i).getDestinationName();
+            String name = "";
+            String roomNum = "";
+
+            if (!"".equals(dstName)) {
+                name = dstName.substring(0, dstName.indexOf("("));
+                roomNum = dstName.substring(dstName.indexOf("(") + 1, dstName.indexOf(")"));
+            }
+
+            roomNums.add(roomNum);
+            names.add(name);
+        }
     }
 
     @NonNull
@@ -45,7 +66,19 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.BindingHol
 
     @Override
     public void onBindViewHolder(@NonNull BindingHolder holder, int position) {
-        holder.binding.tvReportMessage.setText(trimmedData.get(position).getAmount());
+        holder.binding.tvRoomNum.setText(roomNums.get(position));
+        holder.binding.tvName.setText(names.get(position));
+        holder.binding.tvType.setText(trimmedData.get(position).getType());
+        holder.binding.tvDate.setText(trimmedData.get(position).getDate().replace("[KB]", ""));
+        holder.binding.tvAmount.setText(trimmedData.get(position).getAmount());
+
+        for (int i = 0; i < contracts.size(); i++) {
+            if (roomNums.get(position).equals(contracts.get(i).getRoomNum()) &&
+                    names.get(position).equals(contracts.get(i).getName()) &&
+                    trimmedData.get(position).getType().contains("월세")) {
+                holder.binding.tvManageFee.setText(contracts.get(i).getManageFee());
+            }
+        }
     }
 
     @Override

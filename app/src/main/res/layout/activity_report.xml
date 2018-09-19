@@ -14,19 +14,28 @@
         android:layout_height="match_parent"
         tools:context=".activity.ReportActivity">
 
+        <Spinner
+            android:id="@+id/sp_building_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></Spinner>
+
 
         <Spinner
             android:id="@+id/sp_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:entries="@array/month"
             app:layout_constraintBottom_toTopOf="@+id/rv_deposit"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></Spinner>
+            app:layout_constraintStart_toEndOf="@+id/sp_building_name"
+            app:layout_constraintTop_toTopOf="@+id/sp_building_name"></Spinner>
 
         <Spinner
             android:id="@+id/sp_account"
@@ -79,10 +88,42 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_search"></android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:weightSum="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/tv_sum_incoming"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="수입 총합:" />
+
+            <TextView
+                android:id="@+id/tv_sum_outgoing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="지출 총합:" />
+
+            <TextView
+                android:id="@+id/tv_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="총합:" />
+        </LinearLayout>
 
     </android.support.constraint.ConstraintLayout>
 </layout>
