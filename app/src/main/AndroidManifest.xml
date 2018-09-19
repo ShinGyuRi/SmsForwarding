@@ -52,8 +52,9 @@
         <!-- </intent-filter> -->
         <!-- </receiver> -->
 
-        <activity android:name=".activity.RoomDetailActivity"
-            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".activity.RoomDetailActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.ContractActivity" />
         <activity android:name=".activity.RealtyActivity" />
         <activity android:name=".activity.AddCashActivity" />
@@ -68,7 +69,8 @@
         <activity android:name=".activity.ElecStatusActivity" />
         <activity android:name=".activity.ManageBuildingContractActivity" />
         <activity android:name=".activity.ReportActivity" />
-        <activity android:name=".activity.SelectLeaveDayActivity"></activity>
+        <activity android:name=".activity.SelectLeaveDayActivity" />
+        <activity android:name=".activity.CheckOutActivity"></activity>
     </application>
 
 </manifest>

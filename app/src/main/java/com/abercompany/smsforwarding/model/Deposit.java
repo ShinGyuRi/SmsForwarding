@@ -39,6 +39,9 @@ public class Deposit implements Serializable {
     @SerializedName("account")
     private String account;
 
+    @SerializedName("end_date")
+    private String endDate;
+
     private int viewPosition;
 
     private int spCategorySelectedPosition;
@@ -127,6 +130,13 @@ public class Deposit implements Serializable {
     }
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     public int getSpCategorySelectedPosition() {

@@ -101,7 +101,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private BuildingAdapter buildingAdapter;
 
     private Menu menu;
-    private MenuItem navBuilding, navNewData, navExistingData, navSetting, navRealty, navReport, navManageElec;
+    private MenuItem navBuilding, navNewData, navExistingData, navSetting, navRealty, navReport, navManageElec,
+    navCheckoutNote;
     private DrawerLayout drawer;
 
 
@@ -156,6 +157,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void initDefaulterValue() {
         PrefUtil.getInstance().putPreference("leaveDay", "7");
         PrefUtil.getInstance().putPreference("smsLastTimeStamp", "0");
+        PrefUtil.getInstance().putPreference("upperRealtyFees", 50000);
+        PrefUtil.getInstance().putPreference("underRealtyFees", 30000);
+
     }
 
     private void initNav() {
@@ -179,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navRealty = menu.findItem(R.id.nav_realty);
         navReport = menu.findItem(R.id.nav_report);
         navManageElec = menu.findItem(R.id.nav_manage_elec);
+        navCheckoutNote = menu.findItem(R.id.nav_check_note);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -214,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navRealty.setEnabled(true);
         navReport.setEnabled(true);
         navManageElec.setEnabled(true);
+        navCheckoutNote.setEnabled(true);
         menu.setEnabled(false);
     }
 
@@ -766,6 +772,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_manage_elec) {
             Intent intent = new Intent(this, ElecStatusActivity.class);
             intent.putExtra("building", (Serializable) buildings);
+            startActivity(intent);
+        } else if (id == R.id.nav_check_note) {
+            Intent intent = new Intent(this, CheckOutActivity.class);
+            intent.putExtra("contract", (Serializable) contracts);
+            intent.putExtra("resident", (Serializable) residents);
+            intent.putExtra("trimmedData", (Serializable) trimmedData);
             startActivity(intent);
         }
 

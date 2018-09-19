@@ -24,6 +24,17 @@ public class SelectLeaveDayActivity extends AppCompatActivity {
         if (!"".equals(leaveDay)) {
             binding.etDay.setText(leaveDay);
         }
+
+        String upperRealtyFees = PrefUtil.getInstance().getStringPreference("upperRealtyFees");
+        if (!"".equals(upperRealtyFees)) {
+            binding.etUpperFloorRealtyFees.setText(upperRealtyFees);
+        }
+
+        String underRealtyFees = PrefUtil.getInstance().getStringPreference("underRealtyFees");
+        if (!"".equals(underRealtyFees)) {
+            binding.etUnderFloorRealtyFees.setText(underRealtyFees);
+        }
+
     }
 
     public void onClick(View view) {
@@ -32,7 +43,20 @@ public class SelectLeaveDayActivity extends AppCompatActivity {
                 if (!"".equals(binding.etDay.getText().toString())) {
                     PrefUtil.getInstance().putPreference("leaveDay", binding.etDay.getText().toString());
                     Debug.showToast(this, "등록되었습니다");
-                    finish();
+                }
+                break;
+
+            case R.id.btn_register_upper_realty_fees:
+                if (!"".equals(binding.etUpperFloorRealtyFees.getText().toString())) {
+                    PrefUtil.getInstance().putPreference("upperRealtyFees", Integer.parseInt(binding.etDay.getText().toString()));
+                    Debug.showToast(this, "등록되었습니다");
+                }
+                break;
+
+            case R.id.btn_register_under_realty_fees:
+                if (!"".equals(binding.etUnderFloorRealtyFees.getText().toString())) {
+                    PrefUtil.getInstance().putPreference("underRealtyFees", Integer.parseInt(binding.etDay.getText().toString()));
+                    Debug.showToast(this, "등록되었습니다");
                 }
                 break;
         }

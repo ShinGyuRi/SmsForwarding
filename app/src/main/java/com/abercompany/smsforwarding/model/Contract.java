@@ -75,6 +75,9 @@ public class Contract implements Serializable{
     @SerializedName("term")
     private String term;
 
+    @SerializedName("discount")
+    private String discount;
+
     public String getRoomNum() {
         return roomNum;
     }
@@ -143,5 +146,8 @@ public class Contract implements Serializable{
     }
     public String getTerm() {
         return term;
+    }
+    public String getDiscount() {
+        return discount;
     }
 }
