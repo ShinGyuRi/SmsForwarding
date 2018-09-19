@@ -103,6 +103,14 @@ public class NewDataFragment extends Fragment {
                 event.setDep("newData");
                 BusProvider.getInstance().post(event);
                 break;
+
+            case R.id.btn_next:
+                adapter.nextItem();
+                break;
+
+            case R.id.btn_prev:
+                adapter.prevItem();
+                break;
         }
     }
 

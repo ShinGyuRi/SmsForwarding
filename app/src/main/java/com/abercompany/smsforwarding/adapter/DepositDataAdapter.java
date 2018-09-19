@@ -52,6 +52,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     private List<Room> rooms;
     private List<Room> checkOutRooms = new ArrayList<>();
     private List<Building> buildings;
+    private List<Deposit> onePageData = new ArrayList<>();
 
     private List<String> residentName = new ArrayList<>();
     private List<String> brokerName = new ArrayList<>();
@@ -66,6 +67,8 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     private StringBuilder sumNote = new StringBuilder();
 
     private BindingHolder bindingHolder;
+
+    private int page = 0;
 
 
     private ItemClick itemClick;
@@ -108,7 +111,11 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         brokerName.add("중개인");
         buildingName.add("건물");
 
-        for (int i=0; i<rooms.size(); i++) {
+        for (page = 0; page < 10; page++) {
+            onePageData.add(deposits.get(page));
+        }
+
+        for (int i = 0; i < rooms.size(); i++) {
             if ("퇴실".equals(rooms.get(i).getActive())) {
                 checkOutRooms.add(rooms.get(i));
             }
@@ -126,7 +133,6 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
         for (int i = 0; i < buildings.size(); i++) {
             buildingName.add(buildings.get(i).getName());
         }
-
 
 
         BusProvider.getInstance().register(this);
@@ -148,20 +154,20 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     public void onBindViewHolder(@NonNull final BindingHolder holder, final int position) {
 //        holder.setIsRecyclable(false);
 
-        if (deposits.get(position).getMethod().contains("입금")) {
+        if (onePageData.get(position).getMethod().contains("입금")) {
             holder.binding.spCategory.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, context.getResources().getStringArray(R.array.deposit)));
-        } else if (deposits.get(position).getMethod().contains("출금") ||
-                deposits.get(position).getMethod().contains("공동CMS출")) {
+        } else if (onePageData.get(position).getMethod().contains("출금") ||
+                onePageData.get(position).getMethod().contains("공동CMS출")) {
             holder.binding.spCategory.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, context.getResources().getStringArray(R.array.withdraw)));
         }
 
         holder.binding.spBuildingName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, buildingName));
 
         holder.binding.tvMessage.setText(context.getString(R.string.str_deposit_message,
-                deposits.get(position).getName(),
-                deposits.get(position).getAmount(),
-                deposits.get(position).getDate(),
-                deposits.get(position).getMethod()));
+                onePageData.get(position).getName(),
+                onePageData.get(position).getAmount(),
+                onePageData.get(position).getDate(),
+                onePageData.get(position).getMethod()));
 
         holder.binding.spBuildingName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -214,111 +220,111 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                 holder.binding.spCategory.setTag(itemPosition);
 
 
-                    if (deposits.get(position).getMethod().contains("입금")) {
-                        switch (itemPosition) {
-                            case 0:
+                if (onePageData.get(position).getMethod().contains("입금")) {
+                    switch (itemPosition) {
+                        case 0:
+                            for (int i = 0; i < editDeposits.size(); i++) {
+                                if (onePageData.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
+                                    JSLog.D("remove editDeposits position               :::         " + i, null);
+                                    editDeposits.remove(i);
+                                }
+                            }
+                        case 7:
+                        case 8:
+                            holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item));
+                            if (!"".equals(holder.binding.spCategory.getSelectedItem().toString()) && holder.binding.spCategory.getSelectedItemPosition() != 0) {
+                                Deposit deposit = new Deposit();
+                                deposit.setName(onePageData.get(position).getName());
+                                deposit.setDate(onePageData.get(position).getDate());
+                                deposit.setDestinationName("");
+                                deposit.setType(holder.binding.spCategory.getSelectedItem().toString());
+                                deposit.setIndex(onePageData.get(position).getIndex());
+                                deposit.setViewPosition(position);
+                                deposit.setBuildingName(holder.binding.spBuildingName.getSelectedItem().toString());
+
                                 for (int i = 0; i < editDeposits.size(); i++) {
-                                    if (deposits.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
+                                    if (onePageData.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
                                         JSLog.D("remove editDeposits position               :::         " + i, null);
                                         editDeposits.remove(i);
                                     }
                                 }
-                            case 7:
-                            case 8:
-                                holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item));
-                                if (!"".equals(holder.binding.spCategory.getSelectedItem().toString()) && holder.binding.spCategory.getSelectedItemPosition() != 0) {
-                                    Deposit deposit = new Deposit();
-                                    deposit.setName(deposits.get(position).getName());
-                                    deposit.setDate(deposits.get(position).getDate());
-                                    deposit.setDestinationName("");
-                                    deposit.setType(holder.binding.spCategory.getSelectedItem().toString());
-                                    deposit.setIndex(deposits.get(position).getIndex());
-                                    deposit.setViewPosition(position);
-                                    deposit.setBuildingName(holder.binding.spBuildingName.getSelectedItem().toString());
-
-                                    for (int i = 0; i < editDeposits.size(); i++) {
-                                        if (deposits.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
-                                            JSLog.D("remove editDeposits position               :::         " + i, null);
-                                            editDeposits.remove(i);
-                                        }
-                                    }
-                                    JSLog.D("add editDeposits position              :::         " + deposit.getViewPosition(), null);
-                                    editDeposits.add(deposit);
-                                }
-                                break;
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                            case 5:
-                            case 6:
-                                if (NEW_DATA.equals(type)) {
-                                    JSLog.D("residentName size              :::     " + residentName.size(), null);
-                                    holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residentName));
-                                }
-                                selectedFlag = false;
-                                break;
-                        }
-                    } else if (deposits.get(position).getMethod().contains("출금") ||
-                            deposits.get(position).getMethod().contains("공동CMS출")) {
-                        switch (itemPosition) {
-                            case 0:
-                                for (int i = 0; i < editDeposits.size(); i++) {
-                                    if (deposits.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
-                                        JSLog.D("remove editDeposits position               :::         " + i, null);
-                                        editDeposits.remove(i);
-                                    }
-                                }
-                            case 3:
-                            case 4:
-                            case 5:
-                                holder.binding.spExtraToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item));
-                                holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item));
-                                if (!"".equals(holder.binding.spCategory.getSelectedItem().toString()) && holder.binding.spCategory.getSelectedItemPosition() != 0) {
-                                    Deposit deposit = new Deposit();
-                                    deposit.setName(deposits.get(position).getName());
-                                    deposit.setDate(deposits.get(position).getDate());
-                                    deposit.setDestinationName("");
-                                    deposit.setType(holder.binding.spCategory.getSelectedItem().toString());
-                                    deposit.setIndex(deposits.get(position).getIndex());
-                                    deposit.setViewPosition(position);
-                                    deposit.setBuildingName(holder.binding.spBuildingName.getSelectedItem().toString());
-
-                                    for (int i = 0; i < editDeposits.size(); i++) {
-                                        if (deposits.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
-                                            JSLog.D("remove editDeposits position               :::         " + i, null);
-                                            editDeposits.remove(i);
-                                        }
-                                    }
-                                    JSLog.D("add editDeposits position              :::         " + deposit.getViewPosition(), null);
-                                    editDeposits.add(deposit);
-                                }
-                                break;
-                            case 2:
-                                if (NEW_DATA.equals(type)) {
-                                    JSLog.D("residentName size              :::     " + residentName.size(), null);
-                                    holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residentName));
-                                }
-                                selectedFlag = false;
-                                break;
-                            case 1:
-                                if (NEW_DATA.equals(type)) {
-                                    holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, brokerName));
-
-                                    for (int i = 0; i < residentName.size(); i++) {
-                                        StateVO stateVO = new StateVO();
-                                        stateVO.setTitle(residentName.get(i));
-                                        stateVO.setSelected(false);
-                                        listVOs.add(stateVO);
-                                    }
-
-                                    checkboxSpinnerAdapter = new CheckboxSpinnerAdapter(context, 0, listVOs, holder.binding);
-                                    holder.binding.spExtraToName.setAdapter(checkboxSpinnerAdapter);
-                                }
-                                selectedFlag = false;
-                                break;
-                        }
+                                JSLog.D("add editDeposits position              :::         " + deposit.getViewPosition(), null);
+                                editDeposits.add(deposit);
+                            }
+                            break;
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+                        case 6:
+                            if (NEW_DATA.equals(type)) {
+                                JSLog.D("residentName size              :::     " + residentName.size(), null);
+                                holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residentName));
+                            }
+                            selectedFlag = false;
+                            break;
                     }
+                } else if (onePageData.get(position).getMethod().contains("출금") ||
+                        onePageData.get(position).getMethod().contains("공동CMS출")) {
+                    switch (itemPosition) {
+                        case 0:
+                            for (int i = 0; i < editDeposits.size(); i++) {
+                                if (onePageData.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
+                                    JSLog.D("remove editDeposits position               :::         " + i, null);
+                                    editDeposits.remove(i);
+                                }
+                            }
+                        case 3:
+                        case 4:
+                        case 5:
+                            holder.binding.spExtraToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item));
+                            holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item));
+                            if (!"".equals(holder.binding.spCategory.getSelectedItem().toString()) && holder.binding.spCategory.getSelectedItemPosition() != 0) {
+                                Deposit deposit = new Deposit();
+                                deposit.setName(onePageData.get(position).getName());
+                                deposit.setDate(onePageData.get(position).getDate());
+                                deposit.setDestinationName("");
+                                deposit.setType(holder.binding.spCategory.getSelectedItem().toString());
+                                deposit.setIndex(onePageData.get(position).getIndex());
+                                deposit.setViewPosition(position);
+                                deposit.setBuildingName(holder.binding.spBuildingName.getSelectedItem().toString());
+
+                                for (int i = 0; i < editDeposits.size(); i++) {
+                                    if (onePageData.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
+                                        JSLog.D("remove editDeposits position               :::         " + i, null);
+                                        editDeposits.remove(i);
+                                    }
+                                }
+                                JSLog.D("add editDeposits position              :::         " + deposit.getViewPosition(), null);
+                                editDeposits.add(deposit);
+                            }
+                            break;
+                        case 2:
+                            if (NEW_DATA.equals(type)) {
+                                JSLog.D("residentName size              :::     " + residentName.size(), null);
+                                holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, residentName));
+                            }
+                            selectedFlag = false;
+                            break;
+                        case 1:
+                            if (NEW_DATA.equals(type)) {
+                                holder.binding.spToName.setAdapter(new ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, brokerName));
+
+                                for (int i = 0; i < residentName.size(); i++) {
+                                    StateVO stateVO = new StateVO();
+                                    stateVO.setTitle(residentName.get(i));
+                                    stateVO.setSelected(false);
+                                    listVOs.add(stateVO);
+                                }
+
+                                checkboxSpinnerAdapter = new CheckboxSpinnerAdapter(context, 0, listVOs, holder.binding);
+                                holder.binding.spExtraToName.setAdapter(checkboxSpinnerAdapter);
+                            }
+                            selectedFlag = false;
+                            break;
+                    }
+                }
 
 
             }
@@ -335,11 +341,11 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
             public void onItemSelected(AdapterView<?> parent, View view, int itemPosition, long id) {
                 if (selectedFlag && itemPosition != 0) {
                     Deposit deposit = new Deposit();
-                    deposit.setName(deposits.get(position).getName());
-                    deposit.setDate(deposits.get(position).getDate());
+                    deposit.setName(onePageData.get(position).getName());
+                    deposit.setDate(onePageData.get(position).getDate());
                     deposit.setDestinationName(holder.binding.spToName.getSelectedItem().toString());
                     deposit.setType(holder.binding.spCategory.getSelectedItem().toString());
-                    deposit.setIndex(deposits.get(position).getIndex());
+                    deposit.setIndex(onePageData.get(position).getIndex());
                     for (int i = 0; i < residentName.size(); i++) {
                         if (holder.binding.spCategory.getSelectedItem().toString().contains("수수료") &&
                                 checkboxSpinnerAdapter.getListState().get(i).isSelected()) {
@@ -351,7 +357,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                     deposit.setBuildingName(holder.binding.spBuildingName.getSelectedItem().toString());
 
                     for (int i = 0; i < editDeposits.size(); i++) {
-                        if (deposits.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
+                        if (onePageData.get(position).getIndex().equals(editDeposits.get(i).getIndex())) {
                             JSLog.D("remove editDeposits position               :::         " + i, null);
                             editDeposits.remove(i);
                         }
@@ -384,11 +390,11 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
 
     @Override
     public int getItemCount() {
-        if (deposits.size() == 0) {
+        if (onePageData.size() == 0) {
             return 0;
         }
-        if (deposits.size() < 10) {
-            return deposits.size();
+        if (onePageData.size() < 10) {
+            return onePageData.size();
         }
         return 10;
     }
@@ -450,7 +456,7 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
                                         editDeposits.get(i).getNote(), editDeposits.get(i).getBuildingName());
                             } else {
                                 for (int i = 0; i < editDeposits.size(); i++) {
-                                    deposits.remove(editDeposits.get(i).getViewPosition());
+                                    onePageData.remove(editDeposits.get(i).getViewPosition());
                                 }
                                 notifyDataSetChanged();
 
@@ -476,9 +482,9 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     private int getSelectedPosition(int position, List<String> compareList) {
         for (int j = 0; j < compareList.size(); j++) {
 
-            JSLog.D("dstName            :::     " + deposits.get(position).getDestinationName(), null);
+            JSLog.D("dstName            :::     " + onePageData.get(position).getDestinationName(), null);
             JSLog.D("compareList            :::     " + compareList.get(j), null);
-            if ((deposits.get(position).getDestinationName()).equals(compareList.get(j))) {
+            if ((onePageData.get(position).getDestinationName()).equals(compareList.get(j))) {
                 return j;
             }
         }
@@ -488,12 +494,12 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     private int getSelectedTypePosition(int position) {
         for (int j = 0; j < residents.size(); j++) {
 
-            if (deposits.get(position).getMethod().contains("입금")) {
-                if ((deposits.get(position).getType()).equals(context.getResources().getStringArray(R.array.deposit)[j])) {
+            if (onePageData.get(position).getMethod().contains("입금")) {
+                if ((onePageData.get(position).getType()).equals(context.getResources().getStringArray(R.array.deposit)[j])) {
                     return j;
                 }
-            } else if (deposits.get(position).getMethod().contains("출금")) {
-                if ((deposits.get(position).getType()).equals(context.getResources().getStringArray(R.array.withdraw)[j])) {
+            } else if (onePageData.get(position).getMethod().contains("출금")) {
+                if ((onePageData.get(position).getType()).equals(context.getResources().getStringArray(R.array.withdraw)[j])) {
                     return j;
                 }
             }
@@ -502,9 +508,9 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     }
 
     private int getSelectedBuildingPosition(int position, List<String> compareList) {
-        for (int i = 0; i < deposits.size(); i++) {
-            if (deposits.get(position).getBuildingName() != null) {
-                if (deposits.get(position).getBuildingName().equals(compareList.get(i))) {
+        for (int i = 0; i < onePageData.size(); i++) {
+            if (onePageData.get(position).getBuildingName() != null) {
+                if (onePageData.get(position).getBuildingName().equals(compareList.get(i))) {
                     return i;
                 }
             }
@@ -515,4 +521,35 @@ public class DepositDataAdapter extends RecyclerView.Adapter<DepositDataAdapter.
     public BindingHolder getBindingHolder() {
         return bindingHolder;
     }
+
+    public void nextItem() {
+        if (page < deposits.size()) {
+            onePageData = new ArrayList<>();
+        }
+        int lastIndex = page + 10;
+
+        for (; page < lastIndex; page++) {
+            JSLog.D("page               :::     " + page, null);
+            onePageData.add(deposits.get(page));
+        }
+        notifyDataSetChanged();
+    }
+
+    public void prevItem() {
+        if (page >= 20) {
+            onePageData = new ArrayList<>();
+
+            int lastIndex = page - 10;
+
+            for (page -= 20; page < lastIndex; page++) {
+                JSLog.D("page               :::     " + page, null);
+                onePageData.add(deposits.get(page));
+            }
+
+            notifyDataSetChanged();
+
+        }
+
+    }
+
 }

@@ -134,6 +134,15 @@ public class ExistingDataFragment extends Fragment implements DatePickerDialog.O
                 }
                 searchData(existingDatas, this.startDate, this.endDate);
                 break;
+
+
+            case R.id.btn_next:
+                adapter.nextItem();
+                break;
+
+            case R.id.btn_prev:
+                adapter.prevItem();
+                break;
         }
     }
 
