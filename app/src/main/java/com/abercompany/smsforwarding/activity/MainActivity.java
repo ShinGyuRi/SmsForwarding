@@ -320,7 +320,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 if ("success".equals(result)) {
                     residents = getResidentResult.getResidents();
-                    ;
 
                 }
             }
@@ -675,7 +674,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     if (Double.parseDouble(objSms.getTime()) > Double.parseDouble(PrefUtil.getInstance().getStringPreference("smsLastTimeStamp"))) {
                         lstSms.add(objSms);
                     }
-                    if (i == 0) {
+                    if (i == 10) {
                         PrefUtil.getInstance().putPreference("smsLastTimeStamp", objSms.getTime());
                     }
                 }
@@ -742,15 +741,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switchContent(buildingFragment, "BUILDING");
         } else if (id == R.id.nav_new_data) {
             initNaviButton(item, drawer);
-            if (newDataFragment == null) {
-                newDataFragment = NewDataFragment.newInstance(newDatas, residents, brokers, rooms, buildings);
-            }
+            newDataFragment = NewDataFragment.newInstance(newDatas, residents, brokers, rooms, buildings);
             switchContent(newDataFragment, "NEW_DATA");
         } else if (id == R.id.nav_existing_data) {
             initNaviButton(item, drawer);
-            if (existingDataFragment == null) {
-                existingDataFragment = ExistingDataFragment.newInstance(existingDatas, residents, brokers, rooms, buildings);
-            }
+            existingDataFragment = ExistingDataFragment.newInstance(existingDatas, residents, brokers, rooms, buildings);
             switchContent(existingDataFragment, "EXISTING_DATA");
         } else if (id == R.id.nav_realty) {
             Intent intent = new Intent(this, RealtyActivity.class);
@@ -781,7 +776,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if ("building".equals(event.getDep())) {
             getTrimmedData(DeviceUtil.getDevicePhoneNumber(this));
-            getDefaulter();
+            getRoom();
             getBuilding();
         }
 

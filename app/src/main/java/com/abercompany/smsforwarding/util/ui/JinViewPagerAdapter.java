@@ -17,13 +17,6 @@ public class JinViewPagerAdapter extends ViewPagerAdapter {
     @Override
     public int getItemPosition(@NonNull Object object) {
 
-        if (object instanceof InputElecFragment) {
-            // Create a new method notifyUpdate() in your fragment
-            // it will get call when you invoke
-            // notifyDatasetChaged();
-            ((InputElecFragment) object).notifyUpdate();
-        }
-
-        return super.getItemPosition(object);
+        return POSITION_NONE;
     }
 }

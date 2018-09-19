@@ -38,14 +38,14 @@ public class ElecStatusActivity extends AppCompatActivity {
 
     private HashSet<Elec> elecHashSet = new HashSet<>();
 
-    private JinViewPagerAdapter pagerAdapter;
+    private ViewPagerAdapter pagerAdapter;
 
     public enum Elec {
         InputElec(),
         SearchElec();
     }
 
-    private List<Defaulter> elec;
+    private List<Defaulter> elec = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,21 @@ public class ElecStatusActivity extends AppCompatActivity {
             buildingName.add(buildings.get(i).getName());
         }
 
+        initViews();
+
+
+
+    }
+
+    private void initViews() {
+        elecHashSet.add(Elec.InputElec);
+        elecHashSet.add(Elec.SearchElec);
+
+        pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getListFragment(elec));
+        binding.viewPager.setAdapter(pagerAdapter);
+
+        binding.tabLayout.addOnTabSelectedListener(getViewPagerOnTabSelectedListener());
+        binding.viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.tabLayout));
 
         binding.spBuildingName.setAdapter(new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, buildingName));
         binding.spBuildingName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -73,17 +88,7 @@ public class ElecStatusActivity extends AppCompatActivity {
 
             }
         });
-    }
 
-    private void initViews() {
-        elecHashSet.add(Elec.InputElec);
-        elecHashSet.add(Elec.SearchElec);
-
-        pagerAdapter = new JinViewPagerAdapter(getSupportFragmentManager(), getListFragment());
-        binding.viewPager.setAdapter(pagerAdapter);
-
-        binding.tabLayout.addOnTabSelectedListener(getViewPagerOnTabSelectedListener());
-        binding.viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.tabLayout));
     }
 
     private TabLayout.ViewPagerOnTabSelectedListener getViewPagerOnTabSelectedListener() {
@@ -95,7 +100,7 @@ public class ElecStatusActivity extends AppCompatActivity {
         };
     }
 
-    private ArrayList<Fragment> getListFragment() {
+    private ArrayList<Fragment> getListFragment(List<Defaulter> elec) {
         ArrayList<Fragment> fragments = new ArrayList<>();
 
         if (elecHashSet.contains(Elec.InputElec)) {
@@ -126,7 +131,10 @@ public class ElecStatusActivity extends AppCompatActivity {
                 if ("success".equals(result)) {
                     elec = getElecDefaulter.getElecDefaulterList();
 
-                    initViews();
+
+                    pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getListFragment(elec));
+                    binding.viewPager.setAdapter(pagerAdapter);
+                    pagerAdapter.notifyDataSetChanged();
                 }
 
             }

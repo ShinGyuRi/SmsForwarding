@@ -4,6 +4,7 @@ package com.abercompany.smsforwarding.fragment;
 import android.annotation.SuppressLint;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -38,7 +39,7 @@ public class InputElecFragment extends Fragment {
 
     private FragmentInputElecBinding binding;
 
-    private List<Defaulter> elec;
+    private List<Defaulter> elec = new ArrayList<>();
     private List<Defaulter> filterData = new ArrayList<>();
     private List<Building> buildings;
     private List<String> checkDate = new ArrayList<>();
@@ -51,11 +52,14 @@ public class InputElecFragment extends Fragment {
 
     @SuppressLint("ValidFragment")
     public InputElecFragment(List<Defaulter> elec, List<Building> buildings) {
+        JSLog.D("elec.size               :::     " + elec.size(), new Throwable());
         this.elec = elec;
+        JSLog.D("this.elec.size               :::     " + this.elec.size(), new Throwable());
         this.buildings = buildings;
     }
 
     public static InputElecFragment newInstance(List<Defaulter> elec, List<Building> buildings) {
+        JSLog.D("elec.size               :::     " + elec.size(), new Throwable());
         InputElecFragment fragment = new InputElecFragment(elec, buildings);
         return fragment;
     }
@@ -65,27 +69,28 @@ public class InputElecFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_input_elec, container, false);
+        return inflater.inflate(R.layout.fragment_input_elec, container, false);
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_input_elec, container, false);
-        View view = binding.getRoot();
-        binding.setInputElec(this);
-
-        JSLog.D("InputElec              !!!!        ", null);
-        JSLog.D("elec.size               :::     " + elec.size(), null);
-        if (elec != null) {
-            setDate(elec);
-        }
-
-        return view;
     }
 
-    public void notifyUpdate() {
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-        JSLog.D("elec               :::     " + elec, null);
-        if (elec != null) {
-            setDate(elec);
-        }
+        binding = FragmentInputElecBinding.bind(getView());
+        binding.setInputElec(this);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+        JSLog.D("InputElec              !!!!        ", null);
+
+        JSLog.D("elec.size               :::     " + elec.size(), new Throwable());
+        setDate(this.elec);
     }
 
     public void onClick(View view) {
@@ -122,6 +127,8 @@ public class InputElecFragment extends Fragment {
     }
 
     private void setDate(final List<Defaulter> elec) {
+        filterData = new ArrayList<>();
+
         for (int i = 0; i < elec.size(); i++) {
             if (!checkDate.contains(elec.get(i).getEndDate())) {
                 checkDate.add(elec.get(i).getEndDate());
@@ -175,13 +182,11 @@ public class InputElecFragment extends Fragment {
 
                             }
                         }
-                        if (filterData.size() == 0) {
-                            setElecAdapter(null);
-                        } else {
-                            setElecAdapter(filterData);
-                        }
+                        setElecAdapter(filterData);
                     }
                 });
+
+//        elec.clear();
     }
 
     private void insertElec(String roomNum, String elecNum, String checkDate) {
