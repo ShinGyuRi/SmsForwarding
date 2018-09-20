@@ -161,10 +161,10 @@ public class CheckOutActivity extends AppCompatActivity implements DatePickerDia
         if (endDate.before(checkoutDt) ||
                 contract.getEndDate().equals(checkoutDate)) {
 
-            binding.etRealtyFees.setText(0);
-            binding.etPenalty.setText(0);
-            binding.etDiscount.setText(0);
-            binding.etUsageFee.setText(usageFee);
+            binding.etRealtyFees.setText(0+"");
+            binding.etPenalty.setText(0+"");
+            binding.etDiscount.setText(0+"");
+            binding.etUsageFee.setText(usageFee+"");
 
             binding.tvTotal.setText("정산금액: " + deposit + "-" +
                     usageFee + "-" +
