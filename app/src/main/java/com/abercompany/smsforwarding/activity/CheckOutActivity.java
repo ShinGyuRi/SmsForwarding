@@ -120,6 +120,7 @@ public class CheckOutActivity extends AppCompatActivity implements DatePickerDia
         int checkoutFee = Integer.parseInt(binding.etCheckoutFee.getText().toString());
         int usageDays = 0;
         int usageFee = 0;
+        boolean payment = false;
 
 
 
@@ -140,9 +141,13 @@ public class CheckOutActivity extends AppCompatActivity implements DatePickerDia
                 if (dateFormat.parse(endDates.get(0)).after(dateFormat.parse(checkoutDate))) {
                     usageDays = (int) getDifference(dateFormat.parse(endDates.get(1)),
                             dateFormat.parse(checkoutDate));
+
+                    payment = true;
                 } else {
                     usageDays = (int) getDifference(dateFormat.parse(endDates.get(0)),
                             dateFormat.parse(checkoutDate));
+
+                    payment = false;
                 }
             }
             usageFee = usageDays * ((rent + manageFee) / 30);
@@ -202,17 +207,30 @@ public class CheckOutActivity extends AppCompatActivity implements DatePickerDia
 
                 binding.etUsageFee.setText(usageFee + "");
 
-                binding.tvTotal.setText("정산금액: " + deposit + "+" +
-                        rent + "+" +
-                        manageFee + "-" +
-                        usageFee + "-" +
-                        elecAmount + "-" +
-                        gasAmount + "-" +
-                        checkoutFee + "-" +
-                        realtyFees + "-" +
-                        penalty + "-" +
-                        discount + "=" +
-                        (deposit + realtyFees + manageFee - usageFee - elecAmount - gasAmount - checkoutFee - realtyFees - penalty - discount));
+                if (!payment) {
+                    binding.tvTotal.setText("정산금액: " + deposit + "+" +
+                            usageFee + "-" +
+                            elecAmount + "-" +
+                            gasAmount + "-" +
+                            checkoutFee + "-" +
+                            realtyFees + "-" +
+                            penalty + "-" +
+                            discount + "=" +
+                            (deposit - usageFee - elecAmount - gasAmount - checkoutFee - realtyFees - penalty - discount));
+                } else {
+                    binding.tvTotal.setText("정산금액: " + deposit + "+" +
+                            rent + "+" +
+                            manageFee + "-" +
+                            usageFee + "-" +
+                            elecAmount + "-" +
+                            gasAmount + "-" +
+                            checkoutFee + "-" +
+                            realtyFees + "-" +
+                            penalty + "-" +
+                            discount + "=" +
+                            (deposit + rent + manageFee - usageFee - elecAmount - gasAmount - checkoutFee - realtyFees - penalty - discount));
+
+                }
             }
         }
 
