@@ -105,6 +105,7 @@ public class CheckOutActivity extends AppCompatActivity implements DatePickerDia
     }
 
     private void calculateAmount(Contract contract) {
+        endDates.clear();
         binding.etUsageFee.setText("0");
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -126,6 +127,7 @@ public class CheckOutActivity extends AppCompatActivity implements DatePickerDia
 
         for (int i = 0; i < trimmedData.size(); i++) {
             if (trimmedData.get(i).getEndDate() != null &&
+                    trimmedData.get(i).getType().contains("월세") &&
                     binding.spResident.getSelectedItem().toString().equals(trimmedData.get(i).getDestinationName())) {
                 JSLog.D("endDates               :::     " + trimmedData.get(i).getEndDate(), null);
                 endDates.add(trimmedData.get(i).getEndDate());
