@@ -102,11 +102,13 @@ public class CheckOutActivity extends AppCompatActivity  {
     public void insertCheckout(String roomNum, String name, String deposit, String rent, String manageFee,
                                String elecNum, String elecAmount, String gasNum, String gasAmount, String checkoutFee,
                                String realtyFee, String penalty, String discount, String total, String account,
-                               String bank, String buildingName, String date, String usageFee) {
+                               String bank, String buildingName, String date, String usageFee,
+                               String elecBank, String elecAccount, String gasBank, String gasAccount) {
 
         Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertCheckout(roomNum, name, deposit,
                 rent, manageFee, elecNum, elecAmount, gasNum, gasAmount, checkoutFee, realtyFee, penalty,
-                discount, total, account, bank, buildingName, date, usageFee);
+                discount, total, account, bank, buildingName, date, usageFee,
+                elecBank, elecAccount, gasBank, gasAccount);
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

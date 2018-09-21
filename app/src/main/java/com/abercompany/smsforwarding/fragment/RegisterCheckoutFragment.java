@@ -213,7 +213,7 @@ public class RegisterCheckoutFragment extends Fragment implements DatePickerDial
                     payment = false;
                 }
             }
-            usageFee = usageDays * ((rent + manageFee) / 30);
+            usageFee = (int) (Math.ceil((usageDays * ((rent + manageFee) / 30) / 100)))*100;
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -428,10 +428,14 @@ public class RegisterCheckoutFragment extends Fragment implements DatePickerDial
                 String buildingName = binding.spBuildingName.getSelectedItem().toString();
                 String date = binding.etCheckoutDate.getText().toString();
                 String usageFee = binding.etUsageFee.getText().toString();
+                String elecBank = binding.etElecBank.getText().toString();
+                String elecAccount = binding.etElecAccount.getText().toString();
+                String gasBank = binding.etGasBank.getText().toString();
+                String gasAccount = binding.etGasAccount.getText().toString();
 
                 ((CheckOutActivity) getActivity()).insertCheckout(roomNum, name, deposit, rent, manageFee, elecNum, elecAmount,
                         gasNum, gasAmount, checkoutFee, realtyFees, penalty, discount,
-                        total, account, bank, buildingName, date, usageFee);
+                        total, account, bank, buildingName, date, usageFee, elecBank, elecAccount, gasBank, gasAccount);
                 break;
 
             case R.id.et_checkout_date:

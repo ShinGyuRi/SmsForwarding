@@ -232,7 +232,11 @@ public interface HttpService {
                                     @Field("bank") String bank,
                                     @Field("building_name") String buildingName,
                                     @Field("date") String date,
-                                    @Field("usage_fee") String usageFee);
+                                    @Field("usage_fee") String usageFee,
+                                    @Field("elec_bank") String elecBank,
+                                    @Field("elec_account") String elecAccount,
+                                    @Field("gas_bank") String gasBank,
+                                    @Field("gas_account") String gasAccount);
 
     @FormUrlEncoded
     @POST("getCheckout")

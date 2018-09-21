@@ -61,6 +61,18 @@ public class Checkout {
     @SerializedName("usage_fee")
     private String usageFee;
 
+    @SerializedName("elec_bank")
+    private String elecBank;
+
+    @SerializedName("elec_account")
+    private String elecAccount;
+
+    @SerializedName("gas_bank")
+    private String gasBank;
+
+    @SerializedName("gas_account")
+    private String gasAccount;
+
     public String getRoomNum() {
         return roomNum;
     }
@@ -115,5 +127,17 @@ public class Checkout {
     }
     public String getUsageFee() {
         return usageFee;
+    }
+    public String getElecBank() {
+        return elecBank;
+    }
+    public String getElecAccount() {
+        return elecAccount;
+    }
+    public String getGasBank() {
+        return gasBank;
+    }
+    public String getGasAccount() {
+        return gasAccount;
     }
 }

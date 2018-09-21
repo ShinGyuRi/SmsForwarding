@@ -99,15 +99,19 @@ public class SearchCheckoutFragment extends Fragment {
                 String realtyFees = binding.etRealtyFees.getText().toString();
                 String penalty = binding.etPenalty.getText().toString();
                 String discount = binding.etDiscount.getText().toString();
-                String total = binding.tvTotal.getText().toString();
+                String total = binding.tvTotal.getText().toString().replace("원", "").replace("정산금액: ", "");
                 String account = binding.etAccount.getText().toString();
                 String bank = binding.etBank.getText().toString();
                 String date = binding.etCheckoutDate.getText().toString();
                 String usageFee = binding.etUsageFee.getText().toString();
+                String elecBank = binding.etElecBank.getText().toString();
+                String elecAccount = binding.etElecAccount.getText().toString();
+                String gasBank = binding.etGasBank.getText().toString();
+                String gasAccount = binding.etGasAccount.getText().toString();
 
                 ((CheckOutActivity) getActivity()).insertCheckout(roomNum, name, deposit, rent, manageFee, elecNum, elecAmount,
                         gasNum, gasAmount, checkoutFee, realtyFees, penalty, discount,
-                        total, account, bank, buildingName, date, usageFee);
+                        total, account, bank, buildingName, date, usageFee, elecBank, elecAccount, gasBank, gasAccount);
                 break;
         }
     }
@@ -148,9 +152,13 @@ public class SearchCheckoutFragment extends Fragment {
         binding.etRealtyFees.setText(checkout.getRealtyFees());
         binding.etPenalty.setText(checkout.getPenalty());
         binding.etDiscount.setText(checkout.getDiscount());
-        binding.tvTotal.setText("정산금액: " + checkout.getTotal());
+        binding.tvTotal.setText("정산금액: " + checkout.getTotal() + "원");
         binding.etBank.setText(checkout.getBank());
         binding.etAccount.setText(checkout.getAccount());
+        binding.etElecBank.setText(checkout.getElecBank());
+        binding.etElecAccount.setText(checkout.getElecAccount());
+        binding.etGasBank.setText(checkout.getGasBank());
+        binding.etGasAccount.setText(checkout.getGasAccount());
     }
 
 }
