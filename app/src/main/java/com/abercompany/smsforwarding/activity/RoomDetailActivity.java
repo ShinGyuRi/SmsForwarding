@@ -264,6 +264,10 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
                 binding.etRent.append("0000");
                 break;
 
+            case R.id.btn_add_zero_discount:
+                binding.etDiscount.append("0000");
+                break;
+
             case R.id.btn_edit:
                 JSLog.D("EDIT           !!!!    ", null);
                 setInitContent(true);
@@ -484,6 +488,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
         String elecNum = binding.etElecNum.getText().toString();
         String gasNum = binding.etGasNum.getText().toString();
         String active = "";
+        String discount = binding.etDiscount.getText().toString();
 
         if (binding.rbCheckOut.isChecked()) {
             active = "퇴실";
@@ -497,7 +502,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
         Call<JsonObject> jsonObjectCall = NetworkUtil.getInstace().insertContract(
                 roomNum, name, phoneNum, idNum, etcNum, address, emerNum, emerName,
                 downPayment, deposit, rent, manageFee, startDate, endDate, elecNum, gasNum, active,
-                realtyName, account, brokerName, brokerPhoneNum, buildingName);
+                realtyName, account, brokerName, brokerPhoneNum, buildingName, discount);
 
         jsonObjectCall.enqueue(new Callback<JsonObject>() {
             @Override

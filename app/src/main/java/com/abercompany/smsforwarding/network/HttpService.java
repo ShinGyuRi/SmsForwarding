@@ -108,7 +108,8 @@ public interface HttpService {
                                     @Field("realty_account") String realtyAccount,
                                     @Field("realty_broker_name") String realtyBrokerName,
                                     @Field("realty_broker_phone_num") String realtyBrokerPhoneNum,
-                                    @Field("building_name") String buildingName);
+                                    @Field("building_name") String buildingName,
+                                    @Field("discount") String discount);
 
     @FormUrlEncoded
     @POST("getRealty")

@@ -272,6 +272,35 @@
                     android:textColor="@color/white" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/layout_discount"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/et_phone_num"
+                app:layout_constraintTop_toBottomOf="@+id/layout_manage_fee">
+
+
+                <EditText
+                    android:id="@+id/et_discount"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:hint="할인금액"
+                    android:maxLines="1" />
+
+                <Button
+                    android:id="@+id/btn_add_zero_discount"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/black"
+                    android:onClick="@{roomDetail.onClick}"
+                    android:text="만원"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/tv_term"
@@ -288,7 +317,7 @@
                 android:textSize="18dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layout_rent" />
+                app:layout_constraintTop_toBottomOf="@+id/layout_discount" />
 
             <LinearLayout
                 android:id="@+id/linearLayout3"
