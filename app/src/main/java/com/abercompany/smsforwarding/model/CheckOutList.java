@@ -2,7 +2,7 @@ package com.abercompany.smsforwarding.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class CheckOut {
+public class CheckOutList {
 
     @SerializedName("room_num")
     private String roomNum;

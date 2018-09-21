@@ -5,6 +5,7 @@ import com.abercompany.smsforwarding.model.GetBrokerResult;
 import com.abercompany.smsforwarding.model.GetBuildingResult;
 import com.abercompany.smsforwarding.model.GetCheckInListResult;
 import com.abercompany.smsforwarding.model.GetCheckOutListResult;
+import com.abercompany.smsforwarding.model.GetCheckoutResult;
 import com.abercompany.smsforwarding.model.GetContractResult;
 import com.abercompany.smsforwarding.model.GetDefaulterResult;
 import com.abercompany.smsforwarding.model.GetDepositLogResult;
@@ -210,4 +211,32 @@ public interface HttpService {
                                   @Field("broker_name") String brokerName,
                                   @Field("broker_phone_num") String brokerPhoneNum,
                                   @Field("account") String account);
+
+    @FormUrlEncoded
+    @POST("insertCheckout")
+    Call<JsonObject> insertCheckout(@Field("room_num") String roomNum,
+                                    @Field("name") String name,
+                                    @Field("deposit") String deposit,
+                                    @Field("rent") String rent,
+                                    @Field("manage_fee") String manageFee,
+                                    @Field("elec_num") String elecNum,
+                                    @Field("elec_amount") String elecAmount,
+                                    @Field("gas_num") String gasNum,
+                                    @Field("gas_amount") String gasAmount,
+                                    @Field("checkout_fee") String checkoutFee,
+                                    @Field("realty_fee") String realtyFee,
+                                    @Field("penalty") String penalty,
+                                    @Field("discount") String discount,
+                                    @Field("total") String total,
+                                    @Field("account") String account,
+                                    @Field("bank") String bank,
+                                    @Field("building_name") String buildingName,
+                                    @Field("date") String date,
+                                    @Field("usage_fee") String usageFee);
+
+    @FormUrlEncoded
+    @POST("getCheckout")
+    Call<GetCheckoutResult> getCheckout(@Field("room_num") String roomNum,
+                                        @Field("name") String name,
+                                        @Field("building_name") String buildingName);
 }

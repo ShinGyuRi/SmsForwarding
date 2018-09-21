@@ -2,18 +2,20 @@ package com.abercompany.smsforwarding.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class GetCheckInListResult {
+import java.util.List;
+
+public class GetCheckoutResult {
 
     @SerializedName("result")
     private String result;
 
     @SerializedName("message")
-    private CheckInList checkInsList;
+    private Checkout checkout;
 
     public String getResult() {
         return result;
     }
-    public CheckInList getCheckInsList() {
-        return checkInsList;
+    public Checkout getCheckout() {
+        return checkout;
     }
 }

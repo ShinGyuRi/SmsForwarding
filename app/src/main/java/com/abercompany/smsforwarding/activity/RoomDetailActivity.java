@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.RadioGroup;
 
 import com.abercompany.smsforwarding.R;
@@ -15,8 +14,8 @@ import com.abercompany.smsforwarding.adapter.DepositLogAdapter;
 import com.abercompany.smsforwarding.databinding.ActivityRoomDetailBinding;
 import com.abercompany.smsforwarding.dialog.CheckInListDialog;
 import com.abercompany.smsforwarding.dialog.CheckOutListDialog;
-import com.abercompany.smsforwarding.model.CheckIn;
-import com.abercompany.smsforwarding.model.CheckOut;
+import com.abercompany.smsforwarding.model.CheckInList;
+import com.abercompany.smsforwarding.model.CheckOutList;
 import com.abercompany.smsforwarding.model.Contract;
 import com.abercompany.smsforwarding.model.DepositLog;
 import com.abercompany.smsforwarding.model.GetCheckInListResult;
@@ -281,21 +280,21 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
                 String result = getCheckInListResult.getResult();
 
                 if ("success".equals(result)) {
-                    CheckIn checkIn = getCheckInListResult.getCheckIns();
+                    CheckInList checkInList = getCheckInListResult.getCheckInsList();
 
 
                     final CheckInListDialog checkInListDialog = new CheckInListDialog(RoomDetailActivity.this);
                     checkInListDialog.show();
 
 
-                    if (checkIn.isIdNum() != null) {
+                    if (checkInList.isIdNum() != null) {
 
-                        checkInListDialog.getBinding().checkIdNum.setChecked(checkIn.isIdNum());
-                        checkInListDialog.getBinding().checkInputEmerNum.setChecked(checkIn.isEmerNum());
-                        checkInListDialog.getBinding().checkAmount.setChecked(checkIn.isAmount());
-                        checkInListDialog.getBinding().checkElecGas.setChecked(checkIn.isElecGas());
-                        checkInListDialog.getBinding().checkCondition.setChecked(checkIn.isCondition());
-                        checkInListDialog.getBinding().checkRealty.setChecked(checkIn.isRealty());
+                        checkInListDialog.getBinding().checkIdNum.setChecked(checkInList.isIdNum());
+                        checkInListDialog.getBinding().checkInputEmerNum.setChecked(checkInList.isEmerNum());
+                        checkInListDialog.getBinding().checkAmount.setChecked(checkInList.isAmount());
+                        checkInListDialog.getBinding().checkElecGas.setChecked(checkInList.isElecGas());
+                        checkInListDialog.getBinding().checkCondition.setChecked(checkInList.isCondition());
+                        checkInListDialog.getBinding().checkRealty.setChecked(checkInList.isRealty());
 
                     }
 
@@ -350,7 +349,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
                 if ("success".equals(result)) {
                     boolean message = jsonObject.get("message").getAsBoolean();
                     if (message) {
-                        JSLog.D("insert CheckIn List Success            !!!     ", null);
+                        JSLog.D("insert CheckInList List Success            !!!     ", null);
                         dialog.dismiss();
 
                     }
@@ -373,23 +372,23 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
                 String result = checkOutListResult.getResult();
 
                 if ("success".equals(result)) {
-                    CheckOut checkOut = checkOutListResult.getCheckOut();
+                    CheckOutList checkOutList = checkOutListResult.getCheckOutList();
 
                     final CheckOutListDialog checkoutListDialog = new CheckOutListDialog(RoomDetailActivity.this, RoomDetailActivity.this);
                     checkoutListDialog.show();
 
 
-                    if (checkOut.getAccount() != null) {
+                    if (checkOutList.getAccount() != null) {
 
-                        checkoutListDialog.getBinding().etElecAmount.setText(String.valueOf(checkOut.getElecAmount()));
-                        checkoutListDialog.getBinding().etGasAmount.setText(String.valueOf(checkOut.getGasAmount()));
-                        checkoutListDialog.getBinding().etInputOutDate.setText(checkOut.getOutDate());
-                        checkoutListDialog.getBinding().checkRemoteCon.setChecked(checkOut.getRemoteCon());
-                        checkoutListDialog.getBinding().checkAccount.setChecked(checkOut.getAccount());
-                        checkoutListDialog.getBinding().checkKatok.setChecked(checkOut.getKatok());
-                        checkoutListDialog.getBinding().checkTv.setChecked(checkOut.getTv());
+                        checkoutListDialog.getBinding().etElecAmount.setText(String.valueOf(checkOutList.getElecAmount()));
+                        checkoutListDialog.getBinding().etGasAmount.setText(String.valueOf(checkOutList.getGasAmount()));
+                        checkoutListDialog.getBinding().etInputOutDate.setText(checkOutList.getOutDate());
+                        checkoutListDialog.getBinding().checkRemoteCon.setChecked(checkOutList.getRemoteCon());
+                        checkoutListDialog.getBinding().checkAccount.setChecked(checkOutList.getAccount());
+                        checkoutListDialog.getBinding().checkKatok.setChecked(checkOutList.getKatok());
+                        checkoutListDialog.getBinding().checkTv.setChecked(checkOutList.getTv());
                         checkoutListDialog.getBinding().tvAdjustAmount.setText(getString(R.string.str_adjustment_amount,
-                                String.valueOf(checkOut.getDeposit() - (checkOut.getElecAmount() + checkOut.getGasAmount() + 70000 + checkOut.getDayAmount()))));
+                                String.valueOf(checkOutList.getDeposit() - (checkOutList.getElecAmount() + checkOutList.getGasAmount() + 70000 + checkOutList.getDayAmount()))));
                     }
 
 
@@ -455,7 +454,7 @@ public class RoomDetailActivity extends AppCompatActivity implements DatePickerD
                 if ("success".equals(result)) {
                     boolean message = jsonObject.get("message").getAsBoolean();
                     if (message) {
-                        JSLog.D("insert CheckOut List Success            !!!     ", null);
+                        JSLog.D("insert CheckOutList List Success            !!!     ", null);
                         dialog.dismiss();
 
                     }

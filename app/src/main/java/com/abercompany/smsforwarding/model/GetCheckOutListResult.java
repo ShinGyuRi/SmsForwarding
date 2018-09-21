@@ -8,12 +8,12 @@ public class GetCheckOutListResult {
     private String result;
 
     @SerializedName("message")
-    private CheckOut checkOut;
+    private CheckOutList checkOutList;
 
     public String getResult() {
         return result;
     }
-    public CheckOut getCheckOut() {
-        return checkOut;
+    public CheckOutList getCheckOutList() {
+        return checkOutList;
     }
 }

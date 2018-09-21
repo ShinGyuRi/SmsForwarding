@@ -778,6 +778,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             intent.putExtra("contract", (Serializable) contracts);
             intent.putExtra("resident", (Serializable) residents);
             intent.putExtra("trimmedData", (Serializable) trimmedData);
+            intent.putExtra("building", (Serializable) buildings);
             startActivity(intent);
         }
 
