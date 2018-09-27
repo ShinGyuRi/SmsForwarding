@@ -213,7 +213,7 @@ public class RegisterCheckoutFragment extends Fragment implements DatePickerDial
                     payment = false;
                 }
             }
-            usageFee = (int) (Math.ceil((usageDays * ((rent + manageFee) / 30) / 100)))*100;
+            usageFee = (int) (Math.ceil((usageDays * ((rent + manageFee) / 30) / 100)))*100 + 100;
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -236,7 +236,7 @@ public class RegisterCheckoutFragment extends Fragment implements DatePickerDial
                     checkoutFee + "원= " +
                     (total) + "원");
         } else {
-            int stayMonth = Integer.parseInt(checkoutDate.split("-")[1]) - Integer.parseInt(contract.getStartDate().split("-")[1]);
+            int stayMonth = Integer.parseInt(checkoutDate.split("-")[1]) - Integer.parseInt(contract.getStartDate().split("-")[1]) + 1;
             int penalty = (Integer.parseInt(contract.getRent()) + Integer.parseInt(contract.getManageFee())) / 30 * 10;
             int discount = 0;
             int realtyFees = 0;
@@ -255,7 +255,7 @@ public class RegisterCheckoutFragment extends Fragment implements DatePickerDial
 
             binding.etRealtyFees.setText(realtyFees + "");
             binding.etPenalty.setText(penalty + "");
-            binding.etDiscount.setText(discount * stayMonth + "");
+            binding.etDiscount.setText(discount + "");
 
             if (endDateWithinAMonth.after(checkoutDt) ||
                     getEndDateWithinAMonth(contract.getStartDate()).equals(checkoutDate)) {
